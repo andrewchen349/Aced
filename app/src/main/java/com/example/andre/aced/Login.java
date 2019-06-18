@@ -22,52 +22,50 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-
-public class MainActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
 
     //Fields and Constants
     private EditText email;
     private EditText password;
-    private Button register;
-    private TextView toggleVisible;
-    private  TextView login;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener firebaseAuthListener;
+    private Button user_login;
+    private TextView user_register;
+    private TextView toggle_visible;
     private ImageView fb;
     private ImageView ig;
     private ImageView gitH;
+
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
-        //Find Corresponding XML Components
+        //Find Corresponding XML components
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-        register = (Button)findViewById(R.id.register);
-        toggleVisible = (TextView)findViewById(R.id.visible);
-        login = (TextView)findViewById(R.id.login);
+        user_login = (Button) findViewById(R.id.login);
+        user_register = (TextView) findViewById(R.id.register);
+        toggle_visible = (TextView)findViewById(R.id.visible);
         fb = (ImageView)findViewById(R.id.facebook);
         ig = (ImageView)findViewById(R.id.instagram);
         gitH = (ImageView)findViewById(R.id.github);
 
-
-
-        firebaseAuth = FirebaseAuth.getInstance();  //gets Firebase instance
-        firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
+        mAuth = FirebaseAuth.getInstance();  //creates Firebase Instance
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null){
-                    Intent intent = new Intent(MainActivity.this, MainScreen.class);
-                    MainActivity.this.startActivity(intent);
+                if (firebaseAuth.getCurrentUser() != null) {
+                    Intent intent = new Intent(Login.this, MainScreen.class);
+                    Login.this.startActivity(intent);
                 }
             }
         };
 
-        //Toggle Show Password
-        toggleVisible.setVisibility(View.GONE);
+        //Toggles Password Viewablitlity
+        toggle_visible.setVisibility(View.GONE);
         password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         password.addTextChangedListener(new TextWatcher() {
             @Override
@@ -79,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 if(password.getText().length() > 0){
-                    toggleVisible.setVisibility(View.VISIBLE);
+                    toggle_visible.setVisibility(View.VISIBLE);
                 }
                 else{
-                    toggleVisible.setVisibility(View.GONE);
+                    toggle_visible.setVisibility(View.GONE);
                 }
             }
 
@@ -92,98 +90,95 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        toggleVisible.setOnClickListener(new View.OnClickListener() {
+        //Show and Hide Password When Typing
+        toggle_visible.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (toggleVisible.getText() == "Show") {
-                    toggleVisible.setText("Hide");
+                if (toggle_visible.getText() == "Show") {
+                    toggle_visible.setText("Hide");
                     password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     password.setSelection(password.length());
                 }
 
                 else{
-                    toggleVisible.setText("Show");
+                    toggle_visible.setText("Show");
                     password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     password.setSelection(password.length());
                     password.setSelection(password.length());
                 }
-                }});
+            }});
 
-
-        register.setOnClickListener(new View.OnClickListener() {
+        //Logs Users In
+        user_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createAccount();
-            }
-        });
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Login.class);
-                MainActivity.this.startActivity(intent);
+                userLogin();
             }
         });
 
+        //Takes Users to registration page
+        user_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, MainActivity.class);
+                Login.this.startActivity(intent);
+            }
+        });
 
-        //Social Media Icons
+        //Social Media Icons Links
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/andrew.chen.902"));
-               MainActivity.this.startActivity(browserIntent);
+                Login.this.startActivity(browserIntent);
             }
         });
         gitH.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent browsergitIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/andrewchen349/Aced"));
-                MainActivity.this.startActivity(browsergitIntent);
+                Login.this.startActivity(browsergitIntent);
             }
         });
         ig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent browserigIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/realandrewchen/?hl=en"));
-                MainActivity.this.startActivity(browserigIntent);
+                Login.this.startActivity(browserigIntent);
             }
         });
-
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
-        firebaseAuth.addAuthStateListener(firebaseAuthListener);
+        mAuth.addAuthStateListener(mAuthListener);
     }
 
-    //Method for User to Create Account FireBase Auth
-    private void createAccount(){
 
-        String emailUser = email.getText().toString();
-        String passwordUser = password.getText().toString();
+    //Firebase Auth for Login
+    private void userLogin() {
 
-        if(TextUtils.isEmpty(emailUser) || TextUtils.isEmpty(passwordUser)){
-            Toast.makeText(MainActivity.this, "Please Enter in Valid email and password", Toast.LENGTH_LONG).show();
-        }
+        String userPassword = password.getText().toString();
+        String userEmail = email.getText().toString();
 
-        else {
-            firebaseAuth.createUserWithEmailAndPassword(emailUser, passwordUser).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        if (TextUtils.isEmpty(userEmail) || TextUtils.isEmpty(userPassword)) {
+            Toast.makeText(Login.this, "Please Enter in Valid email and password", Toast.LENGTH_LONG).show();
+        } else {
+            mAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = firebaseAuth.getCurrentUser();
-                        Toast.makeText(MainActivity.this, "Registration Successful", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(MainActivity.this, MainScreen.class);
-                        MainActivity.this.startActivity(intent);
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Login.this, MainScreen.class);
+                        Login.this.startActivity(intent);
                     } else if (!task.isSuccessful()) {
-                        Toast.makeText(MainActivity.this, "Registration Unsuccessful", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Login.this, "Login unsuccessful", Toast.LENGTH_LONG).show();
                     }
                 }
             });
+
         }
     }
 }
-
-
-
