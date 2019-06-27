@@ -1,15 +1,21 @@
 package com.example.andre.aced;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainScreen extends AppCompatActivity {
 
     private TextView mTextMessage;
+    private FirebaseAuth mAuth1;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -26,6 +32,7 @@ public class MainScreen extends AppCompatActivity {
                 case R.id.navigation_notes:
                     mTextMessage.setText("Notes");
                     return true;
+
             }
             return false;
         }
@@ -39,6 +46,28 @@ public class MainScreen extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mAuth1 = FirebaseAuth.getInstance();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.moreoptionmenue, menu);
+        //return super.OnCreateOptionsMenu(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout:
+                mAuth1.signOut();
+                finish();
+                Intent intent = new Intent(MainScreen.this, Login.class);
+                MainScreen.this.startActivity(intent);
+                break;
+        }
+        return true;
+        //return super.onOptionsItemSelected(item);
+    }
 }
