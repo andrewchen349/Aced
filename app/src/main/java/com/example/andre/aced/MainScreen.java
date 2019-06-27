@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,6 +19,8 @@ public class MainScreen extends AppCompatActivity {
 
     private TextView mTextMessage;
     private FirebaseAuth mAuth1;
+    private ImageView moreOptions;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,9 +49,18 @@ public class MainScreen extends AppCompatActivity {
         setContentView(R.layout.activity_main_screen);
 
         mTextMessage = (TextView) findViewById(R.id.message);
+        moreOptions = (ImageView)findViewById(R.id.moreoption);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         mAuth1 = FirebaseAuth.getInstance();
+
+        moreOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(MainScreen.this, Option.class);
+                MainScreen.this.startActivity(intent1);
+            }
+        });
     }
 
     @Override

@@ -3,7 +3,7 @@
     package="com.example.andre.aced">
 
     <supports-screens
-        android:largeScreens="true"
+        android:largeScreens="false"
         android:normalScreens="true"
         android:resizeable="true"
         android:smallScreens="false"
@@ -26,12 +26,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login" android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Login"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainScreen"
-            android:label="Calendar"> android:configChanges="orientation"
-            android:screenOrientation="portrait"</activity>
+            android:label="Calendar">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".Option"></activity>
     </application>
 
 </manifest>
