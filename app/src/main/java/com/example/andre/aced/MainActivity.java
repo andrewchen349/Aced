@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){
-                    Intent intent = new Intent(MainActivity.this, MainScreen.class);
+                    Intent intent = new Intent(MainActivity.this, Calendar.class);
                     MainActivity.this.startActivity(intent);
                 }
             }
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         Toast.makeText(MainActivity.this, "Registration Successful", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(MainActivity.this, MainScreen.class);
+                        Intent intent = new Intent(MainActivity.this, Calendar.class);
                         MainActivity.this.startActivity(intent);
                     } else if (!task.isSuccessful()) {
                         Toast.makeText(MainActivity.this, "Registration Unsuccessful", Toast.LENGTH_LONG).show();

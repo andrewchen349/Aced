@@ -31,12 +31,27 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainScreen"
+            android:name=".Calendar"
             android:label="Calendar">
             android:configChanges="orientation"
             android:screenOrientation="portrait"
         </activity>
-        <activity android:name=".Option"></activity>
+        <activity android:name=".Option">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".Checklist">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".Notes">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".Credits">
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+        </activity>
     </application>
 
 </manifest>

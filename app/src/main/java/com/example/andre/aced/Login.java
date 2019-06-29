@@ -58,7 +58,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null) {
-                    Intent intent = new Intent(Login.this, MainScreen.class);
+                    Intent intent = new Intent(Login.this, Calendar.class);
                     Login.this.startActivity(intent);
                 }
             }
@@ -171,7 +171,7 @@ public class Login extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Login.this, MainScreen.class);
+                        Intent intent = new Intent(Login.this, Calendar.class);
                         Login.this.startActivity(intent);
                     } else if (!task.isSuccessful()) {
                         Toast.makeText(Login.this, "Login unsuccessful", Toast.LENGTH_LONG).show();
