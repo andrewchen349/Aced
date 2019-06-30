@@ -18,22 +18,22 @@ public class NotesDialog extends DialogFragment {
     private TextView cancel;
 
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.note_text_input, container, false);
+    //@Nullable
+    //@Override
+   /* public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.note_dialog, container, false);
         //save = view.findViewById(R.id.save_action);
         cancel = view.findViewById(R.id.cancel_action);
 
-        //Cancel Notes
+        //Cancel Note
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getDialog().dismiss();
             }
-        });
+        });*/
 
-        //Save Notes
+        //Save Note
         /*save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,7 +42,7 @@ public class NotesDialog extends DialogFragment {
 
             }
         });*/
-        return view;
+        //return view;
     }
 
-}
+

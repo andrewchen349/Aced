@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/timestamp"
         android:layout_toRightOf="@id/dot"
-        android:textColor="@color/nottextcolor"
+        android:textColor="@color/timestamp"
         android:textSize="@dimen/note_list_text" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
