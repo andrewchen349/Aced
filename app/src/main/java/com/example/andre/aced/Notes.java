@@ -34,6 +34,8 @@ import view.NotesAdapter;
 
 public class Notes extends AppCompatActivity {
 
+    //CONSTANTS and FIELDS
+
     private  static final int ACTIVITY_NUM = 2;
     private ImageView moreOptions;
     private Button add;
@@ -53,8 +55,6 @@ public class Notes extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
         setUpBottomNavbar();
-
-
 
         //Find Corresponding XML Components
         moreOptions = (ImageView)findViewById(R.id.moreoption);
