@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Checklist;
 import model.Note;
 
 
@@ -31,6 +32,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // create notes table
         db.execSQL(Note.CREATE_TABLE);
+
+        //creates checklist table
+        db.execSQL(Checklist.CREATE_TABLE);
     }
 
     // Upgrading database
@@ -38,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + Note.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + Checklist.TABLE_NAME);
 
         // Create tables again
         onCreate(db);
@@ -62,10 +67,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    public long insertChecklist(String task){
+        //Opens db for inserting new task
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Store info in key value pairs using android ContentValues
+        ContentValues values = new ContentValues();
+        values.put(Checklist.COLUMN_TASK, task);
+
+        long id = db.insert(Checklist.TABLE_NAME, null, values);
+
+        db.close();
+
+        return id; //return the id of the task at specific row
+    }
+
     public Note getNote(long id) {
         // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();
 
+        //Retreive specific info from rows using Android Cursor
         Cursor cursor = db.query(Note.TABLE_NAME,
                 new String[]{Note.COLUMN_ID, Note.COLUMN_NOTE, Note.COLUMN_TIMESTAMP},
                 Note.COLUMN_ID + "=?",
@@ -84,6 +105,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return note;
+    }
+
+    public Checklist getTask(long id){
+
+        //reads database
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Checklist.TABLE_NAME,
+                new String[]{Checklist.COLUMN_ID, Checklist.COLUMN_TASK, Checklist.COLUMN_TIMESTAMP},
+                Checklist.COLUMN_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        Checklist task = new Checklist(cursor.getInt(cursor.getColumnIndex(Checklist.COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndex(Checklist.COLUMN_TASK)),
+                cursor.getString(cursor.getColumnIndex(Checklist.COLUMN_TIMESTAMP)));
+
+        //Close db connection
+        cursor.close();
+
+        return task;
+
     }
 
     public List<Note> getAllNotes() {
@@ -115,6 +161,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return notes;
     }
 
+    //add all Tasks to a List
+
+    public List<Checklist> getAllTasks(){
+        List<Checklist> tasks = new ArrayList<>();
+
+        // Select All Query Arrange in DESC
+        String selectQuery = "SELECT  * FROM " + Note.TABLE_NAME + " ORDER BY " +
+                Note.COLUMN_TIMESTAMP + " DESC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null); // Points to all rows
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Checklist task = new Checklist();
+                task.setId(cursor.getInt(cursor.getColumnIndex(Note.COLUMN_ID)));
+                task.setTask(cursor.getString(cursor.getColumnIndex(Note.COLUMN_NOTE)));
+                task.setTimestamp(cursor.getString(cursor.getColumnIndex(Note.COLUMN_TIMESTAMP)));
+
+                tasks.add(task);
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        //returns List
+        return tasks;
+    }
+
     public int getNotesCount() {
         String countQuery = "SELECT  * FROM " + Note.TABLE_NAME;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -128,6 +205,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
+    public int getTaskCount(){
+        int count;
+
+        String countQuery = "SELECT  * FROM " + Checklist.TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+
+        count = cursor.getCount();
+        cursor.close();
+
+        return count;
+
+        /*List <Checklist> notes = getAllTasks();
+        return notes.size();*/
+
+    }
+
     public int updateNote(Note note) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -139,10 +233,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(note.getId())});
     }
 
+    //Updating Tasks
+    public int updateTask(Checklist task){
+
+        //Modfiying Database
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Checklist.COLUMN_TASK, task.getTask());
+
+        //update row with new task
+        return db.update(Note.TABLE_NAME, values, Note.COLUMN_ID + " = ?",
+                new String[]{String.valueOf(task.getId())});
+    }
+
     public void deleteNote(Note note) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(Note.TABLE_NAME, Note.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(note.getId())});
         db.close();
+    }
+
+    public void deleteTask(Checklist task){
+
+        //Need Readable Database for deletion
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(Checklist.TABLE_NAME, Checklist.COLUMN_ID + " = ?",
+                new String[]{String.valueOf(task.getId())});
+
+        //close connection
+        db.close();
+
     }
 }
