@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Checklist;
+
 
 /*public class checklist_databasehelper extends SQLiteOpenHelper {
 

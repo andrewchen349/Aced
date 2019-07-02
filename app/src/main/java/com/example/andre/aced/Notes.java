@@ -135,15 +135,15 @@ public class Notes extends AppCompatActivity {
     }
 
     private void createNote(String note) {
-        // inserting note in db and getting
-        // newly inserted note id
+        // inserting task in db and getting
+        // newly inserted task id
         long id = db.insertNote(note);
 
-        // get the newly inserted note from db
+        // get the newly inserted task from db
         Note n = db.getNote(id);
 
         if (n != null) {
-            // adding new note to array list at 0 position
+            // adding new task to array list at 0 position
             notesList.add(0, n);
 
             // refreshing the list
@@ -156,33 +156,33 @@ public class Notes extends AppCompatActivity {
     }
 
     /**
-     * Updating note in db and updating
+     * Updating task in db and updating
      * item in the list by its position
      */
     private void updateNote(String note, int position) {
         Note n = notesList.get(position);
-        // updating note text
+        // updating task text
         n.setNote(note);
 
-        // updating note in db
+        // updating task in db
         db.updateNote(n);
 
         // refreshing the list
         notesList.set(position, n);
         mAdapter.notifyItemChanged(position);
 
-        //toggleEmptyNotes();
+        toggleEmptyNotes();
     }
 
     /**
-     * Deleting note from SQLite and removing the
+     * Deleting task from SQLite and removing the
      * item from the list by its position
      */
     private void deleteNote(int position) {
-        // deleting the note from db
+        // deleting the task from db
         db.deleteNote(notesList.get(position));
 
-        // removing the note from the list
+        // removing the task from the list
         notesList.remove(position);
         mAdapter.notifyItemRemoved(position);
 
@@ -225,18 +225,18 @@ public class Notes extends AppCompatActivity {
             public void onClick(View v) {
                 // Show toast message when no text is entered
                 if (TextUtils.isEmpty(inputNote.getText().toString())) {
-                    Toast.makeText(Notes.this, "Enter note!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Notes.this, "Enter task!", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
                     alertDialog.dismiss();
                 }
 
-                // check if user updating note
+                // check if user updating task
                 if (shouldUpdate && note != null) {
-                    // update note by it's id
+                    // update task by it's id
                     updateNote(inputNote.getText().toString(), position);
                 } else {
-                    // create new note
+                    // create new task
                     createNote(inputNote.getText().toString());
                 }
             }

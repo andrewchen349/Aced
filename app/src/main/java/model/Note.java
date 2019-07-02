@@ -5,7 +5,7 @@ public class Note {
     public static final String TABLE_NAME = "notes";
 
     public static final String COLUMN_ID = "id";
-    public static final String COLUMN_NOTE = "note";
+    public static final String COLUMN_NOTE = "task";
     public static final String COLUMN_TIMESTAMP = "timestamp";
 
     private int id;
