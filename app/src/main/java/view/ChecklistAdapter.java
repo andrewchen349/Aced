@@ -67,7 +67,7 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
         // Displaying dot from HTML character code
         //holder.dot.setText(Html.fromHtml("&#8226;"));
         //holder.checkBox.setChecked(false);
-        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+        /*holder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(holder.checkBox.isChecked()){
@@ -79,7 +79,7 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
                     //TODO
                 }
             }
-        });
+        });*/
 
 
         // Formatting and displaying timestamp

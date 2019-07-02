@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public class Checklist extends AppCompatActivity {
     private List<model.Checklist>checklistList = new ArrayList<>();
     private TextView noTaskView;
     private Button add;
+    private CheckBox completeTask;
 
 
 
@@ -95,6 +97,7 @@ public class Checklist extends AppCompatActivity {
                 recyclerView, new Recylcer_Touch_Listener.ClickListener() {
             @Override
             public void onClick(View view, final int position) {
+                completeTasks(position);
             }
 
             @Override
@@ -102,6 +105,28 @@ public class Checklist extends AppCompatActivity {
                 showActionsDialog(position);
             }
         }));
+
+        toggleEmptyTask();
+
+
+    }
+
+    private void completeTasks(final int position){
+
+        completeTask = (CheckBox)findViewById(R.id.dot_checklist) ;
+
+        completeTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(completeTask.isChecked()){
+                    completeTask.setVisibility(View.INVISIBLE);
+                    Toast.makeText(Checklist.this, "Task Completed!", Toast.LENGTH_LONG).show();
+                    db.deleteTask(checklistList.get(position));
+                    checklistList.remove(position);
+                    checklistAdapter.notifyItemRemoved(position);
+                }
+            }
+        });
 
         toggleEmptyTask();
     }
@@ -161,13 +186,28 @@ public class Checklist extends AppCompatActivity {
     }
 
 
-    private void deleteTask(int position) {
+    private void deleteTask(final int position) {
         // deleting the task from db
         db.deleteTask(checklistList.get(position));
 
         // removing the task from the list
         checklistList.remove(position);
         checklistAdapter.notifyItemRemoved(position);
+
+        completeTask = (CheckBox)findViewById(R.id.dot_checklist) ;
+
+        completeTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(completeTask.isChecked()){
+                    completeTask.setVisibility(View.INVISIBLE);
+                    Toast.makeText(Checklist.this, "Task Completed!", Toast.LENGTH_LONG).show();
+                    db.deleteTask(checklistList.get(position));
+                    checklistList.remove(position);
+                    checklistAdapter.notifyItemRemoved(position);
+                }
+            }
+        });
 
         toggleEmptyTask();
     }
