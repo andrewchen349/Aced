@@ -3,7 +3,6 @@ package com.example.andre.aced;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
@@ -30,7 +29,6 @@ import Util.MyDividerItemDecoration;
 import Util.Recylcer_Touch_Listener;
 import Util.bottomNavBarHelper;
 import data.DatabaseHelper;
-import model.Note;
 import view.ChecklistAdapter;
 
 //import view.ChecklistAdapter;
@@ -41,7 +39,7 @@ public class Checklist extends AppCompatActivity {
 
     private ImageView moreOptions;
     private DatabaseHelper db;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView1;
     private ChecklistAdapter checklistAdapter;
     private List<model.Checklist>checklistList = new ArrayList<>();
     private TextView noTaskView;
@@ -71,7 +69,7 @@ public class Checklist extends AppCompatActivity {
 
 
         add = (Button)findViewById(R.id.addTask);
-        recyclerView = (RecyclerView)findViewById(R.id.recycler_view_checklist);
+        recyclerView1 = (RecyclerView)findViewById(R.id.recycler_view_checklist);
         noTaskView = (TextView)findViewById(R.id.empty_checklist_view);
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -86,15 +84,15 @@ public class Checklist extends AppCompatActivity {
 
 
         checklistAdapter = new ChecklistAdapter(checklistList, this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
-        recyclerView.setAdapter(checklistAdapter);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
+        recyclerView1.setLayoutManager(mLayoutManager1);
+        recyclerView1.setItemAnimator(new DefaultItemAnimator());
+        recyclerView1.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
+        recyclerView1.setAdapter(checklistAdapter);
 
 
-        recyclerView.addOnItemTouchListener(new Recylcer_Touch_Listener(this,
-                recyclerView, new Recylcer_Touch_Listener.ClickListener() {
+        recyclerView1.addOnItemTouchListener(new Recylcer_Touch_Listener(this,
+                recyclerView1, new Recylcer_Touch_Listener.ClickListener() {
             @Override
             public void onClick(View view, final int position) {
                 completeTasks(position);
@@ -132,7 +130,7 @@ public class Checklist extends AppCompatActivity {
     }
 
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
+        CharSequence colors[] = new CharSequence[]{"Edit", "Delete", "Mark As Complete", "Set Priority"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
@@ -141,6 +139,9 @@ public class Checklist extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
                     showTaskDialog(true, checklistList.get(position), position);
+                 if (which == 1){
+                        completeTasks(position);
+                    }
                 } else {
                     deleteTask(position);
                 }
@@ -149,7 +150,7 @@ public class Checklist extends AppCompatActivity {
         builder.show();
     }
 
-    private void createNote(String task) {
+    private void createTask(String task) {
         // inserting task in db and getting
         // newly inserted task id
         long id = db.insertChecklist(task);
@@ -170,7 +171,7 @@ public class Checklist extends AppCompatActivity {
         checklistAdapter.notifyDataSetChanged();
     }
 
-    private void updateNote(String task, int position) {
+    private void updateTask(String task, int position) {
         model.Checklist n = checklistList.get(position);
         // updating task text
         n.setTask(task);
@@ -194,7 +195,7 @@ public class Checklist extends AppCompatActivity {
         checklistList.remove(position);
         checklistAdapter.notifyItemRemoved(position);
 
-        completeTask = (CheckBox)findViewById(R.id.dot_checklist) ;
+        /*completeTask = (CheckBox)findViewById(R.id.dot_checklist) ;
 
         completeTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,7 +208,7 @@ public class Checklist extends AppCompatActivity {
                     checklistAdapter.notifyItemRemoved(position);
                 }
             }
-        });
+        });*/
 
         toggleEmptyTask();
     }
@@ -221,7 +222,7 @@ public class Checklist extends AppCompatActivity {
 
         final EditText inputTask= view.findViewById(R.id.task);
         TextView dialogTitle = view.findViewById(R.id.dialog_title);
-        dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_note_title) : getString(R.string.lbl_edit_note_title));
+        dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_task_title) : getString(R.string.lbl_edit_task_title));
 
         if (shouldUpdate && task != null) {
             inputTask.setText(task.getTask());
@@ -257,10 +258,10 @@ public class Checklist extends AppCompatActivity {
                 // check if user updating task
                 if (shouldUpdate && task != null) {
                     // update task by it's id
-                    updateNote(inputTask.getText().toString(), position);
+                    updateTask(inputTask.getText().toString(), position);
                 } else {
                     // create new task
-                    createNote(inputTask.getText().toString());
+                    createTask(inputTask.getText().toString());
                 }
             }
         });

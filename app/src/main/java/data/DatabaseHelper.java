@@ -171,8 +171,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<model.Checklist> tasks = new ArrayList<>();
 
         // Select All Query Arrange in DESC
-        String selectQuery = "SELECT  * FROM " + Note.TABLE_NAME + " ORDER BY " +
-                Note.COLUMN_TIMESTAMP + " DESC";
+        String selectQuery = "SELECT  * FROM " + model.Checklist.TABLE_NAME1 + " ORDER BY " +
+                model.Checklist.COLUMN_TIMESTAMP2 + " DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null); // Points to all rows
@@ -181,9 +181,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 model.Checklist task = new model.Checklist();
-                task.setId(cursor.getInt(cursor.getColumnIndex(Note.COLUMN_ID)));
-                task.setTask(cursor.getString(cursor.getColumnIndex(Note.COLUMN_NOTE)));
-                task.setTimestamp(cursor.getString(cursor.getColumnIndex(Note.COLUMN_TIMESTAMP)));
+                task.setId(cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_ID1)));
+                task.setTask(cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TASK2)));
+                task.setTimestamp(cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TIMESTAMP2)));
 
                 tasks.add(task);
             } while (cursor.moveToNext());
@@ -247,7 +247,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(model.Checklist.COLUMN_TASK2, task.getTask());
 
         //update row with new task
-        return db.update(Note.TABLE_NAME, values, Note.COLUMN_ID + " = ?",
+        return db.update(model.Checklist.TABLE_NAME1, values, model.Checklist.COLUMN_ID1 + " = ?",
                 new String[]{String.valueOf(task.getId())});
     }
 
