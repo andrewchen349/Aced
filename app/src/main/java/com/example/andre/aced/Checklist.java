@@ -1,10 +1,20 @@
 package com.example.andre.aced;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.media.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -20,9 +30,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import Util.MyDividerItemDecoration;
@@ -31,9 +43,10 @@ import Util.bottomNavBarHelper;
 import data.DatabaseHelper;
 import view.ChecklistAdapter;
 
+
 //import view.ChecklistAdapter;
 
-public class Checklist extends AppCompatActivity {
+public class Checklist extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
     private static final int ACTIVITY_NUM  = 1;
 
@@ -45,6 +58,13 @@ public class Checklist extends AppCompatActivity {
     private TextView noTaskView;
     private Button add;
     private CheckBox completeTask;
+    private Context context = this;
+    private NotificationManagerCompat notificationManagerCompat;
+
+    public int user_picked_minute;
+    public int user_picked_hour;
+    public model.Checklist user_entered_task;
+    public static String titleTask;
 
 
 
@@ -54,6 +74,9 @@ public class Checklist extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checklist);
+
+        notificationManagerCompat =  NotificationManagerCompat.from(this);
+
         setUpBottomNavbar();
 
         //Field Corresponding XML Components
@@ -109,6 +132,47 @@ public class Checklist extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        user_picked_hour = hourOfDay;
+        user_picked_minute = minute;
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        c.set(Calendar.MINUTE, minute);
+        c.set(Calendar.SECOND, 0);
+
+        startAlarm(c, titleTask);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void startAlarm(Calendar c, String s){
+        AlarmManager alarmManager = (AlarmManager)getSystemService(context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
+
+    }
+
+
+    //Create Notification for Priority Task
+    public void createPriorityNotiLow() {
+        android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this, Notification_Channels.checkListPriority);
+
+        //Builds Notification
+        builder.setSmallIcon(R.drawable.noti);
+        builder.setContentTitle("You Have Incomplete Task");
+        builder.setPriority(android.support.v4.app.NotificationCompat.PRIORITY_HIGH);
+        builder.setAutoCancel(true);
+        //builder.build();
+
+        notificationManagerCompat.notify(1, builder.build());
+    }
+
     private void completeTasks(final int position){
 
         completeTask = (CheckBox)findViewById(R.id.dot_checklist) ;
@@ -128,9 +192,12 @@ public class Checklist extends AppCompatActivity {
 
         toggleEmptyTask();
     }
-
+    public String getUserTask(model.Checklist task){
+        String result = task.getTask();
+        return result;
+    }
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete", "Mark As Complete", "Set Priority"};
+        CharSequence colors[] = new CharSequence[]{"Edit", "Mark As Complete", "Set Reminder"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
@@ -139,16 +206,70 @@ public class Checklist extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
                     showTaskDialog(true, checklistList.get(position), position);
+                }
                  if (which == 1){
                         completeTasks(position);
                     }
-                } else {
-                    deleteTask(position);
+                /*if(which == 2){
+                     completeTasks(position);
                 }
+                /*if(which == 3){
+                     showPriorityDialog(position);
+                }*/
+
+                if(which == 2){
+                    //TODO Set Date Picker
+                    DialogFragment timePicker = new TimePickerFragment();
+                    timePicker.show(getSupportFragmentManager(), "time picker");
+                    titleTask  = getUserTask(checklistList.get(position));
+
+                }
+
+
+                /*else {
+                    deleteTask(position);
+                }*/
             }
         });
         builder.show();
     }
+
+    //Priority Dialog
+    /*private void showPriorityDialog(final int position){
+        CharSequence options[] = new CharSequence[]{"Low", "Medium", "Urgent"};
+
+        AlertDialog.Builder priorityBuilder = new AlertDialog.Builder(this);
+        priorityBuilder.setTitle("Choose Level or Priority");
+        priorityBuilder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0){
+                    //TODO set Notification to every 6 hours
+
+                }
+                if(which == 1){
+                    //TODO setNotifications to every 3 hours
+                }
+                if(which == 2){
+                    //TODO setNotifications to every 1 hour
+                }
+            }
+        });
+
+        priorityBuilder.show();
+    }*/
+
+    //Reminder Dialog
+   /* private void showReminderDialog(final int position){
+        TimePickerDialog timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                int hour = hourOfDay;
+                int min = minute;
+
+            }
+        });
+    }*/
 
     private void createTask(String task) {
         // inserting task in db and getting
@@ -195,20 +316,6 @@ public class Checklist extends AppCompatActivity {
         checklistList.remove(position);
         checklistAdapter.notifyItemRemoved(position);
 
-        /*completeTask = (CheckBox)findViewById(R.id.dot_checklist) ;
-
-        completeTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(completeTask.isChecked()){
-                    completeTask.setVisibility(View.INVISIBLE);
-                    Toast.makeText(Checklist.this, "Task Completed!", Toast.LENGTH_LONG).show();
-                    db.deleteTask(checklistList.get(position));
-                    checklistList.remove(position);
-                    checklistAdapter.notifyItemRemoved(position);
-                }
-            }
-        });*/
 
         toggleEmptyTask();
     }
