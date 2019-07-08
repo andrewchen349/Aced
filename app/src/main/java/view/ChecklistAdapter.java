@@ -48,6 +48,7 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
         this.taskList = taskList;
     }
 
+
     @Override
     public MyViewHolder1 onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -57,7 +58,6 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
 
         return new MyViewHolder1(itemView);
     }
-
     //Reloads old rows with new data functionality of onBindViewHolder
     @Override
     public void onBindViewHolder(final MyViewHolder1 holder, int position) {

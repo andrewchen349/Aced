@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Calendar"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -31,13 +31,7 @@
             android:name=".Login"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Calendar"
-            android:label="Calendar"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
 
-        </activity>
         <activity android:name=".Option"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
@@ -74,6 +68,14 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity android:name=".jf"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".Tutorial"
+            android:label="appTutorial" />
+
 
         <receiver android:name=".AlertReceiver"/>
     </application>

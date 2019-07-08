@@ -22,11 +22,11 @@ public class Option extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_option);
 
-        mAuth = FirebaseAuth.getInstance();
+        //mAuth = FirebaseAuth.getInstance();
 
         backButton = (ImageView) findViewById(R.id.optionBack);
         notification = (Switch)findViewById(R.id.toggleNoti);
-        logout = (ImageView)findViewById(R.id.optionLogout);
+        //logout = (ImageView)findViewById(R.id.optionLogout);
         credits = (ImageView)findViewById(R.id.optionCredit);
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -37,7 +37,7 @@ public class Option extends AppCompatActivity {
             }
         });
 
-        logout.setOnClickListener(new View.OnClickListener() {
+        /*logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mAuth.getCurrentUser() != null){
@@ -47,7 +47,7 @@ public class Option extends AppCompatActivity {
 
                 }
             }
-        });
+        });*/
 
         credits.setOnClickListener(new View.OnClickListener() {
             @Override

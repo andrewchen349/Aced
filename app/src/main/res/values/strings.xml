@@ -15,4 +15,7 @@
 
     <string name="lbl_new_task_title">New Task</string>
     <string name="lbl_edit_task_title">Edit Task</string>
+
+    <string name="lbl_new_event_title">New Event</string>
+    <string name="lbl_edit_event_title">Edit Event</string>
 </resources>

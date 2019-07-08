@@ -11,6 +11,7 @@ import com.example.andre.aced.Checklist;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Events;
 import model.Note;
 
 
@@ -36,6 +37,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //creates checklist table
         db.execSQL(model.Checklist.CREATE_TABLE1);
+
+        //create Calendar Event table
+        db.execSQL(Events.CREATE_TABLE2);
     }
 
     // Upgrading database
@@ -44,6 +48,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + Note.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + model.Checklist.TABLE_NAME1);
+        db.execSQL("DROP TABLE IF EXISTS " + Events.TABLE_NAME2);
+
 
         // Create tables again
         onCreate(db);
