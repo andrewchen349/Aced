@@ -15,7 +15,7 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:fontFamily="@font/segoeuisl"
         android:textSize="45dp"
-        android:text="Checklist"
+        android:text="My Tasks"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

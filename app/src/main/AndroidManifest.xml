@@ -33,35 +33,46 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Calendar"
-            android:label="Calendar">
+            android:label="Calendar"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait">
+
         </activity>
-        <activity android:name=".Option">
+        <activity android:name=".Option"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait">
+
         </activity>
-        <activity android:name=".Checklist">
+        <activity android:name=".Checklist"
+            android:launchMode="singleTop"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait">
+
         </activity>
-        <activity android:name=".Notes">
+        <activity android:name=".Notes"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Credits">
+        <activity android:name=".Credits"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait">
+
         </activity>
-        <activity android:name=".Splash_Screen">
+        <activity android:name=".Splash_Screen"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait">
+
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".more_info_task"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
 
         <receiver android:name=".AlertReceiver"/>

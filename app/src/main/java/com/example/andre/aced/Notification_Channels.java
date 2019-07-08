@@ -8,7 +8,7 @@ import android.os.Build;
 public class Notification_Channels extends Application {
 
     //Constants and Fields
-    public static final String checkListPriority = "checkList_priority";
+    public static final String checkListUserInput = "checkList_priority";
     public static final String checkListUserPick = "checkList_user_priority";
 
     @Override
@@ -23,17 +23,17 @@ public class Notification_Channels extends Application {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O){
 
             //Priority (Checklist) Notification Channel Creation
-            NotificationChannel class_checkList_priority = new NotificationChannel(checkListPriority, "priorityNotifications", NotificationManager.IMPORTANCE_HIGH);
-            class_checkList_priority.setDescription("Notification for Low, Med, High");
+            NotificationChannel class_checkList_priority = new NotificationChannel(checkListUserInput, "priorityNotifications", NotificationManager.IMPORTANCE_HIGH);
+            class_checkList_priority.setDescription("Notification for User Inputed Time");
 
             //User Custom Priority Notification Channel Creation
-            NotificationChannel class_checkList_userPriority = new NotificationChannel(checkListUserPick, "customUserNotification", NotificationManager.IMPORTANCE_HIGH);
-            class_checkList_userPriority.setDescription("Notification for User Entered Time to Complete Task");
+           // NotificationChannel class_checkList_userPriority = new NotificationChannel(checkListUserPick, "customUserNotification", NotificationManager.IMPORTANCE_HIGH);
+            //class_checkList_userPriority.setDescription("Notification for User Entered Time to Complete Task");
 
             //Call to Create Notification Channel
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(class_checkList_priority);
-            manager.createNotificationChannel(class_checkList_userPriority);
+            //manager.createNotificationChannel(class_checkList_userPriority);
 
 
         }

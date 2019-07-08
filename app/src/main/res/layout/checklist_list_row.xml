@@ -10,6 +10,7 @@
     android:paddingTop="@dimen/dimen_10">
 
     <CheckBox
+
         android:id="@+id/dot_checklist"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
@@ -17,8 +18,8 @@
         android:layout_marginRight="10dp"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"
-        android:textColor="@color/colorAccent"
-        android:textSize="40sp" />
+
+        />
 
     <TextView
         android:id="@+id/timestamp_checklist"
@@ -36,5 +37,9 @@
         android:layout_toRightOf="@+id/dot_checklist"
         android:textColor="@color/timestamp"
         android:textSize="@dimen/note_list_text" />
+
+
+
+
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package view;
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import model.Checklist;
 
@@ -23,7 +25,6 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
     //Constants and Fields
     private List<Checklist> taskList;
     private Context context;
-    //private DatabaseHelper db;
 
     public class MyViewHolder1 extends RecyclerView.ViewHolder {
         public TextView task;
@@ -36,7 +37,8 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
             checkBox = view.findViewById(R.id.dot_checklist);
 
             timestamp = view.findViewById(R.id.timestamp_checklist);
-            //db = new DatabaseHelper(context);
+
+
         }
     }
 
@@ -50,6 +52,8 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
     public MyViewHolder1 onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.checklist_list_row, parent, false);
+
+
 
         return new MyViewHolder1(itemView);
     }
@@ -83,5 +87,8 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
 
         return "";
     }
+
+
+
 
 }

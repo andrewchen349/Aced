@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
@@ -36,6 +37,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import Util.MyDividerItemDecoration;
 import Util.Recylcer_Touch_Listener;
@@ -51,21 +53,23 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
     private static final int ACTIVITY_NUM  = 1;
 
     private ImageView moreOptions;
-    private DatabaseHelper db;
+    public static DatabaseHelper db;
     private RecyclerView recyclerView1;
-    private ChecklistAdapter checklistAdapter;
-    private List<model.Checklist>checklistList = new ArrayList<>();
-    private TextView noTaskView;
+    public static ChecklistAdapter checklistAdapter;
+    public List<model.Checklist>checklistList = new ArrayList<>();
+    private static TextView noTaskView;
     private Button add;
     private CheckBox completeTask;
     private Context context = this;
     private NotificationManagerCompat notificationManagerCompat;
+    private CountDownTimer countDownTimer;
 
-    public int user_picked_minute;
-    public int user_picked_hour;
-    public model.Checklist user_entered_task;
+    public static int user_picked_minute;
+    public static int user_picked_hour;
     public static String titleTask;
-
+    public static int hour;
+    public static int minute;
+    public int task_position;
 
 
 
@@ -74,6 +78,7 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checklist);
+
 
         notificationManagerCompat =  NotificationManagerCompat.from(this);
 
@@ -88,8 +93,6 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
                 Checklist.this.startActivity(intent1);
             }
         });
-
-
 
         add = (Button)findViewById(R.id.addTask);
         recyclerView1 = (RecyclerView)findViewById(R.id.recycler_view_checklist);
@@ -112,6 +115,7 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
         recyclerView1.setItemAnimator(new DefaultItemAnimator());
         recyclerView1.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
         recyclerView1.setAdapter(checklistAdapter);
+        checklistAdapter.notifyDataSetChanged();
 
 
         recyclerView1.addOnItemTouchListener(new Recylcer_Touch_Listener(this,
@@ -119,7 +123,7 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
             @Override
             public void onClick(View view, final int position) {
                 completeTasks(position);
-            }
+                }
 
             @Override
             public void onLongClick(View view, int position) {
@@ -135,20 +139,36 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+        Toast.makeText(Checklist.this, "Reminder set!", Toast.LENGTH_LONG).show();
+
         user_picked_hour = hourOfDay;
         user_picked_minute = minute;
+
+        checklistList.get(task_position).setHour(hourOfDay);
+        checklistList.get(task_position).setMin(minute);
+
+        db.insertHour(checklistList.get(task_position));
+        db.insertMinute(checklistList.get(task_position));
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(Calendar.MINUTE, minute);
         c.set(Calendar.SECOND, 0);
 
+        //Adds a Day for Midnight
+        if(c.before(Calendar.getInstance())) {
+            c.add(Calendar.DATE, 1);
+        }
+
         startAlarm(c, titleTask);
 
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void startAlarm(Calendar c, String s){
+    public void startAlarm(Calendar c, String s){
         AlarmManager alarmManager = (AlarmManager)getSystemService(context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
 
@@ -159,20 +179,6 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
     }
 
 
-    //Create Notification for Priority Task
-    public void createPriorityNotiLow() {
-        android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this, Notification_Channels.checkListPriority);
-
-        //Builds Notification
-        builder.setSmallIcon(R.drawable.noti);
-        builder.setContentTitle("You Have Incomplete Task");
-        builder.setPriority(android.support.v4.app.NotificationCompat.PRIORITY_HIGH);
-        builder.setAutoCancel(true);
-        //builder.build();
-
-        notificationManagerCompat.notify(1, builder.build());
-    }
-
     private void completeTasks(final int position){
 
         completeTask = (CheckBox)findViewById(R.id.dot_checklist) ;
@@ -181,11 +187,15 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
             @Override
             public void onClick(View v) {
                 if(completeTask.isChecked()){
-                    completeTask.setVisibility(View.INVISIBLE);
+                    completeTask.setActivated(true);
+                    completeTask.setChecked(true);
                     Toast.makeText(Checklist.this, "Task Completed!", Toast.LENGTH_LONG).show();
                     db.deleteTask(checklistList.get(position));
                     checklistList.remove(position);
                     checklistAdapter.notifyItemRemoved(position);
+                }
+                else{
+                    deleteTask(position);
                 }
             }
         });
@@ -197,7 +207,9 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
         return result;
     }
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Mark As Complete", "Set Reminder"};
+        final more_info_task mit = new more_info_task();
+        CharSequence colors[] = new CharSequence[]{"Edit", "Mark As Complete", "Set Reminder", "More Info"};
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
@@ -208,68 +220,34 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
                     showTaskDialog(true, checklistList.get(position), position);
                 }
                  if (which == 1){
-                        completeTasks(position);
+                        deleteTask(position);
                     }
-                /*if(which == 2){
-                     completeTasks(position);
-                }
-                /*if(which == 3){
-                     showPriorityDialog(position);
-                }*/
-
                 if(which == 2){
-                    //TODO Set Date Picker
+                    task_position = position;
                     DialogFragment timePicker = new TimePickerFragment();
                     timePicker.show(getSupportFragmentManager(), "time picker");
                     titleTask  = getUserTask(checklistList.get(position));
 
                 }
+                if(which == 3){
+                    titleTask = getUserTask(checklistList.get(position));
+                    hour = db.getHour(checklistList.get(position).getId());
+                    minute = db.getMin(checklistList.get(position).getId());
+                    Intent intent2 = new Intent(Checklist.this, more_info_task.class);
+                    intent2.putExtra("taskname", titleTask);
+                    intent2.putExtra("hour", hour);
+                    intent2.putExtra("minute", minute);
+
+                    Checklist.this.startActivity(intent2);
+                    mit.position = position;
 
 
-                /*else {
-                    deleteTask(position);
-                }*/
+                }
+
             }
         });
         builder.show();
     }
-
-    //Priority Dialog
-    /*private void showPriorityDialog(final int position){
-        CharSequence options[] = new CharSequence[]{"Low", "Medium", "Urgent"};
-
-        AlertDialog.Builder priorityBuilder = new AlertDialog.Builder(this);
-        priorityBuilder.setTitle("Choose Level or Priority");
-        priorityBuilder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(which == 0){
-                    //TODO set Notification to every 6 hours
-
-                }
-                if(which == 1){
-                    //TODO setNotifications to every 3 hours
-                }
-                if(which == 2){
-                    //TODO setNotifications to every 1 hour
-                }
-            }
-        });
-
-        priorityBuilder.show();
-    }*/
-
-    //Reminder Dialog
-   /* private void showReminderDialog(final int position){
-        TimePickerDialog timePickerDialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                int hour = hourOfDay;
-                int min = minute;
-
-            }
-        });
-    }*/
 
     private void createTask(String task) {
         // inserting task in db and getting
@@ -308,8 +286,9 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
     }
 
 
-    private void deleteTask(final int position) {
+    public void deleteTask(final int position) {
         // deleting the task from db
+        System.out.println(checklistList.size());
         db.deleteTask(checklistList.get(position));
 
         // removing the task from the list
@@ -393,6 +372,8 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
+
+
 }
 
 

@@ -86,6 +86,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id; //return the id of the task at specific row
     }
 
+    public int insertHour(model.Checklist task){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(model.Checklist.COLUMN_HOUR, task.getHour());
+
+        return db.update(model.Checklist.TABLE_NAME1, values, model.Checklist.COLUMN_ID1 + " = ?",
+                new String[]{String.valueOf(task.getId())});
+    }
+
+    public int insertMinute(model.Checklist task){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(model.Checklist.COLUMN_MINUTE, task.getMinute());
+
+        return db.update(model.Checklist.TABLE_NAME1, values, model.Checklist.COLUMN_ID1 + " = ?",
+                new String[]{String.valueOf(task.getId())});
+    }
+    public int getMin(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(model.Checklist.TABLE_NAME1,
+                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2, model.Checklist.COLUMN_HOUR, model.Checklist.COLUMN_MINUTE},
+                model.Checklist.COLUMN_ID1 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        int min = cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_MINUTE));
+
+        cursor.close();
+
+        return min;
+    }
+
+    public int getHour(long id){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(model.Checklist.TABLE_NAME1,
+                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2, model.Checklist.COLUMN_HOUR, model.Checklist.COLUMN_MINUTE},
+                model.Checklist.COLUMN_ID1 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        int hour = cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_HOUR));
+
+        cursor.close();
+
+        return hour;
+    }
+
     public Note getNote(long id) {
         // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();
@@ -117,7 +175,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(model.Checklist.TABLE_NAME1,
-                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2},
+                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2, model.Checklist.COLUMN_HOUR, model.Checklist.COLUMN_MINUTE},
                 model.Checklist.COLUMN_ID1 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -127,9 +185,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         model.Checklist task = new model.Checklist(cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_ID1)),
                 cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TASK2)),
-                cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TIMESTAMP2)));
+                cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TIMESTAMP2)),
+                cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_HOUR)),
+                cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_MINUTE)));
 
-        //Close db connection
         cursor.close();
 
         return task;
@@ -184,6 +243,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 task.setId(cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_ID1)));
                 task.setTask(cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TASK2)));
                 task.setTimestamp(cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TIMESTAMP2)));
+                task.setHour(cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_HOUR)));
+                task.setMin(cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_MINUTE)));
+
 
                 tasks.add(task);
             } while (cursor.moveToNext());
@@ -203,7 +265,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         int count = cursor.getCount();
         cursor.close();
-
 
         // return count
         return count;
