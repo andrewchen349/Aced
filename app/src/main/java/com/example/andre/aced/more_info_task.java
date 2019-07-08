@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
@@ -28,13 +29,12 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
     private TextView task_desciption;
     public int position;
     private DatabaseHelper db1;
-   // public static int user_minute;
-    //public static int user_hour;
     public static String more_info_taskUpdate;
     public Checklist checklist;
     private TextView displayTime;
     private int min;
     private int hr;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +57,8 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
         min = i.getIntExtra("minute", 0);
         hr = i.getIntExtra("hour", 0);
 
+
+
         //back Button functionality
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,20 +71,30 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
         deleteTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(more_info_task.this, "Task Deleted", Toast.LENGTH_LONG).show();
                 checklist.deleteTask(position);
                 deleteTask.setEnabled(false);
                 completeTask.setEnabled(false);
+                Toast.makeText(more_info_task.this, "Task Deleted", Toast.LENGTH_LONG).show();
+
+                min = 0;
+                hr = 0;
+                displayTime.setText("Done!");
+                checklist.checklistAdapter.notifyDataSetChanged();
             }
         });
 
         completeTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(more_info_task.this, "Task Completed!", Toast.LENGTH_LONG).show();
                 checklist.deleteTask(position);
                 completeTask.setEnabled(false);
                 deleteTask.setEnabled(false);
+                Toast.makeText(more_info_task.this, "Task Completed!", Toast.LENGTH_LONG).show();
+
+                min = 0;
+                hr = 0;
+                displayTime.setText("Done!");
+                checklist.checklistAdapter.notifyDataSetChanged();
             }
         });
 
@@ -96,6 +108,7 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
 
         task_desciption.setText(more_info_taskUpdate);
         displayTime.setText(formatTime());
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -123,13 +136,47 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
         int m = min;
         int hour = hr;
 
-        if(m > 12){
-            m = m - 12;
+        if(hour > 12){
+            hour = hr - 12;
+            String result = (hour + ":" + m);
+            return result;
         }
 
-        String result = (hour + ":" + m);
-        return result;
+        if(m == 0){
+            String result = hour + ":" + m + "0";
+            return result;
+        }
+        else {
+            String result = (hour + ":" + m);
+            return result;
+        }
     }
+
+    //Countdown Timer Implementation
+    /*private void count_timer(){
+        countDownTimer = new CountDownTimer(mTimeLeft, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mTimeLeft = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+                mTimer = false;
+            }
+        }.start();
+    }
+
+    private void updateCountDownText(){
+        //TODO
+        int minute = (int)(mTimeLeft /  1000) / 60;
+        int seconds = (int) (mTimeLeft / 1000) % 60;
+
+        String timeLeftFormatted = String.format("%02d:%02d", minute, seconds);
+        displayTime.setText(timeLeftFormatted);
+
+    }*/
 
 
 }
