@@ -1,6 +1,7 @@
 package com.example.andre.aced;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -18,21 +19,17 @@ public class Splash_Screen extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         newtonCradleLoading = (NewtonCradleLoading)findViewById(R.id.newton_cradle_loading);
-        newtonCradleLoading.setLoadingColor(R.color.colorPrimary);
+        newtonCradleLoading.setLoadingColor(Color.parseColor("#F64848"));
         newtonCradleLoading.start();
-
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(Splash_Screen.this, Tutorial.class);
+                Intent intent = new Intent(Splash_Screen.this, Calendar.class);
                 Splash_Screen.this.startActivity(intent);
-                //newtonCradleLoading.start();
-                //newtonCradleLoading.setLoadingColor(R.color.colorPrimary);
                 finish();
                 newtonCradleLoading.stop();
-                //newtonCradleLoading.stop();
             }
         },2500);
 

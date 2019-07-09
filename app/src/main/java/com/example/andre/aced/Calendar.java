@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,7 +28,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.shrikanthravi.collapsiblecalendarview.data.Day;
 import com.shrikanthravi.collapsiblecalendarview.widget.CollapsibleCalendar;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import Util.MyDividerItemDecoration;
 import Util.bottomNavBarHelper;
+import data.DatabaseHelper;
+import model.Events;
+import view.Calendar_Task_Adapter;
 
 public class Calendar extends AppCompatActivity {
 
@@ -35,19 +44,15 @@ public class Calendar extends AppCompatActivity {
 
     private Button calendar_add_event;
     private RecyclerView recyclerView_calendar;
+    private DatabaseHelper db_calendar;
+    private Calendar_Task_Adapter calendar_task_adapter;
+    private List<Events>all_calendar_events = new ArrayList<>();
+    private String selectDate;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.calendar_view1);
-        setUpBottomNavbar();
-
-        //Find Corresponding XML Components
-        calendar_add_event = (Button)findViewById(R.id.addEvent);
-        recyclerView_calendar = (RecyclerView)findViewById(R.id.calendar_recycler_view);
-
-        //  Declare a new thread to do a preference check
+        //  Declare a new thread to do a preference check for tutorial page
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -85,6 +90,9 @@ public class Calendar extends AppCompatActivity {
         // Start the thread
         t.start();
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.calendar_view1);
+        setUpBottomNavbar();
 
         final CollapsibleCalendar collapsibleCalendar = findViewById(R.id.calendarView);
         collapsibleCalendar.setCalendarListener(new CollapsibleCalendar.CalendarListener() {
@@ -93,6 +101,7 @@ public class Calendar extends AppCompatActivity {
                 Day day = collapsibleCalendar.getSelectedDay();
                 Log.i(getClass().getName(), "Selected Day: "
                         + day.getYear() + "/" + (day.getMonth() + 1) + "/" + day.getDay());
+                selectDate = Integer.toString(day.getYear()) + Integer.toString(day.getMonth()) +Integer.toString(day.getDay());
             }
 
             @Override
@@ -116,6 +125,13 @@ public class Calendar extends AppCompatActivity {
             }
         });
 
+
+
+        //Find Corresponding XML Components
+        calendar_add_event = (Button)findViewById(R.id.addEvent);
+        recyclerView_calendar = (RecyclerView)findViewById(R.id.calendar_recycler_view);
+        db_calendar = new DatabaseHelper(this);
+
         calendar_add_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,21 +139,30 @@ public class Calendar extends AppCompatActivity {
             }
         });
 
-    }
+        all_calendar_events.addAll(db_calendar.getAllEvents());
 
-    private void showTaskDialog(final boolean shouldUpdate, final model.Checklist task, final int position) {
+        calendar_task_adapter = new Calendar_Task_Adapter(all_calendar_events, this);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
+        recyclerView_calendar.setLayoutManager(mLayoutManager1);
+        recyclerView_calendar.setItemAnimator(new DefaultItemAnimator());
+        recyclerView_calendar.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
+        recyclerView_calendar.setAdapter(calendar_task_adapter);
+
+        }
+
+    private void showTaskDialog(final boolean shouldUpdate, final Events event, final int position) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getApplicationContext());
         View view = layoutInflaterAndroid.inflate(R.layout.calendar_event_dialog, null);
 
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(Calendar.this);
         alertDialogBuilderUserInput.setView(view);
 
-        final EditText inputTask= view.findViewById(R.id.event_calendar);
+        final EditText inputEvent= view.findViewById(R.id.event_calendar);
         TextView dialogTitle = view.findViewById(R.id.dialog_title_calendar);
         dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_event_title) : getString(R.string.lbl_edit_event_title));
 
-        if (shouldUpdate && task != null) {
-            inputTask.setText(task.getTask());
+        if (shouldUpdate && event != null) {
+            inputEvent.setText(event.getEvent());
         }
         alertDialogBuilderUserInput
                 .setCancelable(false)
@@ -160,7 +185,7 @@ public class Calendar extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Show toast message when no text is entered
-                if (TextUtils.isEmpty(inputTask.getText().toString())) {
+                if (TextUtils.isEmpty(inputEvent.getText().toString())) {
                     Toast.makeText(Calendar.this, "Enter event!", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -168,25 +193,59 @@ public class Calendar extends AppCompatActivity {
                 }
 
                 // check if user updating task
-                if (shouldUpdate && task != null) {
+                if (shouldUpdate && event != null) {
                     // update task by it's id
-                    updateEvent(inputTask.getText().toString(), position);
+                    updateEvent(inputEvent.getText().toString(), position);
                 } else {
                     // create new task
-                    createEvent(inputTask.getText().toString());
+                    createEvent(inputEvent.getText().toString());
                 }
             }
         });
     }
 
     private void createEvent(String event){
-        //TODO
+
+        long id = db_calendar.insertEvent(event);
+
+        // get the newly inserted task from db
+        Events n = db_calendar.getEvent(id);
+
+        if (n != null) {
+            // adding new task to array list at 0 position
+            all_calendar_events.add(0, n);
+
+            // refreshing the list
+            calendar_task_adapter.notifyDataSetChanged();
+
+        }
+
+        calendar_task_adapter.notifyDataSetChanged();
     }
 
     private void updateEvent(String event, int position){
-        //TODO
+        Events n = all_calendar_events.get(position);
+        // updating event text
+        n.setEvent(event);
+
+        // updating event in db
+        db_calendar.updateEvent(n);
+
+        // refreshing the list
+        all_calendar_events.set(position, n);
+        calendar_task_adapter.notifyItemChanged(position);
+
     }
 
+    private void deleteEvent(final int position){
+
+        db_calendar.deleteEvent(all_calendar_events.get(position));
+
+        // removing the task from the list
+        all_calendar_events.remove(position);
+        calendar_task_adapter.notifyItemRemoved(position);
+
+    }
 
     //Bottom Navigation Bar Setup
    private void setUpBottomNavbar(){

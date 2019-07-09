@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.EventLog;
 
 import com.example.andre.aced.Checklist;
 
@@ -90,6 +91,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return id; //return the id of the task at specific row
+    }
+
+    public long insertEvent(String event){
+        //Open db for inserting new task
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Events.COLUMN_EVENTS, event);
+
+        long id = db.insert(Events.TABLE_NAME2, null, values);
+        db.close();
+        return id;
     }
 
     public int insertHour(model.Checklist task){
@@ -201,6 +214,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public Events getEvent(long id){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Events.TABLE_NAME2,
+                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_DATE},
+                Events.COLUMN_ID2 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+       Events event = new Events(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_ID2)),
+                cursor.getString(cursor.getColumnIndex(Events.COLUMN_EVENTS)),
+                cursor.getString(cursor.getColumnIndex(Events.COLUMN_DATE)));
+
+
+        cursor.close();
+
+        return event;
+    }
+
     public List<Note> getAllNotes() {
         List<Note> notes = new ArrayList<>();
 
@@ -263,6 +299,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //returns List
         return tasks;
     }
+    public List<Events>getAllEvents(){
+        List<Events> events = new ArrayList<>();
+
+        // Select All Query Arrange in DESC
+        String selectQuery = "SELECT  * FROM " + Events.TABLE_NAME2 + " ORDER BY " +
+                Events.COLUMN_DATE + " DESC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null); // Points to all rows
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Events event = new Events();
+                event.setId(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_ID2)));
+                event.setEvent(cursor.getString(cursor.getColumnIndex(Events.COLUMN_EVENTS)));
+               event.setDate(cursor.getString(cursor.getColumnIndex(Events.COLUMN_DATE)));
+
+
+
+                events.add(event);
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        //returns List
+        return events;
+
+    }
 
     public int getNotesCount() {
         String countQuery = "SELECT  * FROM " + Note.TABLE_NAME;
@@ -292,6 +359,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     }
+    public int getEvensCount(){
+         int count;
+
+        String countQuery = "SELECT  * FROM " + Events.TABLE_NAME2;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+
+        count = cursor.getCount();
+        cursor.close();
+
+        return count;
+
+    }
+
 
     public int updateNote(Note note) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -318,6 +399,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(task.getId())});
     }
 
+    public int updateEvent(Events events){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Events.COLUMN_EVENTS, events.getEvent());
+
+        //update row with new task
+        return db.update(Events.TABLE_NAME2, values, Events.COLUMN_ID2 + " = ?",
+                new String[]{String.valueOf(events.getId())});
+    }
+
     public void deleteNote(Note note) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(Note.TABLE_NAME, Note.COLUMN_ID + " = ?",
@@ -333,6 +426,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(task.getId())});
 
         //close connection
+        db.close();
+
+    }
+
+    public void deleteEvent(Events event){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(Events.TABLE_NAME2, Events.COLUMN_ID2 + " = ?",
+                new String[]{String.valueOf(event.getId())});
         db.close();
 
     }

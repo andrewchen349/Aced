@@ -305,7 +305,7 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
 
     public void deleteTask(final int position) {
         // deleting the task from db
-        System.out.println(checklistList.size());
+
         db.deleteTask(checklistList.get(position));
 
         // removing the task from the list
