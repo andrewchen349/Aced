@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.EventLog;
-
-import com.example.andre.aced.Checklist;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +38,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //create Calendar Event table
         db.execSQL(Events.CREATE_TABLE2);
+
+        //create Calendar Event Later Table
+        //db.execSQL(Events_Later.CREATE_TABLE3);
     }
 
     // Upgrading database
@@ -50,7 +50,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + Note.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + model.Checklist.TABLE_NAME1);
         db.execSQL("DROP TABLE IF EXISTS " + Events.TABLE_NAME2);
-
 
         // Create tables again
         onCreate(db);
@@ -104,6 +103,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return id;
     }
+
+    public int insertYear(Events event){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Events.COLUMN_YEAR, event.get_later_calendar_year());
+
+        return db.update(Events.TABLE_NAME2, values, Events.COLUMN_ID2 + " = ?",
+                new String[]{String.valueOf(event.getId())});
+    }
+
+    public int insertMonth(Events event){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Events.COLUMN_MONTH, event.get_later_calendar_month());
+
+        return db.update(Events.TABLE_NAME2, values, Events.COLUMN_ID2 + " = ?",
+                new String[]{String.valueOf(event.getId())});
+    }
+
+    public int insertDay(Events event){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Events.COLUMN_DAY, event.get_later_calendar_day());
+
+        return db.update(Events.TABLE_NAME2, values, Events.COLUMN_ID2 + " = ?",
+                new String[]{String.valueOf(event.getId())});
+    }
+
+
 
     public int insertHour(model.Checklist task){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -219,7 +253,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Events.TABLE_NAME2,
-                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_DATE},
+                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_YEAR, Events.COLUMN_MONTH, Events.COLUMN_DAY},
                 Events.COLUMN_ID2 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -229,7 +263,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
        Events event = new Events(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_ID2)),
                 cursor.getString(cursor.getColumnIndex(Events.COLUMN_EVENTS)),
-                cursor.getString(cursor.getColumnIndex(Events.COLUMN_DATE)));
+                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_YEAR)),
+               cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MONTH)),
+               cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)));
 
 
         cursor.close();
@@ -304,7 +340,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // Select All Query Arrange in DESC
         String selectQuery = "SELECT  * FROM " + Events.TABLE_NAME2 + " ORDER BY " +
-                Events.COLUMN_DATE + " DESC";
+                Events.COLUMN_DAY + " DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null); // Points to all rows
@@ -315,7 +351,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Events event = new Events();
                 event.setId(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_ID2)));
                 event.setEvent(cursor.getString(cursor.getColumnIndex(Events.COLUMN_EVENTS)));
-               event.setDate(cursor.getString(cursor.getColumnIndex(Events.COLUMN_DATE)));
+                event.set_calendar_year(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_YEAR)));
+                event.set_calendar_month(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MONTH)));
+                event.set_calendar_day(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)));
 
 
 

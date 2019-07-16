@@ -21,11 +21,19 @@
         android:textSize="@dimen/dot_text_size" />
 
     <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/dot_event"
+        android:textColor="@color/timestamp"
+        android:textSize="14sp" />
+
+    <TextView
         android:id="@+id/calendar_event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/timestamp"
-        android:layout_toRightOf="@id/dot"
+        android:layout_toRightOf="@id/dot_event"
         android:textColor="@color/timestamp"
         android:textSize="@dimen/note_list_text" />
 

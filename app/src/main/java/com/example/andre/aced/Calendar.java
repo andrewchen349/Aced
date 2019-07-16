@@ -1,30 +1,32 @@
 package com.example.andre.aced;
 
-import android.content.Context;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.shrikanthravi.collapsiblecalendarview.data.Day;
 import com.shrikanthravi.collapsiblecalendarview.widget.CollapsibleCalendar;
 
@@ -32,12 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Util.MyDividerItemDecoration;
+import Util.Recylcer_Touch_Listener;
 import Util.bottomNavBarHelper;
 import data.DatabaseHelper;
 import model.Events;
 import view.Calendar_Task_Adapter;
 
-public class Calendar extends AppCompatActivity {
+public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     //Constants and Fields
     private static final int ACTIVITY_NUM  = 0;
@@ -47,7 +50,14 @@ public class Calendar extends AppCompatActivity {
     private DatabaseHelper db_calendar;
     private Calendar_Task_Adapter calendar_task_adapter;
     private List<Events>all_calendar_events = new ArrayList<>();
+    private List<Events>current_calendar_events = new ArrayList<>();
     private String selectDate;
+
+    private int calendar_year;
+    private int calendar_day;
+    private int calendar_month;
+
+    public  CollapsibleCalendar collapsibleCalendar;
 
 
     @Override
@@ -94,14 +104,81 @@ public class Calendar extends AppCompatActivity {
         setContentView(R.layout.calendar_view1);
         setUpBottomNavbar();
 
-        final CollapsibleCalendar collapsibleCalendar = findViewById(R.id.calendarView);
+
+        //Find Corresponding XML Components
+        calendar_add_event = (Button)findViewById(R.id.addEvent);
+        recyclerView_calendar = (RecyclerView)findViewById(R.id.calendar_recycler_view);
+        db_calendar = new DatabaseHelper(this);
+
+        calendar_add_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+                showEventDialog(false, null, -1);
+            }
+        });
+
+        all_calendar_events.addAll(db_calendar.getAllEvents());
+
+        //calendar_task_adapter = new Calendar_Task_Adapter(all_calendar_events, this);
+        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
+        recyclerView_calendar.setLayoutManager(mLayoutManager1);
+        recyclerView_calendar.setItemAnimator(new DefaultItemAnimator());
+        recyclerView_calendar.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
+        //recyclerView_calendar.setAdapter(calendar_task_adapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+                int position = viewHolder.getAdapterPosition();
+                deleteEvent(position);
+                Toast.makeText(Calendar.this, "Event Deleted!", Toast.LENGTH_LONG).show();
+            }
+        }).attachToRecyclerView(recyclerView_calendar);
+
+        recyclerView_calendar.addOnItemTouchListener(new Recylcer_Touch_Listener(this,
+                recyclerView_calendar, new Recylcer_Touch_Listener.ClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+                deleteEvent(position);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                showActionsDialog(position);
+            }
+        }));
+
+        collapsibleCalendar = findViewById(R.id.calendarView);
+
         collapsibleCalendar.setCalendarListener(new CollapsibleCalendar.CalendarListener() {
             @Override
             public void onDaySelect() {
+                current_calendar_events.clear();
                 Day day = collapsibleCalendar.getSelectedDay();
                 Log.i(getClass().getName(), "Selected Day: "
                         + day.getYear() + "/" + (day.getMonth() + 1) + "/" + day.getDay());
-                selectDate = Integer.toString(day.getYear()) + Integer.toString(day.getMonth()) +Integer.toString(day.getDay());
+
+                for(Events e : all_calendar_events){
+
+                    if(e.get_later_calendar_year() == day.getYear() && e.get_later_calendar_month() == day.getMonth() && e.get_later_calendar_day() == day.getDay()){
+
+                        current_calendar_events.add(e);
+                    }
+                }
+
+                calendar_task_adapter = new Calendar_Task_Adapter(current_calendar_events, getApplicationContext());
+                recyclerView_calendar.setAdapter(calendar_task_adapter);
+                calendar_task_adapter.notifyDataSetChanged();
+
+
             }
 
             @Override
@@ -125,32 +202,27 @@ public class Calendar extends AppCompatActivity {
             }
         });
 
-
-
-        //Find Corresponding XML Components
-        calendar_add_event = (Button)findViewById(R.id.addEvent);
-        recyclerView_calendar = (RecyclerView)findViewById(R.id.calendar_recycler_view);
-        db_calendar = new DatabaseHelper(this);
-
-        calendar_add_event.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTaskDialog(false, null, -1);
-            }
-        });
-
-        all_calendar_events.addAll(db_calendar.getAllEvents());
-
-        calendar_task_adapter = new Calendar_Task_Adapter(all_calendar_events, this);
-        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
-        recyclerView_calendar.setLayoutManager(mLayoutManager1);
-        recyclerView_calendar.setItemAnimator(new DefaultItemAnimator());
-        recyclerView_calendar.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
-        recyclerView_calendar.setAdapter(calendar_task_adapter);
-
         }
 
-    private void showTaskDialog(final boolean shouldUpdate, final Events event, final int position) {
+    private void showActionsDialog(final int position) {
+        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose option");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    showEventDialog(true, all_calendar_events.get(position), position);
+                } else {
+                    deleteEvent(position);
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void showEventDialog(final boolean shouldUpdate, final Events event, final int position) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getApplicationContext());
         View view = layoutInflaterAndroid.inflate(R.layout.calendar_event_dialog, null);
 
@@ -166,6 +238,7 @@ public class Calendar extends AppCompatActivity {
         }
         alertDialogBuilderUserInput
                 .setCancelable(false)
+
                 .setPositiveButton(shouldUpdate ? "update" : "save", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
 
@@ -204,7 +277,7 @@ public class Calendar extends AppCompatActivity {
         });
     }
 
-    private void createEvent(String event){
+    private void createEvent(String event) {
 
         long id = db_calendar.insertEvent(event);
 
@@ -214,13 +287,24 @@ public class Calendar extends AppCompatActivity {
         if (n != null) {
             // adding new task to array list at 0 position
             all_calendar_events.add(0, n);
+            n.set_calendar_year(calendar_year);
+            n.set_calendar_month(calendar_month);
+            n.set_calendar_day(calendar_day);
+
+            db_calendar.insertYear(n);
+            db_calendar.insertMonth(n);
+            db_calendar.insertDay(n);
 
             // refreshing the list
-            calendar_task_adapter.notifyDataSetChanged();
-
+            if(calendar_task_adapter != null) {
+                calendar_task_adapter.notifyDataSetChanged();
+            }
         }
 
-        calendar_task_adapter.notifyDataSetChanged();
+        if(calendar_task_adapter != null) {
+            calendar_task_adapter.notifyDataSetChanged();
+        }
+
     }
 
     private void updateEvent(String event, int position){
@@ -243,7 +327,24 @@ public class Calendar extends AppCompatActivity {
 
         // removing the task from the list
         all_calendar_events.remove(position);
+        current_calendar_events.remove(position);
         calendar_task_adapter.notifyItemRemoved(position);
+
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+        //create new Calendar instance
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+
+        calendar.set(java.util.Calendar.YEAR, year);
+        calendar.set(java.util.Calendar.MONTH, month);
+        calendar.set(java.util.Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        calendar_year = year;
+        calendar_month = month;
+        calendar_day = dayOfMonth;
 
     }
 
