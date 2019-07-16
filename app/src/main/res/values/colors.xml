@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#F64848</color>
-    <color name="colorPrimaryDark">#F64848</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#5AC9DD</color>
+    <color name="colorPrimaryDark">#5AC9DD</color>
+    <color name="colorAccent">#5AC9DD</color>
     <color name = "buttonStyle">#E8EBEC</color>
     <color name = "timestamp"> #858585</color>
     <color name = "nottextcolor"> #232323</color>

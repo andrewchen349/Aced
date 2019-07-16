@@ -71,6 +71,11 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name=".more_event_info"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
 
         <activity android:name=".Tutorial"
             android:label="appTutorial" />

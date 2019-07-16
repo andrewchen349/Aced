@@ -19,7 +19,7 @@ public class Splash_Screen extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         newtonCradleLoading = (NewtonCradleLoading)findViewById(R.id.newton_cradle_loading);
-        newtonCradleLoading.setLoadingColor(Color.parseColor("#F64848"));
+        newtonCradleLoading.setLoadingColor(Color.parseColor("#5AC9DD"));
         newtonCradleLoading.start();
 
         Handler handler = new Handler();

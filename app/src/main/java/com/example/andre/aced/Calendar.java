@@ -147,12 +147,12 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                 recyclerView_calendar, new Recylcer_Touch_Listener.ClickListener() {
             @Override
             public void onClick(View view, final int position) {
-                deleteEvent(position);
+                showActionsDialog(position);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                showActionsDialog(position);
+
             }
         }));
 
@@ -205,16 +205,23 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         }
 
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
+        CharSequence colors[] = new CharSequence[]{"Edit", "More Info", "Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder1 = builder.setItems(colors, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-                    showEventDialog(true, all_calendar_events.get(position), position);
-                } else {
+                    showEventDialog(true, all_calendar_events.get(position), position);}
+
+                    if (which == 1) {
+
+                        Intent intent = new Intent(Calendar.this, more_event_info.class);
+                        Calendar.this.startActivity(intent);
+
+                    }
+                 else {
                     deleteEvent(position);
                 }
             }

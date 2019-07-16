@@ -120,11 +120,12 @@ public class Notes extends AppCompatActivity {
                 recyclerView, new Recylcer_Touch_Listener.ClickListener() {
             @Override
             public void onClick(View view, final int position) {
+                showActionsDialog(position);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                showActionsDialog(position);
+
             }
         }));
 

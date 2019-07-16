@@ -16,12 +16,12 @@
         android:layout_marginRight="@dimen/dot_margin_right"
         android:layout_marginTop="@dimen/dimen_10"
         android:includeFontPadding="false"
-        android:textColor="@color/colorAccent"
+        android:textColor="#5AC9DD"
         android:lineSpacingExtra="0dp"
         android:textSize="@dimen/dot_text_size" />
 
     <TextView
-        android:id="@+id/timestamp"
+        android:id="@+id/timestamp_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/dot_event"
@@ -32,7 +32,7 @@
         android:id="@+id/calendar_event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timestamp"
+        android:layout_below="@id/timestamp_calendar"
         android:layout_toRightOf="@id/dot_event"
         android:textColor="@color/timestamp"
         android:textSize="@dimen/note_list_text" />

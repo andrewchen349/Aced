@@ -139,12 +139,12 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
                 recyclerView1, new Recylcer_Touch_Listener.ClickListener() {
             @Override
             public void onClick(View view, final int position) {
-                completeTasks(position);
+                showActionsDialog(position);
                 }
 
             @Override
             public void onLongClick(View view, int position) {
-                showActionsDialog(position);
+
             }
         }));
 
