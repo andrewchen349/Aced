@@ -41,6 +41,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import Util.MyDividerItemDecoration;
@@ -172,6 +173,9 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
                 int position = viewHolder.getAdapterPosition();
                 deleteEvent(position);
+
+
+
                 Toast.makeText(Calendar.this, "Event Deleted!", Toast.LENGTH_LONG).show();
             }
         }).attachToRecyclerView(recyclerView_calendar);
@@ -259,6 +263,8 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                 int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
 
                 for (Events e : all_calendar_events) {
+
+                    System.out.println("he" + e.get_later_calendar_day());
 
                     if (e.get_later_calendar_year() == year && e.get_later_calendar_month() == month && e.get_later_calendar_day() == day) {
                         current_calendar_events.add(e);
@@ -458,7 +464,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         if (calendar_task_adapter != null) {
             calendar_task_adapter.notifyDataSetChanged();
         }
-        setDots();
+        setDots(n);
 
     }
 
@@ -483,9 +489,18 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
         // removing the task from the list
         all_calendar_events.remove(position);
+        int year = current_calendar_events.get(position).get_later_calendar_year();
+        int month = current_calendar_events.get(position).get_later_calendar_month();
+        int day = current_calendar_events.get(position).get_later_calendar_day();
+
+        Date date = new GregorianCalendar(year, month , day).getTime();
+        compactCalendarView.removeEvents(date);
         current_calendar_events.remove(position);
         calendar_task_adapter.notifyItemRemoved(position);
-        setDots();
+
+        //System.out.println(current_calendar_events.get(position).get_later_calendar_day());
+        //compactCalendarView.removeEvents();
+
 
     }
 
@@ -563,8 +578,8 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         }
     }
 
-    private void setDots() {
-        for (Events e : all_calendar_events) {
+    private void setDots(Events e) {
+
             int month = e.get_later_calendar_month() + 1;
             int year = e.get_later_calendar_year();
             int day = e.get_later_calendar_day();
@@ -606,5 +621,5 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                 }
             }
         }
-    }
+
 }
