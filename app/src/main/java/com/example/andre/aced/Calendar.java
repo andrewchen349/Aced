@@ -37,7 +37,7 @@ import com.shrikanthravi.collapsiblecalendarview.data.Day;
 import com.shrikanthravi.collapsiblecalendarview.widget.CollapsibleCalendar;
 
 
-
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,14 +55,14 @@ import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
 public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     //Constants and Fields
-    private static final int ACTIVITY_NUM  = 0;
+    private static final int ACTIVITY_NUM = 0;
 
     private Button calendar_add_event;
     private RecyclerView recyclerView_calendar;
-    public static  DatabaseHelper db_calendar;
+    public static DatabaseHelper db_calendar;
     public static Calendar_Task_Adapter calendar_task_adapter;
-    public  List<Events>all_calendar_events = new ArrayList<>();
-    public List<Events>current_calendar_events = new ArrayList<>();
+    public List<Events> all_calendar_events = new ArrayList<>();
+    public List<Events> current_calendar_events = new ArrayList<>();
     private TextView noEventView;
     private TextView selectDate;
 
@@ -71,7 +71,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
     private int calendar_month;
     public TextView mo;
 
-    public static  CollapsibleCalendar collapsibleCalendar;
+    public static CollapsibleCalendar collapsibleCalendar;
     public static CompactCalendarView compactCalendarView;
 
 
@@ -95,7 +95,8 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                     final Intent i = new Intent(Calendar.this, Tutorial.class);
 
                     runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        @Override
+                        public void run() {
                             startActivity(i);
                         }
                     });
@@ -122,7 +123,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
         //Find Corresponding XML Components
         //calendar_add_event = (Button)findViewById(R.id.addEvent);
-        recyclerView_calendar = (RecyclerView)findViewById(R.id.calendar_recycler_view);
+        recyclerView_calendar = (RecyclerView) findViewById(R.id.calendar_recycler_view);
         db_calendar = new DatabaseHelper(this);
 
         /*calendar_add_event.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +135,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
             }
         });*/
 
-        SpringFabMenu sfm = (SpringFabMenu)findViewById(R.id.springfab);
+        SpringFabMenu sfm = (SpringFabMenu) findViewById(R.id.springfab);
 
         sfm.setOnSpringFabMenuItemClickListener(new SpringFabMenu.OnSpringFabMenuItemClickListener() {
             @Override
@@ -190,17 +191,60 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
         collapsibleCalendar = findViewById(R.id.calendarView);
         compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
-        noEventView = (TextView)findViewById(R.id.empty_eventss_view);
-        selectDate = (TextView)findViewById(R.id.select_date_view);
-        mo = (TextView)findViewById(R.id.me);
+        noEventView = (TextView) findViewById(R.id.empty_eventss_view);
+        selectDate = (TextView) findViewById(R.id.select_date_view);
+        mo = (TextView) findViewById(R.id.me);
 
         java.util.Calendar c = java.util.Calendar.getInstance();
         int f = c.get((java.util.Calendar.MONTH));
         mo.setText(monthFormat(f));
 
         compactCalendarView.setFirstDayOfWeek(java.util.Calendar.MONDAY);
-        Event ev1 = new Event(Color.GREEN, 1563597329000L, "Some extra data that I want to store.");
-        compactCalendarView.addEvent(ev1);
+
+        for (Events e : all_calendar_events) {
+            int month = e.get_later_calendar_month() + 1;
+            int year = e.get_later_calendar_year();
+            int day = e.get_later_calendar_day();
+
+            if (month < 10 && day < 10) {
+                String date = "0" + month + "/" + "0" + day + "/" + year;
+                //Long millis = null;
+                try {
+                    long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
+                    System.out.println(millis);
+                    Event ev2 = new Event(Color.parseColor("#5AC9DD"), millis);
+                    compactCalendarView.addEvent(ev2);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (month < 10) {
+                String date = "0" + month + "/" + day + "/" + year;
+                //Long millis = null;
+                try {
+                    long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
+                    System.out.println(millis);
+                    Event ev2 = new Event(Color.parseColor("#5AC9DD"), millis);
+                    compactCalendarView.addEvent(ev2);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+
+            } else {
+                String date = month + "/" + day + "/" + year;
+                //Long millis = null;
+                try {
+                    long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
+                    System.out.println(millis);
+                    Event ev2 = new Event(Color.parseColor("#5AC9DD"), millis);
+                    compactCalendarView.addEvent(ev2);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+
+
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
             public void onDayClick(Date dateClicked) {
@@ -214,26 +258,16 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                 int year = cal.get(java.util.Calendar.YEAR);
                 int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
 
-                System.out.println(month);
-                System.out.println(year);
-                System.out.println(day);
+                for (Events e : all_calendar_events) {
 
-
-
-                for(Events e : all_calendar_events){
-
-                    if(e.get_later_calendar_year() == year && e.get_later_calendar_month() == month && e.get_later_calendar_day() == day){
-                        System.out.println("here");
+                    if (e.get_later_calendar_year() == year && e.get_later_calendar_month() == month && e.get_later_calendar_day() == day) {
                         current_calendar_events.add(e);
                     }
                 }
 
-                System.out.println(current_calendar_events.size());
-
-                if(current_calendar_events.size() > 0){
+                if (current_calendar_events.size() > 0) {
                     noEventView.setVisibility(View.GONE);
-                }
-                else{
+                } else {
                     noEventView.setVisibility(View.VISIBLE);
                 }
 
@@ -253,7 +287,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
         noEventView.setVisibility(View.GONE);
 
-        collapsibleCalendar.setCalendarListener(new CollapsibleCalendar.CalendarListener() {
+        /*collapsibleCalendar.setCalendarListener(new CollapsibleCalendar.CalendarListener() {
             @Override
             public void onDaySelect() {
                 selectDate.setVisibility(View.GONE);
@@ -303,9 +337,9 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
             public void onWeekChange(int i) {
 
             }
-        });
+        });*/
 
-        }
+    }
 
     private void showActionsDialog(final int position) {
         CharSequence colors[] = new CharSequence[]{"Edit", "More Info", "Delete"};
@@ -318,26 +352,23 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-                    showEventDialog(true, all_calendar_events.get(position), position);}
+                    showEventDialog(true, all_calendar_events.get(position), position);
+                }
 
-                    if (which == 1) {
-
-
-                        Intent intent = new Intent(Calendar.this, more_event_info.class);
-
-                        intent.putExtra("year", day.getYear());
-                        intent.putExtra("month", day.getMonth());
-                        intent.putExtra("day", day.getDay());
-                        intent.putExtra("position", position);
-
-                        Calendar.this.startActivity(intent);
+                if (which == 1) {
 
 
+                    Intent intent = new Intent(Calendar.this, more_event_info.class);
+
+                    intent.putExtra("year", day.getYear());
+                    intent.putExtra("month", day.getMonth());
+                    intent.putExtra("day", day.getDay());
+                    intent.putExtra("position", position);
+
+                    Calendar.this.startActivity(intent);
 
 
-
-                    }
-                 else {
+                } else {
                     deleteEvent(position);
                 }
             }
@@ -352,7 +383,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(Calendar.this);
         alertDialogBuilderUserInput.setView(view);
 
-        final EditText inputEvent= view.findViewById(R.id.event_calendar);
+        final EditText inputEvent = view.findViewById(R.id.event_calendar);
         TextView dialogTitle = view.findViewById(R.id.dialog_title_calendar);
         dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_event_title) : getString(R.string.lbl_edit_event_title));
 
@@ -419,18 +450,19 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
             db_calendar.insertDay(n);
 
             // refreshing the list
-            if(calendar_task_adapter != null) {
+            if (calendar_task_adapter != null) {
                 calendar_task_adapter.notifyDataSetChanged();
             }
         }
 
-        if(calendar_task_adapter != null) {
+        if (calendar_task_adapter != null) {
             calendar_task_adapter.notifyDataSetChanged();
         }
+        setDots();
 
     }
 
-    private void updateEvent(String event, int position){
+    private void updateEvent(String event, int position) {
         Events n = all_calendar_events.get(position);
         // updating event text
         n.setEvent(event);
@@ -444,7 +476,8 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
     }
 
-    public void deleteEvent(final int position){
+    public void deleteEvent(final int position) {
+
 
         db_calendar.deleteEvent(all_calendar_events.get(position));
 
@@ -452,6 +485,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         all_calendar_events.remove(position);
         current_calendar_events.remove(position);
         calendar_task_adapter.notifyItemRemoved(position);
+        setDots();
 
     }
 
@@ -472,62 +506,105 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
     }
 
 
-
     //Bottom Navigation Bar Setup
-   private void setUpBottomNavbar(){
-       BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottomnavbar);
-       bottomNavBarHelper.enbaleNav(Calendar.this, bottomNavigationView);
-       Menu menu = bottomNavigationView.getMenu();
-       MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-       menuItem.setChecked(true);
-       }
+    private void setUpBottomNavbar() {
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomnavbar);
+        bottomNavBarHelper.enbaleNav(Calendar.this, bottomNavigationView);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        menuItem.setChecked(true);
+    }
 
-   private String monthFormat(int m){
+    private String monthFormat(int m) {
 
         m += 1;
-       if(m == 1){
-           return "January";
-       }
+        if (m == 1) {
+            return "January";
+        }
 
-       if(m == 2){
-           return "February";
-       }
+        if (m == 2) {
+            return "February";
+        }
 
-       if(m == 3){
-           return "March";
-       }
+        if (m == 3) {
+            return "March";
+        }
 
-       if(m == 4){
-           return "April";
-       }
+        if (m == 4) {
+            return "April";
+        }
 
-       if(m == 5){
-           return "May";
-       }
+        if (m == 5) {
+            return "May";
+        }
 
-       if(m == 6){
-           return "June";
-       }
+        if (m == 6) {
+            return "June";
+        }
 
-       if(m == 7){
-           return "July";
-       }
-       if(m == 8){
-           return "August";
-       }
+        if (m == 7) {
+            return "July";
+        }
+        if (m == 8) {
+            return "August";
+        }
 
-       if(m== 9){
-           return "September";
-       }
-       if(m == 10){
-           return "October";
-       }
+        if (m == 9) {
+            return "September";
+        }
+        if (m == 10) {
+            return "October";
+        }
 
-       if(m == 11){
-           return "November";
-       }
-       else{
-           return "December";
-       }
-   }
+        if (m == 11) {
+            return "November";
+        } else {
+            return "December";
+        }
+    }
+
+    private void setDots() {
+        for (Events e : all_calendar_events) {
+            int month = e.get_later_calendar_month() + 1;
+            int year = e.get_later_calendar_year();
+            int day = e.get_later_calendar_day();
+
+            if (month < 10 && day < 10) {
+                String date = "0" + month + "/" + "0" + day + "/" + year;
+                //Long millis = null;
+                try {
+                    long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
+                    System.out.println(millis);
+                    Event ev2 = new Event(Color.parseColor("#5AC9DD"), millis);
+                    compactCalendarView.addEvent(ev2);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if (month < 10) {
+                String date = "0" + month + "/" + day + "/" + year;
+                //Long millis = null;
+                try {
+                    long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
+                    System.out.println(millis);
+                    Event ev2 = new Event(Color.parseColor("#5AC9DD"), millis);
+                    compactCalendarView.addEvent(ev2);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+
+            } else {
+                String date = month + "/" + day + "/" + year;
+                //Long millis = null;
+                try {
+                    long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
+                    System.out.println(millis);
+                    Event ev2 = new Event(Color.parseColor("#5AC9DD"), millis);
+                    compactCalendarView.addEvent(ev2);
+                } catch (ParseException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
 }
