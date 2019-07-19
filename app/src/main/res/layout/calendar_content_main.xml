@@ -10,4 +10,28 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="190dp"
         android:id="@+id/calendar_recycler_view"/>
+
+    <TextView
+        android:id="@+id/empty_eventss_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="271dp"
+        android:fontFamily="sans-serif-light"
+        android:text="No Events Yet.."
+        android:textColor="@color/msg_no_notes"
+        android:textSize="@dimen/msg_no_notes" />
+
+    <TextView
+        android:id="@+id/select_date_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="271dp"
+        android:fontFamily="sans-serif-light"
+        android:text="Select A Date"
+        android:textColor="@color/msg_no_notes"
+        android:textSize="@dimen/msg_no_notes" />
 </RelativeLayout>

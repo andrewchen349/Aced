@@ -56,7 +56,7 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
         more_info_taskUpdate = i.getStringExtra("taskname");
         min = i.getIntExtra("minute", 0);
         hr = i.getIntExtra("hour", 0);
-
+        position = i.getIntExtra("position", 0);
 
 
         //back Button functionality

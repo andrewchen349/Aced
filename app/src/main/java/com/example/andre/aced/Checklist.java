@@ -254,9 +254,10 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
                     intent2.putExtra("taskname", titleTask);
                     intent2.putExtra("hour", hour);
                     intent2.putExtra("minute", minute);
+                    intent2.putExtra("position", position);
 
                     Checklist.this.startActivity(intent2);
-                    mit.position = position;
+
 
 
                 }

@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.ImageFormat;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -23,14 +25,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.rany.albeg.wein.springfabmenu.SpringFabMenu;
 import com.shrikanthravi.collapsiblecalendarview.data.Day;
 import com.shrikanthravi.collapsiblecalendarview.widget.CollapsibleCalendar;
 
+
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import Util.MyDividerItemDecoration;
@@ -40,6 +50,8 @@ import data.DatabaseHelper;
 import model.Events;
 import view.Calendar_Task_Adapter;
 
+import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
+
 public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     //Constants and Fields
@@ -47,17 +59,20 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
     private Button calendar_add_event;
     private RecyclerView recyclerView_calendar;
-    private DatabaseHelper db_calendar;
-    private Calendar_Task_Adapter calendar_task_adapter;
-    private List<Events>all_calendar_events = new ArrayList<>();
-    private List<Events>current_calendar_events = new ArrayList<>();
-    private String selectDate;
+    public static  DatabaseHelper db_calendar;
+    public static Calendar_Task_Adapter calendar_task_adapter;
+    public  List<Events>all_calendar_events = new ArrayList<>();
+    public List<Events>current_calendar_events = new ArrayList<>();
+    private TextView noEventView;
+    private TextView selectDate;
 
     private int calendar_year;
     private int calendar_day;
     private int calendar_month;
+    public TextView mo;
 
-    public  CollapsibleCalendar collapsibleCalendar;
+    public static  CollapsibleCalendar collapsibleCalendar;
+    public static CompactCalendarView compactCalendarView;
 
 
     @Override
@@ -106,16 +121,33 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
 
         //Find Corresponding XML Components
-        calendar_add_event = (Button)findViewById(R.id.addEvent);
+        //calendar_add_event = (Button)findViewById(R.id.addEvent);
         recyclerView_calendar = (RecyclerView)findViewById(R.id.calendar_recycler_view);
         db_calendar = new DatabaseHelper(this);
 
-        calendar_add_event.setOnClickListener(new View.OnClickListener() {
+        /*calendar_add_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment datePicker = new DatePickerFragment();
                 datePicker.show(getSupportFragmentManager(), "date picker");
                 showEventDialog(false, null, -1);
+            }
+        });*/
+
+        SpringFabMenu sfm = (SpringFabMenu)findViewById(R.id.springfab);
+
+        sfm.setOnSpringFabMenuItemClickListener(new SpringFabMenu.OnSpringFabMenuItemClickListener() {
+            @Override
+            public void onSpringFabMenuItemClick(View view) {
+                switch (view.getId()) {
+                    case R.id.fab_1:
+                        DialogFragment datePicker = new DatePickerFragment();
+                        datePicker.show(getSupportFragmentManager(), "date picker");
+                        showEventDialog(false, null, -1);
+
+                    case R.id.fab_2:
+                        break;
+                }
             }
         });
 
@@ -157,10 +189,74 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         }));
 
         collapsibleCalendar = findViewById(R.id.calendarView);
+        compactCalendarView = (CompactCalendarView) findViewById(R.id.compactcalendar_view);
+        noEventView = (TextView)findViewById(R.id.empty_eventss_view);
+        selectDate = (TextView)findViewById(R.id.select_date_view);
+        mo = (TextView)findViewById(R.id.me);
+
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        int f = c.get((java.util.Calendar.MONTH));
+        mo.setText(monthFormat(f));
+
+        compactCalendarView.setFirstDayOfWeek(java.util.Calendar.MONDAY);
+        Event ev1 = new Event(Color.GREEN, 1563597329000L, "Some extra data that I want to store.");
+        compactCalendarView.addEvent(ev1);
+        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            @Override
+            public void onDayClick(Date dateClicked) {
+                List<Event> events = compactCalendarView.getEvents(dateClicked);
+                selectDate.setVisibility(View.GONE);
+                current_calendar_events.clear();
+
+                java.util.Calendar cal = java.util.Calendar.getInstance();
+                cal.setTime(dateClicked);
+                int month = cal.get(java.util.Calendar.MONTH);
+                int year = cal.get(java.util.Calendar.YEAR);
+                int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+
+                System.out.println(month);
+                System.out.println(year);
+                System.out.println(day);
+
+
+
+                for(Events e : all_calendar_events){
+
+                    if(e.get_later_calendar_year() == year && e.get_later_calendar_month() == month && e.get_later_calendar_day() == day){
+                        System.out.println("here");
+                        current_calendar_events.add(e);
+                    }
+                }
+
+                System.out.println(current_calendar_events.size());
+
+                if(current_calendar_events.size() > 0){
+                    noEventView.setVisibility(View.GONE);
+                }
+                else{
+                    noEventView.setVisibility(View.VISIBLE);
+                }
+
+                calendar_task_adapter = new Calendar_Task_Adapter(current_calendar_events, getApplicationContext());
+                recyclerView_calendar.setAdapter(calendar_task_adapter);
+                calendar_task_adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onMonthScroll(Date firstDayOfNewMonth) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM");
+                mo.setText(simpleDateFormat.format(firstDayOfNewMonth));
+            }
+        });
+
+
+        noEventView.setVisibility(View.GONE);
 
         collapsibleCalendar.setCalendarListener(new CollapsibleCalendar.CalendarListener() {
             @Override
             public void onDaySelect() {
+                selectDate.setVisibility(View.GONE);
                 current_calendar_events.clear();
                 Day day = collapsibleCalendar.getSelectedDay();
                 Log.i(getClass().getName(), "Selected Day: "
@@ -172,6 +268,13 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
                         current_calendar_events.add(e);
                     }
+                }
+
+                if(current_calendar_events.size() > 0){
+                    noEventView.setVisibility(View.GONE);
+                }
+                else{
+                    noEventView.setVisibility(View.VISIBLE);
                 }
 
                 calendar_task_adapter = new Calendar_Task_Adapter(current_calendar_events, getApplicationContext());
@@ -206,6 +309,8 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
     private void showActionsDialog(final int position) {
         CharSequence colors[] = new CharSequence[]{"Edit", "More Info", "Delete"};
+        final more_event_info mei = new more_event_info();
+        final Day day = collapsibleCalendar.getSelectedDay();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
@@ -217,8 +322,19 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
                     if (which == 1) {
 
+
                         Intent intent = new Intent(Calendar.this, more_event_info.class);
+
+                        intent.putExtra("year", day.getYear());
+                        intent.putExtra("month", day.getMonth());
+                        intent.putExtra("day", day.getDay());
+                        intent.putExtra("position", position);
+
                         Calendar.this.startActivity(intent);
+
+
+
+
 
                     }
                  else {
@@ -328,7 +444,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
     }
 
-    private void deleteEvent(final int position){
+    public void deleteEvent(final int position){
 
         db_calendar.deleteEvent(all_calendar_events.get(position));
 
@@ -355,6 +471,8 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
     }
 
+
+
     //Bottom Navigation Bar Setup
    private void setUpBottomNavbar(){
        BottomNavigationView bottomNavigationView = (BottomNavigationView)findViewById(R.id.bottomnavbar);
@@ -363,4 +481,53 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
        menuItem.setChecked(true);
        }
+
+   private String monthFormat(int m){
+
+        m += 1;
+       if(m == 1){
+           return "January";
+       }
+
+       if(m == 2){
+           return "February";
+       }
+
+       if(m == 3){
+           return "March";
+       }
+
+       if(m == 4){
+           return "April";
+       }
+
+       if(m == 5){
+           return "May";
+       }
+
+       if(m == 6){
+           return "June";
+       }
+
+       if(m == 7){
+           return "July";
+       }
+       if(m == 8){
+           return "August";
+       }
+
+       if(m== 9){
+           return "September";
+       }
+       if(m == 10){
+           return "October";
+       }
+
+       if(m == 11){
+           return "November";
+       }
+       else{
+           return "December";
+       }
+   }
 }

@@ -76,6 +76,8 @@ public class Calendar_Task_Adapter extends RecyclerView.Adapter<Calendar_Task_Ad
 
     public String convertMonth(int m){
 
+        m =  m + 1;
+
         if(m == 1){
             return "January";
         }

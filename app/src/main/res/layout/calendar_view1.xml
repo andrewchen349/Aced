@@ -28,6 +28,7 @@
     </com.shrikanthravi.collapsiblecalendarview.widget.CollapsibleCalendar>
 
     <include
+        android:id="@+id/include3"
         layout="@layout/calendar_content_main"
         android:layout_width="match_parent"
         android:layout_height="631dp"
@@ -40,25 +41,83 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.845"
+        app:layout_constraintVertical_bias="1.0"
         tools:ignore="UnknownId" />
 
-    <Button
-        android:id="@+id/addEvent"
-        android:layout_width="68dp"
-        android:layout_height="68dp"
+
+    <com.rany.albeg.wein.springfabmenu.SpringFabMenu
+        android:layout_width="wrap_content"
+        android:id="@+id/springfab"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="516dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/addcireclestyle"
-        android:text="+"
-        android:textColor="#FFF"
-        android:textSize="40dp"
+        android:layout_marginBottom="8dp"
+        app:layout_anchorGravity="bottom|left"
+        app:layout_behavior="@string/appbar_springfabmenu_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.929"
+        app:layout_constraintHorizontal_bias="0.975"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.862">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab1white"
+            app:fabSize="mini"
+            app:sfm_src_icon="@drawable/calendarrrr" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fab2"
+            app:fabSize="mini"
+            app:sfm_src_icon="@drawable/calendarrrr" />
+
+    </com.rany.albeg.wein.springfabmenu.SpringFabMenu>
+
+    <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/compactcalendar_view"
+        app:compactCalendarCurrentDayTextColor="#FFF"
+        app:compactCalendarCurrentSelectedDayTextColor="#FFF"
+        android:layout_width="395dp"
+        android:layout_height="206dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:compactCalendarBackgroundColor="#FFF"
+        app:compactCalendarCurrentDayBackgroundColor="#5AC9DD"
+        app:compactCalendarCurrentSelectedDayBackgroundColor="#5AC9DD"
+        app:compactCalendarMultiEventIndicatorColor="#fff"
+        app:compactCalendarTargetHeight="250dp"
+        app:compactCalendarTextColor="@android:color/black"
+        app:compactCalendarTextSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.039" />
+
+    <TextView
+        android:id="@+id/me"
+        android:layout_width="261dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

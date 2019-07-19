@@ -38,5 +38,11 @@ dependencies {
     implementation 'com.github.shrikanth7698:Collapsible-Calendar-View-Android:v1.0.0'
     implementation 'com.victor:lib:1.0.4'
     implementation 'com.github.AppIntro:AppIntro:4.2.3'
+    implementation 'com.rany.albeg.wein:spring-fab-menu:1.0.1'
+    implementation 'com.github.marcoscgdev:Android-Week-View:1.2.7'
+    compile 'com.github.sundeepk:compact-calendar-view:3.0.0'
+
+
+
 }
 apply plugin: 'com.google.gms.google-services'
