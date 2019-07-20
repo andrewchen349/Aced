@@ -76,7 +76,7 @@
         app:layout_constraintHorizontal_bias="0.259"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.53" />
+        app:layout_constraintVertical_bias="0.604" />
 
     <TextView
         android:id="@+id/location_input"
@@ -92,7 +92,7 @@
         app:layout_constraintHorizontal_bias="0.259"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" />
+        app:layout_constraintVertical_bias="0.677" />
 
     <TextView
         android:id="@+id/more_info_invite"
@@ -110,7 +110,7 @@
         app:layout_constraintHorizontal_bias="0.259"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.731" />
+        app:layout_constraintVertical_bias="0.456" />
 
     <ImageView
         android:id="@+id/imageView8"
@@ -125,7 +125,7 @@
         app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.526"
+        app:layout_constraintVertical_bias="0.601"
         app:srcCompat="@drawable/location" />
 
     <ImageView
@@ -141,7 +141,7 @@
         app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.732"
+        app:layout_constraintVertical_bias="0.456"
         app:srcCompat="@drawable/invite" />
 
     <ImageView
@@ -209,7 +209,7 @@
         app:layout_constraintHorizontal_bias="0.259"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.391" />
+        app:layout_constraintVertical_bias="0.37" />
 
     <TextView
         android:id="@+id/invite_input"
@@ -225,6 +225,6 @@
         app:layout_constraintHorizontal_bias="0.259"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.818" />
+        app:layout_constraintVertical_bias="0.502" />
 
 </android.support.constraint.ConstraintLayout>

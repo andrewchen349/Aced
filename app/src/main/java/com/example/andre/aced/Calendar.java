@@ -1,16 +1,22 @@
 package com.example.andre.aced;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -32,6 +38,8 @@ import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.rany.albeg.wein.springfabmenu.SpringFabMenu;
 import com.shrikanthravi.collapsiblecalendarview.data.Day;
 import com.shrikanthravi.collapsiblecalendarview.widget.CollapsibleCalendar;
@@ -74,6 +82,11 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
     public static CollapsibleCalendar collapsibleCalendar;
     public static CompactCalendarView compactCalendarView;
+    private boolean mLocationPermissionGranted = false;
+    public static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
+    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
+    public static final int ERROR_DIALOG_REQUEST = 9001;
+
 
 
     @Override
@@ -121,23 +134,12 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         setContentView(R.layout.calendar_view1);
         setUpBottomNavbar();
 
-
         //Find Corresponding XML Components
         //calendar_add_event = (Button)findViewById(R.id.addEvent);
         recyclerView_calendar = (RecyclerView) findViewById(R.id.calendar_recycler_view);
         db_calendar = new DatabaseHelper(this);
 
-        /*calendar_add_event.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment datePicker = new DatePickerFragment();
-                datePicker.show(getSupportFragmentManager(), "date picker");
-                showEventDialog(false, null, -1);
-            }
-        });*/
-
         SpringFabMenu sfm = (SpringFabMenu) findViewById(R.id.springfab);
-
         sfm.setOnSpringFabMenuItemClickListener(new SpringFabMenu.OnSpringFabMenuItemClickListener() {
             @Override
             public void onSpringFabMenuItemClick(View view) {
@@ -149,9 +151,6 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
                     case R.id.fab_2:
                         break;
-
-
-
                 }
             }
         });
@@ -215,7 +214,6 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
             if (month < 10 && day < 10) {
                 String date = "0" + month + "/" + "0" + day + "/" + year;
-                //Long millis = null;
                 try {
                     long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
                     System.out.println(millis);
@@ -227,7 +225,6 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
             }
             if (month < 10) {
                 String date = "0" + month + "/" + day + "/" + year;
-                //Long millis = null;
                 try {
                     long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
                     System.out.println(millis);
@@ -250,7 +247,6 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                 }
             }
         }
-
 
         compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
@@ -293,62 +289,118 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
             }
         });
 
-
         noEventView.setVisibility(View.GONE);
 
-        /*collapsibleCalendar.setCalendarListener(new CollapsibleCalendar.CalendarListener() {
-            @Override
-            public void onDaySelect() {
-                selectDate.setVisibility(View.GONE);
-                current_calendar_events.clear();
-                Day day = collapsibleCalendar.getSelectedDay();
-                Log.i(getClass().getName(), "Selected Day: "
-                        + day.getYear() + "/" + (day.getMonth() + 1) + "/" + day.getDay());
-
-                for(Events e : all_calendar_events){
-
-                    if(e.get_later_calendar_year() == day.getYear() && e.get_later_calendar_month() == day.getMonth() && e.get_later_calendar_day() == day.getDay()){
-
-                        current_calendar_events.add(e);
-                    }
-                }
-
-                if(current_calendar_events.size() > 0){
-                    noEventView.setVisibility(View.GONE);
-                }
-                else{
-                    noEventView.setVisibility(View.VISIBLE);
-                }
-
-                calendar_task_adapter = new Calendar_Task_Adapter(current_calendar_events, getApplicationContext());
-                recyclerView_calendar.setAdapter(calendar_task_adapter);
-                calendar_task_adapter.notifyDataSetChanged();
-
-
-            }
-
-            @Override
-            public void onItemClick(View view) {
-
-            }
-
-            @Override
-            public void onDataUpdate() {
-
-            }
-
-            @Override
-            public void onMonthChange() {
-
-            }
-
-            @Override
-            public void onWeekChange(int i) {
-
-            }
-        });*/
+        checkMapServices();
 
     }
+
+
+    private boolean checkMapServices(){
+        if(isServicesOK()){
+            if(isMapsEnabled()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public boolean isMapsEnabled(){
+        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+
+        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            buildAlertMessageNoGps();
+            return false;
+        }
+        return true;
+    }
+
+    private void getLocationPermission(){
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+            //getChatrooms();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+    public boolean isServicesOK(){
+        //Log.d(TAG, "isServicesOK: checking google services version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(Calendar.this);
+
+        if(available == ConnectionResult.SUCCESS){
+            //everything is fine and the user can make map requests
+            //Log.d(TAG, "isServicesOK: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            //an error occured but we can resolve it
+            //Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(Calendar.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }else{
+            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        mLocationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Log.d(TAG, "onActivityResult: called.");
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ENABLE_GPS: {
+                if(mLocationPermissionGranted){
+                    //getChatrooms();
+                }
+                else{
+                    getLocationPermission();
+                }
+            }
+        }
+
+    }
+
 
     private void showActionsDialog(final int position) {
         CharSequence colors[] = new CharSequence[]{"Edit", "More Info", "Delete"};
