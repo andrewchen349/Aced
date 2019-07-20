@@ -93,6 +93,8 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
                 calendar.deleteEvent(position);
                 calendar.calendar_task_adapter.notifyDataSetChanged();
                 Toast.makeText(more_event_info.this, "Event Deleted!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(more_event_info.this, Calendar.class);
+                more_event_info.this.startActivity(intent);
             }
         });
 
