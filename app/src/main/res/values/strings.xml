@@ -18,4 +18,14 @@
 
     <string name="lbl_new_event_title">New Event</string>
     <string name="lbl_edit_event_title">Edit Event</string>
+
+    <string-array name="header_title">
+        <item></item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+    </string-array>
+
 </resources>

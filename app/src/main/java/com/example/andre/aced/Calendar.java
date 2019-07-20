@@ -87,6 +87,11 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
     public static final int ERROR_DIALOG_REQUEST = 9001;
 
+    public int yearSelected;
+    public int monthSelected;
+    public int daySelected;
+
+    public int idupdate;
 
 
     @Override
@@ -151,6 +156,12 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
                     case R.id.fab_2:
                         break;
+
+                    case R.id.fab_3:
+                        Intent intent = new Intent(Calendar.this, WeeklyView.class);
+
+                        Calendar.this.startActivity(intent);
+
                 }
             }
         });
@@ -216,7 +227,6 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                 String date = "0" + month + "/" + "0" + day + "/" + year;
                 try {
                     long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
-                    System.out.println(millis);
                     Event ev2 = new Event(Color.parseColor("#5AC9DD"), millis);
                     compactCalendarView.addEvent(ev2);
                 } catch (ParseException e1) {
@@ -227,7 +237,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                 String date = "0" + month + "/" + day + "/" + year;
                 try {
                     long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
-                    System.out.println(millis);
+
                     Event ev2 = new Event(Color.parseColor("#5AC9DD"), millis);
                     compactCalendarView.addEvent(ev2);
                 } catch (ParseException e1) {
@@ -239,7 +249,6 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                 //Long millis = null;
                 try {
                     long millis = new SimpleDateFormat("MM/dd/yyyy").parse(date).getTime();
-                    System.out.println(millis);
                     Event ev2 = new Event(Color.parseColor("#5AC9DD"), millis);
                     compactCalendarView.addEvent(ev2);
                 } catch (ParseException e1) {
@@ -257,18 +266,20 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
                 java.util.Calendar cal = java.util.Calendar.getInstance();
                 cal.setTime(dateClicked);
-                int month = cal.get(java.util.Calendar.MONTH);
-                int year = cal.get(java.util.Calendar.YEAR);
-                int day = cal.get(java.util.Calendar.DAY_OF_MONTH);
+                 monthSelected = cal.get(java.util.Calendar.MONTH);
+                 yearSelected = cal.get(java.util.Calendar.YEAR);
+                 daySelected = cal.get(java.util.Calendar.DAY_OF_MONTH);
 
                 for (Events e : all_calendar_events) {
 
-                    System.out.println("he" + e.get_later_calendar_day());
 
-                    if (e.get_later_calendar_year() == year && e.get_later_calendar_month() == month && e.get_later_calendar_day() == day) {
+
+                    if (e.get_later_calendar_year() == yearSelected && e.get_later_calendar_month() == monthSelected && e.get_later_calendar_day() == daySelected) {
                         current_calendar_events.add(e);
                     }
                 }
+
+
 
                 if (current_calendar_events.size() > 0) {
                     noEventView.setVisibility(View.GONE);
@@ -428,7 +439,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                     Calendar.this.startActivity(intent);
 
 
-                } else {
+                } if(which == 2) {
                     deleteEvent(position);
                 }
             }
@@ -439,6 +450,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
     private void showEventDialog(final boolean shouldUpdate, final Events event, final int position) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getApplicationContext());
         View view = layoutInflaterAndroid.inflate(R.layout.calendar_event_dialog, null);
+
 
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(Calendar.this);
         alertDialogBuilderUserInput.setView(view);
@@ -481,7 +493,8 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
                 // check if user updating task
                 if (shouldUpdate && event != null) {
-                    // update task by it's id
+                    current_calendar_events.add(event);
+                    //all_calendar_events.add(event);
                     updateEvent(inputEvent.getText().toString(), position);
                 } else {
                     // create new task
@@ -494,6 +507,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
     private void createEvent(String event) {
 
         long id = db_calendar.insertEvent(event);
+        System.out.println("id" + id);
 
         // get the newly inserted task from db
         Events n = db_calendar.getEvent(id);
@@ -523,7 +537,9 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
     }
 
     private void updateEvent(String event, int position) {
-        Events n = all_calendar_events.get(position);
+
+        Events n = current_calendar_events.get(position);
+        System.out.println("this is update id" + n.getId());
         // updating event text
         n.setEvent(event);
 
@@ -531,10 +547,11 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         db_calendar.updateEvent(n);
 
         // refreshing the list
-        all_calendar_events.set(position, n);
+        //all_calendar_events.set(position, n);
+        current_calendar_events.set(position,n);
+        current_calendar_events.remove(position + 1);
         calendar_task_adapter.notifyItemChanged(position);
-
-    }
+        }
 
     public void deleteEvent(final int position) {
 
