@@ -149,6 +149,9 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
                     case R.id.fab_2:
                         break;
+
+
+
                 }
             }
         });
@@ -349,8 +352,9 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
 
     private void showActionsDialog(final int position) {
         CharSequence colors[] = new CharSequence[]{"Edit", "More Info", "Delete"};
-        final more_event_info mei = new more_event_info();
-        final Day day = collapsibleCalendar.getSelectedDay();
+        //final more_event_info mei = new more_event_info();
+        //final Day day = collapsibleCalendar.getSelectedDay();
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
@@ -362,13 +366,11 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                 }
 
                 if (which == 1) {
-
-
                     Intent intent = new Intent(Calendar.this, more_event_info.class);
-
-                    intent.putExtra("year", day.getYear());
-                    intent.putExtra("month", day.getMonth());
-                    intent.putExtra("day", day.getDay());
+                    intent.putExtra("Event Name", current_calendar_events.get(position).getEvent());
+                    intent.putExtra("year", current_calendar_events.get(position).get_later_calendar_year());
+                    intent.putExtra("month", current_calendar_events.get(position).get_later_calendar_month());
+                    intent.putExtra("day", current_calendar_events.get(position).get_later_calendar_day());
                     intent.putExtra("position", position);
 
                     Calendar.this.startActivity(intent);
@@ -494,7 +496,9 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         int day = current_calendar_events.get(position).get_later_calendar_day();
 
         Date date = new GregorianCalendar(year, month , day).getTime();
-        compactCalendarView.removeEvents(date);
+
+        //compactCalendarView.getEvents(date);
+        compactCalendarView.removeEvent(compactCalendarView.getEvents(date).get(0));
         current_calendar_events.remove(position);
         calendar_task_adapter.notifyItemRemoved(position);
 

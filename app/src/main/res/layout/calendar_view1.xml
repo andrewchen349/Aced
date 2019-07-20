@@ -73,6 +73,14 @@
             app:fabSize="mini"
             app:sfm_src_icon="@drawable/calendarrrr" />
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/grid"
+            app:fabSize="mini"
+            app:sfm_src_icon="@drawable/calendarrrr" />
+
     </com.rany.albeg.wein.springfabmenu.SpringFabMenu>
 
     <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -115,5 +123,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+
 
 </android.support.constraint.ConstraintLayout>
