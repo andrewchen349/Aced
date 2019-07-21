@@ -116,6 +116,7 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
         });
 
         event_date.setText(dateFormat());
+        time_input.setText(formatTime(calendar.all_calendar_events.get(position).getHour(),calendar.all_calendar_events.get(position).getMinute()));
 
 
 
@@ -182,6 +183,12 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
+        calendar.all_calendar_events.get(position).setHour(hourOfDay);
+        calendar.all_calendar_events.get(position).setMinute(minute);
+
+        calendar.db_calendar.insertEventHour(calendar.all_calendar_events.get(position));
+        calendar.db_calendar.insertEventMinute(calendar.all_calendar_events.get(position));
+
         java.util.Calendar c = java.util.Calendar.getInstance();
         c.set(java.util.Calendar.HOUR_OF_DAY, hourOfDay);
         c.set(java.util.Calendar.MINUTE, minute);
@@ -205,6 +212,26 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
             c.add(java.util.Calendar.DATE, 1);
         }
 
+    }
+
+    private String formatTime(int min, int hr){
+        int m = min;
+        int hour = hr;
+
+        if(hour > 12){
+            hour = hr - 12;
+            String result = (hour + ":" + m);
+            return result;
+        }
+
+        if(m == 0){
+            String result = hour + ":" + m + "0";
+            return result;
+        }
+        else {
+            String result = (hour + ":" + m);
+            return result;
+        }
     }
 
 

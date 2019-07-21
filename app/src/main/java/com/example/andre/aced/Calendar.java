@@ -217,6 +217,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         mo.setText(monthFormat(f));
 
         compactCalendarView.setFirstDayOfWeek(java.util.Calendar.MONDAY);
+        System.out.println("size" + all_calendar_events.size());
 
         for (Events e : all_calendar_events) {
             int month = e.get_later_calendar_month() + 1;
@@ -271,10 +272,8 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                  daySelected = cal.get(java.util.Calendar.DAY_OF_MONTH);
 
                 for (Events e : all_calendar_events) {
-
-
-
                     if (e.get_later_calendar_year() == yearSelected && e.get_later_calendar_month() == monthSelected && e.get_later_calendar_day() == daySelected) {
+                        System.out.println("HEre");
                         current_calendar_events.add(e);
                     }
                 }
@@ -419,6 +418,8 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
             db_calendar.insertYear(n);
             db_calendar.insertMonth(n);
             db_calendar.insertDay(n);
+            //db_calendar.insertEventMinute(n);
+           // db_calendar.insertEventHour(n);
 
             // refreshing the list
             if (calendar_task_adapter != null) {

@@ -95,6 +95,11 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name=".FullScreenImage"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
         <activity android:name=".WeeklyView"
             android:configChanges="orientation"
             android:screenOrientation="portrait">

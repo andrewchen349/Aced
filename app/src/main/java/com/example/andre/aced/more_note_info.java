@@ -3,6 +3,7 @@ package com.example.andre.aced;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,6 +57,21 @@ public class more_note_info extends AppCompatActivity {
         String note = i.getStringExtra("Note");
         position = i.getIntExtra("position", 0);
         noteName.setText(note);
+
+        mimageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(more_note_info.this, FullScreenImage.class);
+
+                mimageView.buildDrawingCache();
+                Bitmap image= mimageView.getDrawingCache();
+
+                Bundle extras = new Bundle();
+                extras.putParcelable("imagebitmap", image);
+                intent.putExtras(extras);
+                startActivity(intent);
+            }
+        });
 
         files.setOnClickListener(new View.OnClickListener() {
             @Override

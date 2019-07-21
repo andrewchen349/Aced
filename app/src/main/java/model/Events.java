@@ -9,6 +9,8 @@ public class Events {
     public static final String COLUMN_YEAR = "year";
     public static final String COLUMN_MONTH = "month";
     public static final String COLUMN_DAY = "day";
+    public static final String COLUMN_HOUR = "hour";
+    public static final String COLUMN_MINUTE = "minute";
 
     private int id;
     private String date;
@@ -17,6 +19,8 @@ public class Events {
     private int later_year;
     private int later_month;
     private int later_day;
+    private int event_hour;
+    private int event_minute;
     private String event;
 
     // Create table SQL query
@@ -26,6 +30,8 @@ public class Events {
                     + COLUMN_EVENTS + " TEXT,"
                     + COLUMN_YEAR + " YEAR,"
                     + COLUMN_MONTH + " MONTH,"
+                    + COLUMN_HOUR + " HOUR,"
+                    + COLUMN_MINUTE + " MINUTE,"
                     + COLUMN_DAY + " DAY"
                     + ")";
 
@@ -36,15 +42,19 @@ public class Events {
     }
 
     //Constructor
-   public Events(int id, String event, int year, int month, int day){
+   public Events(int id, String event, int year, int month, int day, int hour, int minute){
 
         this.id = id;
         this.event = event;
         this.later_day = day;
         this.later_month = month;
         this.later_year = year;
+       this.event_hour = hour;
+       this.event_minute = minute;
 
    }
+
+
 
    //Getters and Setters
 
@@ -80,7 +90,6 @@ public class Events {
         this.later_day = day;
     }
 
-
     public void setId(int id ){
         this.id = id;
     }
@@ -88,6 +97,22 @@ public class Events {
     public void setEvent(String event){
         this.event = event;
     }
+
+    public int getHour(){
+        return this.event_hour;
+    }
+
+    public int  getMinute(){
+        return this.event_minute;
+    }
+
+    public void setHour(int m){
+        this.event_hour = m;
+    }
+    public void setMinute(int m){
+        this.event_minute = m;
+    }
+
 
 
 

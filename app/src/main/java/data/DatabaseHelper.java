@@ -104,6 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
+
     public int insertYear(Events event){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -137,7 +138,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(event.getId())});
     }
 
+    //Event set/get min, hr
 
+    public int insertEventHour(Events events){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Events.COLUMN_HOUR, events.getHour());
+
+        return db.update(Events.TABLE_NAME2, values, Events.COLUMN_ID2 + " = ?",
+                new String[]{String.valueOf(events.getId())});
+    }
+
+    public int insertEventMinute(Events events){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Events.COLUMN_MINUTE, events.getMinute());
+
+        return db.update(Events.TABLE_NAME2, values, Events.COLUMN_ID2 + " = ?",
+                new String[]{String.valueOf(events.getId())});
+    }
+    public int getEventMin(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Events.TABLE_NAME2,
+                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_MONTH, Events.COLUMN_YEAR, Events.COLUMN_DAY, Events.COLUMN_HOUR, Events.COLUMN_MINUTE},
+                Events.COLUMN_ID2 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        int min = cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MINUTE));
+
+        cursor.close();
+
+        return min;
+    }
+
+    public int getEventHour(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Events.TABLE_NAME2,
+                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_MONTH, Events.COLUMN_YEAR, Events.COLUMN_DAY, Events.COLUMN_HOUR, Events.COLUMN_MINUTE},
+                Events.COLUMN_ID2 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        int min = cursor.getInt(cursor.getColumnIndex(Events.COLUMN_HOUR));
+
+        cursor.close();
+
+        return min;
+    }
 
     public int insertHour(model.Checklist task){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -253,7 +311,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Events.TABLE_NAME2,
-                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_YEAR, Events.COLUMN_MONTH, Events.COLUMN_DAY},
+                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_YEAR, Events.COLUMN_MONTH, Events.COLUMN_DAY, Events.COLUMN_HOUR, Events.COLUMN_MINUTE},
                 Events.COLUMN_ID2 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -261,16 +319,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
         }
 
+
+
        Events event = new Events(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_ID2)),
                 cursor.getString(cursor.getColumnIndex(Events.COLUMN_EVENTS)),
                 cursor.getInt(cursor.getColumnIndex(Events.COLUMN_YEAR)),
+               cursor.getInt(cursor.getColumnIndex(Events.COLUMN_HOUR)),
+               cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MINUTE)),
                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MONTH)),
                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)));
 
+        /*Events eventTime = new Events(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_ID2)),
+                cursor.getString(cursor.getColumnIndex(Events.COLUMN_EVENTS)),
+                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_YEAR)),
+                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MONTH)),
+                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_HOUR)),
+                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MINUTE)),
+                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)));*/
 
-        cursor.close();
+        /*if( cursor.getInt(cursor.getColumnIndex(Events.COLUMN_HOUR)) != 0 && cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MINUTE)) != 0){
+            cursor.close();
+            return eventTime;
 
-        return event;
+        }*/
+
+
+            cursor.close();
+            return  event;
+
+
+
+        //cursor.close();
+
+
     }
 
     public List<Note> getAllNotes() {
@@ -353,9 +434,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 event.setEvent(cursor.getString(cursor.getColumnIndex(Events.COLUMN_EVENTS)));
                 event.set_calendar_year(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_YEAR)));
                 event.set_calendar_month(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MONTH)));
+                event.setHour(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_HOUR)));
+                event.setMinute(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MINUTE)));
                 event.set_calendar_day(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)));
-
-
 
                 events.add(event);
             } while (cursor.moveToNext());
