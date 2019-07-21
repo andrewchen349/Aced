@@ -84,8 +84,11 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
 
             if (yr == e.get_later_calendar_year() && m == e.get_later_calendar_month() && days == e.get_later_calendar_day()) {
                 calendar.current_calendar_events.add(e);
+                //time_input.setText(formatTime(calendar.current_calendar_events.get(position).getMinute(),calendar.current_calendar_events.get(position).getHour()));
             }
         }
+        
+        time_input.setText(formatTime(calendar.current_calendar_events.get(position).getMinute(),calendar.current_calendar_events.get(position).getHour()));
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +119,8 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
         });
 
         event_date.setText(dateFormat());
-        time_input.setText(formatTime(calendar.all_calendar_events.get(position).getHour(),calendar.all_calendar_events.get(position).getMinute()));
+
+        //time_input.setText(formatTime(calendar.all_calendar_events.get(position).getMinute(),calendar.all_calendar_events.get(position).getHour()));
 
 
 
@@ -183,11 +187,13 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-        calendar.all_calendar_events.get(position).setHour(hourOfDay);
-        calendar.all_calendar_events.get(position).setMinute(minute);
+        calendar.current_calendar_events.get(position).setHour(hourOfDay);
 
-        calendar.db_calendar.insertEventHour(calendar.all_calendar_events.get(position));
-        calendar.db_calendar.insertEventMinute(calendar.all_calendar_events.get(position));
+
+        calendar.current_calendar_events.get(position).setMinute(minute);
+
+        calendar.db_calendar.insertEventHour(calendar.current_calendar_events.get(position));
+        calendar.db_calendar.insertEventMinute(calendar.current_calendar_events.get(position));
 
         java.util.Calendar c = java.util.Calendar.getInstance();
         c.set(java.util.Calendar.HOUR_OF_DAY, hourOfDay);
