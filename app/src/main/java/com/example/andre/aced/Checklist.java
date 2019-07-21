@@ -115,7 +115,7 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
         RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
         recyclerView1.setLayoutManager(mLayoutManager1);
         recyclerView1.setItemAnimator(new DefaultItemAnimator());
-        recyclerView1.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
+        //recyclerView1.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
         recyclerView1.setAdapter(checklistAdapter);
         checklistAdapter.notifyDataSetChanged();
 
@@ -130,6 +130,7 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
 
                 int position = viewHolder.getAdapterPosition();
                 deleteTask(position);
+                checklistAdapter.notifyDataSetChanged();
                 Toast.makeText(Checklist.this, "Task Completed!", Toast.LENGTH_LONG).show();
             }
         }).attachToRecyclerView(recyclerView1);

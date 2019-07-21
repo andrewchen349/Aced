@@ -1,13 +1,16 @@
 package view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.andre.aced.R;
 
@@ -16,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import model.Checklist;
 
@@ -26,10 +30,19 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
     private List<Checklist> taskList;
     private Context context;
 
+    private int [] colors = {Color.parseColor("#5AC9DD"),Color.parseColor("#FF971A"), Color.parseColor("#FF6961")
+    , Color.parseColor("#E2A7D9")};
+    private int colorCode;
+
+
     public class MyViewHolder1 extends RecyclerView.ViewHolder {
         public TextView task;
         public CheckBox checkBox;
         public TextView timestamp;
+        private TextView itemtitle;
+        private TextView itemdesc;
+        private CardView cardView;
+
 
         public MyViewHolder1(View view) {
             super(view);
@@ -37,6 +50,10 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
             checkBox = view.findViewById(R.id.dot_checklist);
 
             timestamp = view.findViewById(R.id.timestamp_checklist);
+
+            itemtitle = view.findViewById(R.id.item_title);
+            itemdesc = view.findViewById(R.id.item_detail);
+            cardView = view.findViewById(R.id.card_view);
 
 
         }
@@ -51,22 +68,30 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
 
     @Override
     public MyViewHolder1 onCreateViewHolder(ViewGroup parent, int viewType) {
+        /*View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.checklist_list_row, parent, false);*/
+
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.checklist_list_row, parent, false);
-
-
-
+                .inflate(R.layout.card_layout, parent, false);
+        
         return new MyViewHolder1(itemView);
     }
     //Reloads old rows with new data functionality of onBindViewHolder
     @Override
     public void onBindViewHolder(final MyViewHolder1 holder, int position) {
-        final Checklist task = taskList.get(position);
+        //final Checklist task = taskList.get(position);
 
-        holder.task.setText(task.getTask());
+        //holder.task.setText(task.getTask());
+
 
         // Formatting and displaying timestamp
-        holder.timestamp.setText(formatDate(task.getTimestamp()));
+        //holder.timestamp.setText(formatDate(task.getTimestamp()));
+
+
+
+        final Checklist task = taskList.get(position);
+        holder.cardView.setCardBackgroundColor(random_color());
+        holder.itemtitle.setText(task.getTask());
     }
 
     @Override
@@ -86,6 +111,16 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
         }
 
         return "";
+    }
+
+    private int random_color(){
+        for(int i = 0; i < colors.length; i ++){
+            int rnd = new Random().nextInt(colors.length);
+            colorCode = colors[rnd];
+
+        }
+
+        return colorCode;
     }
 
 
