@@ -46,10 +46,10 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
 
         public MyViewHolder1(View view) {
             super(view);
-            task = view.findViewById(R.id.task_row);
-            checkBox = view.findViewById(R.id.dot_checklist);
+            //task = view.findViewById(R.id.task_row);
+            //checkBox = view.findViewById(R.id.dot_checklist);
 
-            timestamp = view.findViewById(R.id.timestamp_checklist);
+            //timestamp = view.findViewById(R.id.timestamp_checklist);
 
             itemtitle = view.findViewById(R.id.item_title);
             itemdesc = view.findViewById(R.id.item_detail);
@@ -73,7 +73,7 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
 
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_layout, parent, false);
-        
+
         return new MyViewHolder1(itemView);
     }
     //Reloads old rows with new data functionality of onBindViewHolder
@@ -90,8 +90,19 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
 
 
         final Checklist task = taskList.get(position);
-        holder.cardView.setCardBackgroundColor(random_color());
-        holder.itemtitle.setText(task.getTask());
+
+        if(task.getHour() == 0 && task.getMinute() == 0){
+            holder.cardView.setCardBackgroundColor(random_color());
+            holder.itemtitle.setText(task.getTask());
+            //holder.itemdesc.setText("All Day");
+        }
+        else {
+            holder.cardView.setCardBackgroundColor(random_color());
+            holder.itemtitle.setText(task.getTask());
+            //holder.itemdesc.setText(formatTime(task.getMinute(), task.getHour()));
+        }
+
+
     }
 
     @Override
@@ -121,6 +132,26 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
         }
 
         return colorCode;
+    }
+
+    private String formatTime(int min, int hr){
+        int m = min;
+        int hour = hr;
+
+        if(hour > 12){
+            hour = hr - 12;
+            String result = (hour + ":" + m);
+            return result;
+        }
+
+        if(m == 0){
+            String result = hour + ":" + m + "0";
+            return result;
+        }
+        else {
+            String result = (hour + ":" + m);
+            return result;
+        }
     }
 
 

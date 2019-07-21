@@ -172,7 +172,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
         recyclerView_calendar.setLayoutManager(mLayoutManager1);
         recyclerView_calendar.setItemAnimator(new DefaultItemAnimator());
-        recyclerView_calendar.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
+        recyclerView_calendar.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 12));
         //recyclerView_calendar.setAdapter(calendar_task_adapter);
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {

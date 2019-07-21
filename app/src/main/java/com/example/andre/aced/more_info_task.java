@@ -66,6 +66,7 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
             public void onClick(View v) {
                 Intent intent = new Intent(more_info_task.this, Checklist.class);
                 more_info_task.this.startActivity(intent);
+                checklist.checklistAdapter.notifyDataSetChanged(); //TODO new CHange
             }
         });
 
@@ -74,13 +75,15 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
             public void onClick(View v) {
                 checklist.deleteTask(position);
                 deleteTask.setEnabled(false);
-                completeTask.setEnabled(false);
+                //completeTask.setEnabled(false);
                 Toast.makeText(more_info_task.this, "Task Deleted", Toast.LENGTH_LONG).show();
 
                 min = 0;
                 hr = 0;
                 displayTime.setText("Done!");
                 checklist.checklistAdapter.notifyDataSetChanged();
+                Intent intent = new Intent(more_info_task.this, Checklist.class);
+                more_info_task.this.startActivity(intent);
             }
         });
 
