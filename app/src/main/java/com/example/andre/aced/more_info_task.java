@@ -42,15 +42,16 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
         setContentView(R.layout.more_task_info);
 
         //Find Corresponding XML components
-        deleteTask = (ImageView)findViewById(R.id.more_info_delete);
+        deleteTask = (ImageView)findViewById(R.id.more_info_trash);
         back = (ImageView)findViewById(R.id.more_info_back);
-        completeTask = (ImageView)findViewById(R.id.more_info_completetask);
+        //completeTask = (ImageView)findViewById(R.id.more_info_completetask);
         reschedule = (TextView)findViewById(R.id.more_info_time);
         task_desciption = (TextView)findViewById(R.id.more_info_task);
         displayTime = (TextView)findViewById(R.id.more_info_displaytime);
 
         checklist = new Checklist();
         checklist.checklistList.addAll(Checklist.db.getAllTasks());
+
 
         Intent i = getIntent();
         more_info_taskUpdate = i.getStringExtra("taskname");
@@ -83,7 +84,7 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
             }
         });
 
-        completeTask.setOnClickListener(new View.OnClickListener() {
+        /*completeTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checklist.deleteTask(position);
@@ -96,7 +97,7 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
                 displayTime.setText("Done!");
                 checklist.checklistAdapter.notifyDataSetChanged();
             }
-        });
+        });*/
 
         reschedule.setOnClickListener(new View.OnClickListener() {
             @Override

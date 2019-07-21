@@ -43,13 +43,13 @@ public class Notes extends AppCompatActivity {
     private Button add;
     private RecyclerView noteView;
 
-    private NotesAdapter mAdapter;
-    private List<Note> notesList = new ArrayList<>();
+    public static NotesAdapter mAdapter;
+    public List<Note> notesList = new ArrayList<>();
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView recyclerView;
     private TextView noNotesView;
 
-    private DatabaseHelper db;
+   public static DatabaseHelper db;
 
 
     @Override
@@ -135,7 +135,7 @@ public class Notes extends AppCompatActivity {
     }
 
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
+        CharSequence colors[] = new CharSequence[]{"Edit", "Delete", "More Info"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
@@ -144,7 +144,15 @@ public class Notes extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
                     showNoteDialog(true, notesList.get(position), position);
-                } else {
+                }
+                if (which == 2){
+                    String note_title = notesList.get(position).getNote();
+                    Intent intent = new Intent (Notes.this, more_note_info.class);
+                    intent.putExtra("Note", note_title);
+                    intent.putExtra("position", position);
+                    Notes.this.startActivity(intent);
+                }
+                else {
                     deleteNote(position);
                 }
             }
@@ -196,7 +204,7 @@ public class Notes extends AppCompatActivity {
      * Deleting task from SQLite and removing the
      * item from the list by its position
      */
-    private void deleteNote(int position) {
+    public void deleteNote(int position) {
         // deleting the task from db
         db.deleteNote(notesList.get(position));
 
@@ -204,7 +212,7 @@ public class Notes extends AppCompatActivity {
         notesList.remove(position);
         mAdapter.notifyItemRemoved(position);
 
-        toggleEmptyNotes();
+        //toggleEmptyNotes();
     }
 
     private void showNoteDialog(final boolean shouldUpdate, final Note note, final int position) {

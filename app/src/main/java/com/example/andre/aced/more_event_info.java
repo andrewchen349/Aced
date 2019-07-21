@@ -19,22 +19,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.shrikanthravi.collapsiblecalendarview.data.Day;
 
 import model.Events;
 
 
-public class more_event_info extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, OnMapReadyCallback {
+public class more_event_info extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
 
     private ImageView back;
     private ImageView delete;
@@ -54,8 +45,7 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
     public int days;
     public String event_title;
 
-    private MapView mMapView;
-    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+
 
 
     @Override
@@ -128,15 +118,7 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
         event_date.setText(dateFormat());
 
 
-        Bundle mapViewBundle = null;
-        if (savedInstanceState != null) {
-            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
-        }
-        mMapView = (MapView) findViewById(R.id.mapView);
-        mMapView.onCreate(mapViewBundle);
 
-
-        mMapView.getMapAsync(this);
 
 
     }
@@ -225,98 +207,5 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-        Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
-        if (mapViewBundle == null) {
-            mapViewBundle = new Bundle();
-            outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
-        }
-
-        mMapView.onSaveInstanceState(mapViewBundle);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mMapView.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mMapView.onStop();
-    }
-
-    @Override
-    public void onMapReady(GoogleMap map) {
-        Location locationCt;
-        LocationManager locationManagerCt = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationCt = locationManagerCt
-                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        LatLng latLng = new LatLng(locationCt.getLatitude(),
-                locationCt.getLongitude());
-        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.addMarker(new MarkerOptions().position(latLng)
-                .title("My Spot").snippet("This is my spot!"));
-                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.back)));
-        map.setMyLocationEnabled(false);
-        map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        // Zoom in the Google Map
-        map.animateCamera(CameraUpdateFactory.zoomTo(6));
-
-
-
-        UiSettings mapUIsettings = map.getUiSettings();
-        mapUIsettings.setTiltGesturesEnabled(false);
-        mapUIsettings.setCompassEnabled(false);
-
-
-        map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        map.setMyLocationEnabled(true);
-
-
-    }
-
-    @Override
-    protected void onPause() {
-        mMapView.onPause();
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mMapView.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
-    }
 }
