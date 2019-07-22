@@ -11,10 +11,13 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
@@ -34,7 +37,9 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
     private TextView displayTime;
     private int min;
     private int hr;
-
+    private EditText local;
+    private ImageView setLocal;
+    private TextView locationview;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +53,10 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
         reschedule = (TextView)findViewById(R.id.more_info_time);
         task_desciption = (TextView)findViewById(R.id.more_info_task);
         displayTime = (TextView)findViewById(R.id.more_info_displaytime);
+        local = (EditText)findViewById(R.id.location_input);
+        setLocal = (ImageView)findViewById(R.id.locationset);
+        locationview = (TextView)findViewById(R.id.location);
+
 
         checklist = new Checklist();
         checklist.checklistList.addAll(Checklist.db.getAllTasks());
@@ -58,6 +67,22 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
         min = i.getIntExtra("minute", 0);
         hr = i.getIntExtra("hour", 0);
         position = i.getIntExtra("position", 0);
+
+        setLocal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String local1 = local.getText().toString();
+
+                checklist.checklistList.get(position).setLocation(local1);
+                checklist.db.insertTaskLocation(checklist.checklistList.get(position));
+                locationview.setText(local1);
+            }
+        });
+
+        if(checklist.checklistList.get(position).getLocation() != null || checklist.checklistList.get(position).getLocation() != "" ){
+            locationview.setText(checklist.checklistList.get(position).getLocation());
+        }
+
 
 
         //back Button functionality

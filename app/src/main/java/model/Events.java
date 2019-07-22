@@ -11,6 +11,7 @@ public class Events {
     public static final String COLUMN_DAY = "day";
     public static final String COLUMN_HOUR = "hour";
     public static final String COLUMN_MINUTE = "minute";
+    public static final String COLUMN_LOCATION = "location";
 
     private int id;
     private String date;
@@ -22,6 +23,7 @@ public class Events {
     private int event_hour;
     private int event_minute;
     private String event;
+    private String location = "";
 
     // Create table SQL query
     public static final String CREATE_TABLE2 =
@@ -30,6 +32,7 @@ public class Events {
                     + COLUMN_EVENTS + " TEXT,"
                     + COLUMN_YEAR + " YEAR,"
                     + COLUMN_MONTH + " MONTH,"
+                    + COLUMN_LOCATION + " LOCATION,"
                     + COLUMN_HOUR + " HOUR,"
                     + COLUMN_MINUTE + " MINUTE,"
                     + COLUMN_DAY + " DAY"
@@ -42,7 +45,7 @@ public class Events {
     }
 
     //Constructor
-   public Events(int id, String event, int year, int month, int day, int hour, int minute){
+   public Events(int id, String event, int year, int month, int day, int hour, int minute, String location){
 
         this.id = id;
         this.event = event;
@@ -51,6 +54,7 @@ public class Events {
         this.later_year = year;
        this.event_hour = hour;
        this.event_minute = minute;
+       this.location = location;
 
    }
 
@@ -111,6 +115,13 @@ public class Events {
     }
     public void setMinute(int m){
         this.event_minute = m;
+    }
+
+    public String getLocation(){
+        return this.location;
+    }
+    public void setLocation(String s){
+        this.location = s;
     }
 
 

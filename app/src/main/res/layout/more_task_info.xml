@@ -179,6 +179,22 @@
         app:layout_constraintVertical_bias="0.73"
         app:srcCompat="@drawable/location" />
 
+    <ImageView
+        android:id="@+id/locationset"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.753"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.803"
+        app:srcCompat="@drawable/ic_done_white" />
+
     <TextView
         android:id="@+id/location"
         android:layout_width="191dp"
@@ -198,7 +214,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.726" />
 
-    <TextView
+    <EditText
         android:id="@+id/location_input"
         android:layout_width="191dp"
         android:layout_height="36dp"

@@ -14,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -34,11 +35,12 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
     private TextView time;
     private TextView time_input;
     private TextView location;
-    private TextView location_input;
+    private EditText location_input;
     private TextView invite;
     private TextView invite_input;
     public int position;
     public Calendar calendar;
+    private ImageView locationConfirm;
 
     public int yr;
     public int m;
@@ -61,9 +63,10 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
         time = (TextView) findViewById(R.id.time);
         time_input = (TextView) findViewById(R.id.user_selected_time);
         location = (TextView) findViewById(R.id.location);
-        location_input = (TextView) findViewById(R.id.location_input);
+        location_input = (EditText) findViewById(R.id.location_input);
         invite = (TextView) findViewById(R.id.more_info_invite);
         invite_input = (TextView) findViewById(R.id.invite_input);
+        locationConfirm = (ImageView)findViewById(R.id.locationset);
 
         //Create a Calendar object
         calendar = new Calendar();
@@ -87,7 +90,24 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
                 //time_input.setText(formatTime(calendar.current_calendar_events.get(position).getMinute(),calendar.current_calendar_events.get(position).getHour()));
             }
         }
-        
+
+        locationConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String local = location_input.getText().toString();
+
+                calendar.current_calendar_events.get(position).setLocation(local);
+                calendar.db_calendar.insertEventLocation(calendar.current_calendar_events.get(position));
+                location.setText(local);
+            }
+        });
+
+        if(calendar.current_calendar_events.get(position).getLocation() != null || calendar.current_calendar_events.get(position).getLocation() != "" ){
+            location.setText(calendar.current_calendar_events.get(position).getLocation());
+        }
+
+
+
         time_input.setText(formatTime(calendar.current_calendar_events.get(position).getMinute(),calendar.current_calendar_events.get(position).getHour()));
 
 
@@ -121,10 +141,6 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
         event_date.setText(dateFormat());
 
         //time_input.setText(formatTime(calendar.all_calendar_events.get(position).getMinute(),calendar.all_calendar_events.get(position).getHour()));
-
-
-
-
 
     }
 
@@ -188,7 +204,6 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
         calendar.current_calendar_events.get(position).setHour(hourOfDay);
-
 
         calendar.current_calendar_events.get(position).setMinute(minute);
 

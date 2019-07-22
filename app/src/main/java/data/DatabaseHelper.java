@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Checklist;
 import model.Events;
 import model.Note;
 
@@ -159,11 +160,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.update(Events.TABLE_NAME2, values, Events.COLUMN_ID2 + " = ?",
                 new String[]{String.valueOf(events.getId())});
     }
+
+    public int insertEventLocation(Events events){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Events.COLUMN_LOCATION, events.getLocation());
+
+        return db.update(Events.TABLE_NAME2, values, Events.COLUMN_ID2 + " = ?",
+                new String[]{String.valueOf(events.getId())});
+    }
+
+    public int insertTaskLocation(Checklist task){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Checklist.COLUMN_LOCATION, task.getLocation());
+
+        return db.update(Checklist.TABLE_NAME1, values, Checklist.COLUMN_ID1 + " = ?",
+                new String[]{String.valueOf(task.getId())});
+    }
     public int getEventMin(long id){
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Events.TABLE_NAME2,
-                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_MONTH, Events.COLUMN_YEAR, Events.COLUMN_DAY, Events.COLUMN_HOUR, Events.COLUMN_MINUTE},
+                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_MONTH, Events.COLUMN_YEAR, Events.COLUMN_DAY, Events.COLUMN_HOUR, Events.COLUMN_MINUTE, Events.COLUMN_LOCATION},
                 Events.COLUMN_ID2 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -182,7 +203,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Events.TABLE_NAME2,
-                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_MONTH, Events.COLUMN_YEAR, Events.COLUMN_DAY, Events.COLUMN_HOUR, Events.COLUMN_MINUTE},
+                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_MONTH, Events.COLUMN_YEAR, Events.COLUMN_DAY, Events.COLUMN_HOUR, Events.COLUMN_MINUTE, Events.COLUMN_LOCATION},
                 Events.COLUMN_ID2 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -220,7 +241,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(model.Checklist.TABLE_NAME1,
-                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2, model.Checklist.COLUMN_HOUR, model.Checklist.COLUMN_MINUTE},
+                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2,
+                        model.Checklist.COLUMN_HOUR, model.Checklist.COLUMN_MINUTE, Checklist.COLUMN_LOCATION},
                 model.Checklist.COLUMN_ID1 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -240,7 +262,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(model.Checklist.TABLE_NAME1,
-                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2, model.Checklist.COLUMN_HOUR, model.Checklist.COLUMN_MINUTE},
+                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2,
+                        model.Checklist.COLUMN_HOUR, model.Checklist.COLUMN_MINUTE, Checklist.COLUMN_LOCATION},
                 model.Checklist.COLUMN_ID1 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -286,7 +309,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(model.Checklist.TABLE_NAME1,
-                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2, model.Checklist.COLUMN_HOUR, model.Checklist.COLUMN_MINUTE},
+                new String[]{model.Checklist.COLUMN_ID1, model.Checklist.COLUMN_TASK2, model.Checklist.COLUMN_TIMESTAMP2,
+                        model.Checklist.COLUMN_HOUR, model.Checklist.COLUMN_MINUTE, Checklist.COLUMN_LOCATION},
                 model.Checklist.COLUMN_ID1 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -298,7 +322,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TASK2)),
                 cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TIMESTAMP2)),
                 cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_HOUR)),
-                cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_MINUTE)));
+                cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_MINUTE)),
+                cursor.getString(cursor.getColumnIndex(Checklist.COLUMN_LOCATION)));
 
         cursor.close();
 
@@ -311,7 +336,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Events.TABLE_NAME2,
-                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_YEAR, Events.COLUMN_MONTH, Events.COLUMN_DAY, Events.COLUMN_HOUR, Events.COLUMN_MINUTE},
+                new String[]{Events.COLUMN_ID2, Events.COLUMN_EVENTS, Events.COLUMN_YEAR, Events.COLUMN_MONTH,
+                        Events.COLUMN_DAY, Events.COLUMN_HOUR, Events.COLUMN_MINUTE, Events.COLUMN_LOCATION},
                 Events.COLUMN_ID2 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -327,7 +353,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_HOUR)),
                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MINUTE)),
                cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MONTH)),
-               cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)));
+               cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)),
+               cursor.getString(cursor.getColumnIndex(Events.COLUMN_LOCATION)));
 
         /*Events eventTime = new Events(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_ID2)),
                 cursor.getString(cursor.getColumnIndex(Events.COLUMN_EVENTS)),
@@ -404,6 +431,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 task.setTimestamp(cursor.getString(cursor.getColumnIndex(model.Checklist.COLUMN_TIMESTAMP2)));
                 task.setHour(cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_HOUR)));
                 task.setMin(cursor.getInt(cursor.getColumnIndex(model.Checklist.COLUMN_MINUTE)));
+                task.setLocation(cursor.getString(cursor.getColumnIndex(Checklist.COLUMN_LOCATION)));
 
 
                 tasks.add(task);
@@ -437,6 +465,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 event.setHour(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_HOUR)));
                 event.setMinute(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MINUTE)));
                 event.set_calendar_day(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)));
+                event.setLocation(cursor.getString(cursor.getColumnIndex(Events.COLUMN_LOCATION)));
 
                 events.add(event);
             } while (cursor.moveToNext());
