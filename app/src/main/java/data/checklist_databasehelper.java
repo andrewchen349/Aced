@@ -11,7 +11,7 @@ import java.util.List;
 
 
 
-/*public class checklist_databasehelper extends SQLiteOpenHelper {
+/*public class_planner checklist_databasehelper extends SQLiteOpenHelper {
 
     //DataBase Version
     private static final int DATABASE_VERSION = 2; //CheckList DataBase

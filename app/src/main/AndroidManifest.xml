@@ -101,6 +101,11 @@
         </activity>
 
         <activity android:name=".WeeklyView"
+        android:configChanges="orientation"
+        android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".Classes_Planner"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
         </activity>

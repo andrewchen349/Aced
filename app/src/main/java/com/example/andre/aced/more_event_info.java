@@ -106,6 +106,13 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
             location.setText(calendar.current_calendar_events.get(position).getLocation());
         }
 
+        location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
 
         time_input.setText(formatTime(calendar.current_calendar_events.get(position).getMinute(),calendar.current_calendar_events.get(position).getHour()));

@@ -42,7 +42,7 @@ public class Option extends AppCompatActivity {
             public void onClick(View v) {
                 if(mAuth.getCurrentUser() != null){
                     mAuth.signOut();
-                    Intent intent = new Intent(Option.this, Login.class);
+                    Intent intent = new Intent(Option.this, Login.class_planner);
                     Option.this.startActivity(intent);
 
                 }

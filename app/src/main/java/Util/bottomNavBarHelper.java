@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.example.andre.aced.Checklist;
 import com.example.andre.aced.Calendar;
+import com.example.andre.aced.Classes_Planner;
 import com.example.andre.aced.Notes;
 import com.example.andre.aced.Option;
 import com.example.andre.aced.R;
@@ -31,6 +32,11 @@ public class bottomNavBarHelper {
                     case R.id.navigation_notes:
                         Intent intent3 = new Intent(context, Notes.class);
                         context.startActivity(intent3);
+                        break;
+
+                    case R.id.navigation_course:
+                        Intent intent_class = new Intent(context, Classes_Planner.class);
+                        context.startActivity(intent_class);
                         break;
                 }
 
