@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/calendar_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="435dp"
+        android:layout_alignBottom="@+id/compactcalendar_view"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="@id/compactcalendar_view"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="190dp"
-        android:id="@+id/calendar_recycler_view"/>
+        android:layout_marginTop="24dp" />
 
     <TextView
         android:id="@+id/empty_eventss_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/select_date_view"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="271dp"
+        android:layout_marginStart="-3dp"
+        android:layout_marginTop="150dp"
         android:fontFamily="sans-serif-light"
         android:text="No Events Yet.."
         android:textColor="@color/msg_no_notes"
@@ -28,10 +33,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="271dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="152dp"
+        android:layout_marginEnd="129dp"
         android:fontFamily="sans-serif-light"
         android:text="Select A Date"
         android:textColor="@color/msg_no_notes"
         android:textSize="@dimen/msg_no_notes" />
+
+
 </RelativeLayout>

@@ -136,7 +136,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         t.start();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.calendar_view1);
+        setContentView(R.layout.calendar2);
         setUpBottomNavbar();
 
         //Find Corresponding XML Components

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Checklist;
+import model.Course;
 import model.Events;
 import model.Note;
 
@@ -40,8 +41,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //create Calendar Event table
         db.execSQL(Events.CREATE_TABLE2);
 
-        //create Calendar Event Later Table
-        //db.execSQL(Events_Later.CREATE_TABLE3);
+        //Create Courses Table
+        db.execSQL(Course.CREATE_TABLE3);
     }
 
     // Upgrading database
@@ -51,10 +52,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + Note.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + model.Checklist.TABLE_NAME1);
         db.execSQL("DROP TABLE IF EXISTS " + Events.TABLE_NAME2);
+        db.execSQL("DROP TABLE IF EXISTS " + Course.TABLE_NAME3);
 
         // Create tables again
         onCreate(db);
     }
+
+    public long insertCourseName(String coursename){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_COURSENAME, coursename);
+
+        long id = db.insert(Course.TABLE_NAME3, null, values);
+        db.close();
+
+        return id;
+    }
+
 
     public long insertNote(String note) {
         // get writable database as we want to write data
@@ -103,6 +119,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long id = db.insert(Events.TABLE_NAME2, null, values);
         db.close();
         return id;
+    }
+
+    public int insertMon(Course course){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_MONDAY, course.getMon());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+
+    }
+
+    public int insertTues(Course course){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_TUESDAY, course.getMon());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+
+    }
+
+    public int insertWed(Course course){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_WEDNESDAY, course.getMon());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+
+    }
+
+    public int insertThurs(Course course){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_THURSDAY, course.getMon());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+
+    }
+
+    public int insertFri(Course course){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_FRIDAY, course.getMon());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+
     }
 
 
@@ -180,6 +251,187 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.update(Checklist.TABLE_NAME1, values, Checklist.COLUMN_ID1 + " = ?",
                 new String[]{String.valueOf(task.getId())});
     }
+
+    public int insertCourseLocation(Course course){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_LOCATIONCLASS, course.getLocation());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+    }
+
+    public int insertTeacherEmail(Course course){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_PROFESSOREMAIL, course.getEmail());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+    }
+
+    public String getCourseLocation(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Course.TABLE_NAME3,
+                new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY},
+                Course.COLUMN_ID3 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        String s  = cursor.getString(cursor.getColumnIndex(Course.COLUMN_LOCATIONCLASS));
+
+        cursor.close();
+
+        return s;
+    }
+
+    public String getCourseTeacherEmail(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Course.TABLE_NAME3,
+                new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY},
+                Course.COLUMN_ID3 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        String s  = cursor.getString(cursor.getColumnIndex(Course.COLUMN_PROFESSOREMAIL));
+
+        cursor.close();
+
+        return s;
+    }
+
+    public String getCourseTeacher(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Course.TABLE_NAME3,
+                new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY},
+                Course.COLUMN_ID3 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        String s  = cursor.getString(cursor.getColumnIndex(Course.COLUMN_TEACHERNAME));
+
+        cursor.close();
+
+        return s;
+    }
+
+    public int getMon(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Course.TABLE_NAME3,
+                new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
+                Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY},
+                Course.COLUMN_ID3 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        int min = cursor.getInt(cursor.getColumnIndex(Course.COLUMN_MONDAY));
+
+        cursor.close();
+
+        return min;
+    }
+
+    public int getTues(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Course.TABLE_NAME3,
+                new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY},
+                Course.COLUMN_ID3 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        int min = cursor.getInt(cursor.getColumnIndex(Course.COLUMN_TUESDAY));
+
+        cursor.close();
+
+        return min;
+    }
+
+    public int getWed(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Course.TABLE_NAME3,
+                new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY},
+                Course.COLUMN_ID3 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        int min = cursor.getInt(cursor.getColumnIndex(Course.COLUMN_WEDNESDAY));
+
+        cursor.close();
+
+        return min;
+    }
+
+    public int getThurs(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Course.TABLE_NAME3,
+                new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY},
+                Course.COLUMN_ID3 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        int min = cursor.getInt(cursor.getColumnIndex(Course.COLUMN_THURSDAY));
+
+        cursor.close();
+
+        return min;
+    }
+
+    public int getFri(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Course.TABLE_NAME3,
+                new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY},
+                Course.COLUMN_ID3 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        int min = cursor.getInt(cursor.getColumnIndex(Course.COLUMN_FRIDAY));
+
+        cursor.close();
+
+        return min;
+    }
+
     public int getEventMin(long id){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -277,6 +529,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return hour;
     }
+
 
     public Note getNote(long id) {
         // get readable database as we are not inserting anything
@@ -381,6 +634,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public Course getCourse(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(Course.TABLE_NAME3,
+                new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY},
+                Course.COLUMN_ID3 + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if(cursor != null){
+            cursor.moveToFirst();
+        }
+
+        Course course = new Course(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_ID3)),
+                cursor.getString(cursor.getColumnIndex(Course.COLUMN_COURSENAME)),
+                cursor.getString(cursor.getColumnIndex(Course.COLUMN_TEACHERNAME)),
+                cursor.getInt(cursor.getColumnIndex(Course.COLUMN_MONDAY)),
+                cursor.getInt(cursor.getColumnIndex(Course.COLUMN_TUESDAY)),
+                cursor.getInt(cursor.getColumnIndex(Course.COLUMN_WEDNESDAY)),
+                cursor.getInt(cursor.getColumnIndex(Course.COLUMN_THURSDAY)),
+                cursor.getInt(cursor.getColumnIndex(Course.COLUMN_FRIDAY)),
+                cursor.getString(cursor.getColumnIndex(Course.COLUMN_LOCATIONCLASS)),
+                cursor.getString(cursor.getColumnIndex(Course.COLUMN_PROFESSOREMAIL)));
+
+        cursor.close();
+        return course;
+
+    }
+
     public List<Note> getAllNotes() {
         List<Note> notes = new ArrayList<>();
 
@@ -478,6 +760,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return events;
 
     }
+
+    /*public List<Course>getAllCourses(){
+        List<Course> courses = new ArrayList<>();
+
+        // Select All Query Arrange in DESC
+        String selectQuery = "SELECT  * FROM " + Course.TABLE_NAME3 + " ORDER BY " +
+                Course.COLUMN_COURSENAME + " DESC";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null); // Points to all rows
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Course course = new Course();
+                course.setId(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_ID3)));
+                course.setCourseName(cursor.getString(cursor.getColumnIndex(Course.COLUMN_COURSENAME)));
+                course.setProfessorName(cursor.getString(cursor.getColumnIndex(Course.COLUMN_TEACHERNAME)));
+                course.setEmail(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MONTH)));
+                course.setHour(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_HOUR)));
+                course.setMinute(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MINUTE)));
+                course.set_calendar_day(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)));
+                course.setLocation(cursor.getString(cursor.getColumnIndex(Events.COLUMN_LOCATION)));
+
+                events.add(event);
+            } while (cursor.moveToNext());
+        }
+
+        // close db connection
+        db.close();
+
+        //returns List
+        return events;
+
+    }*/
 
     public int getNotesCount() {
         String countQuery = "SELECT  * FROM " + Note.TABLE_NAME;
