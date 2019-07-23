@@ -16,11 +16,11 @@ public class Splash_Screen extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.splash_screen);
 
-        newtonCradleLoading = (NewtonCradleLoading)findViewById(R.id.newton_cradle_loading);
+        /*newtonCradleLoading = (NewtonCradleLoading)findViewById(R.id.newton_cradle_loading);
         newtonCradleLoading.setLoadingColor(Color.parseColor("#5AC9DD"));
-        newtonCradleLoading.start();
+        newtonCradleLoading.start();*/
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -29,7 +29,7 @@ public class Splash_Screen extends AppCompatActivity {
                 Intent intent = new Intent(Splash_Screen.this, Calendar.class);
                 Splash_Screen.this.startActivity(intent);
                 finish();
-                newtonCradleLoading.stop();
+                //newtonCradleLoading.stop();
             }
         },2500);
 
