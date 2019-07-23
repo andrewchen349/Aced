@@ -1,6 +1,7 @@
 package view;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -30,11 +31,19 @@ public class Calendar_Task_Adapter extends RecyclerView.Adapter<Calendar_Task_Ad
         public TextView event_dot;
         public TextView time_date;
 
+        private TextView itemtitle;
+        private TextView itemdesc;
+        private CardView cardView;
+
         public MyViewHolder2(View view) {
             super(view);
-            event = view.findViewById(R.id.calendar_event);
-            event_dot = view.findViewById(R.id.dot_event);
-            time_date = view.findViewById(R.id.timestamp_calendar);
+            //event = view.findViewById(R.id.calendar_event);
+            event_dot = view.findViewById(R.id.dot);
+            //time_date = view.findViewById(R.id.timestamp_calendar);
+
+            itemtitle = view.findViewById(R.id.item_title);
+            itemdesc = view.findViewById(R.id.item_detail);
+            cardView = view.findViewById(R.id.card_view);
             }
     }
 
@@ -48,7 +57,7 @@ public class Calendar_Task_Adapter extends RecyclerView.Adapter<Calendar_Task_Ad
     @Override
     public Calendar_Task_Adapter.MyViewHolder2 onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.calendar_even_row, parent, false);
+                .inflate(R.layout.card_layout_event, parent, false);
 
         return new Calendar_Task_Adapter.MyViewHolder2(itemView);
     }
@@ -59,13 +68,16 @@ public class Calendar_Task_Adapter extends RecyclerView.Adapter<Calendar_Task_Ad
     public void onBindViewHolder(final Calendar_Task_Adapter.MyViewHolder2 holder, int position) {
 
         Events event  = calendar_event_list.get(position);
-        holder.event.setText(event.getEvent());
+        //holder.event.setText(event.getEvent());
 
         //Set Dot
         holder.event_dot.setText(Html.fromHtml("&#8226;"));
 
         //set Date
-        holder.time_date.setText(convertMonth(event.get_later_calendar_month()) + " " + event.get_later_calendar_day());
+       // holder.time_date.setText(convertMonth(event.get_later_calendar_month()) + " " + event.get_later_calendar_day());
+
+        holder.itemdesc.setText(event.getEvent());
+        holder.itemtitle.setText(convertMonth(event.get_later_calendar_month()) + " " + event.get_later_calendar_day());
 
     }
 
