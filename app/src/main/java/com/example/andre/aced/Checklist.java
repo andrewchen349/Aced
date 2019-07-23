@@ -79,7 +79,7 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_checklist);
+        setContentView(R.layout.checklist);
 
 
         notificationManagerCompat =  NotificationManagerCompat.from(this);
