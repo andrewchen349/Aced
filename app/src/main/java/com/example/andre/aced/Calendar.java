@@ -74,6 +74,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
     public List<Events> current_calendar_events = new ArrayList<>();
     private TextView noEventView;
     private TextView selectDate;
+    private Button addEvent;
 
     private int calendar_year;
     private int calendar_day;
@@ -144,7 +145,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
         recyclerView_calendar = (RecyclerView) findViewById(R.id.calendar_recycler_view);
         db_calendar = new DatabaseHelper(this);
 
-        SpringFabMenu sfm = (SpringFabMenu) findViewById(R.id.springfab);
+        /*SpringFabMenu sfm = (SpringFabMenu) findViewById(R.id.springfab);
         sfm.setOnSpringFabMenuItemClickListener(new SpringFabMenu.OnSpringFabMenuItemClickListener() {
             @Override
             public void onSpringFabMenuItemClick(View view) {
@@ -163,6 +164,16 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
                         Calendar.this.startActivity(intent);
 
                 }
+            }
+        });*/
+
+        addEvent = (Button) findViewById(R.id.addEventCal);
+        addEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "date picker");
+                showEventDialog(false, null, -1);
             }
         });
 
@@ -321,7 +332,7 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (which == 0) {
-                    showEventDialog(true, all_calendar_events.get(position), position);
+                    showEventDialog(true, current_calendar_events.get(position), position);
                 }
 
                 if (which == 1) {
@@ -454,10 +465,11 @@ public class Calendar extends AppCompatActivity implements DatePickerDialog.OnDa
     public void deleteEvent(final int position) {
 
 
-        db_calendar.deleteEvent(all_calendar_events.get(position));
+        db_calendar.deleteEvent(current_calendar_events.get(position));
 
         // removing the task from the list
-        all_calendar_events.remove(position);
+        //all_calendar_events.remove(position);
+        all_calendar_events.remove(current_calendar_events.get(position));
         int year = current_calendar_events.get(position).get_later_calendar_year();
         int month = current_calendar_events.get(position).get_later_calendar_month();
         int day = current_calendar_events.get(position).get_later_calendar_day();

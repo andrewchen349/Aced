@@ -74,7 +74,15 @@ public class Calendar_Task_Adapter extends RecyclerView.Adapter<Calendar_Task_Ad
 
         //Set Dot
         holder.event_dot.setText(Html.fromHtml("&#8226;"));
-        holder.time.setText("All Day");
+
+
+        if(event.getHour() == 0 && event.getMinute() == 0) {
+            holder.time.setText("All Day");
+        }
+
+        else{
+            holder.time.setText(event.getHour() + ":" + event.getMinute());
+        }
 
         //set Date
        // holder.time_date.setText(convertMonth(event.get_later_calendar_month()) + " " + event.get_later_calendar_day());

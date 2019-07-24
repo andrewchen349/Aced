@@ -36,11 +36,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/item_detail"
-            android:textSize="17sp"
+            android:textSize="15sp"
+            android:fontFamily="@font/segoeui"
             android:layout_below="@+id/item_title"
             android:textAlignment="center"
             android:gravity="center_vertical"
-            android:textColor="#5AC9DD"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="bold"
             />
 
 
@@ -69,6 +71,7 @@
             android:id="@+id/item_time"
             android:textSize="12sp"
             android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dot_margin_right"
             android:textAlignment="center"

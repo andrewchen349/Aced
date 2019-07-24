@@ -80,33 +80,18 @@
         tools:ignore="UnknownId" />
 
 
-    <com.rany.albeg.wein.springfabmenu.SpringFabMenu
-        android:id="@+id/springfab"
-        android:layout_width="107dp"
-        android:layout_height="260dp"
+    <Button
+        android:id="@+id/addEventCal"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="345dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="100dp"
-        android:paddingRight="15dp"
-        app:layout_behavior="@string/appbar_springfabmenu_behavior">
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/fab1white"
-            app:fabSize="mini" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fabSize="mini" />
-
-    </com.rany.albeg.wein.springfabmenu.SpringFabMenu>
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="46dp"
+        android:layout_marginBottom="144dp"
+        android:background="@drawable/addcireclestyle"
+        android:text="+"
+        android:textColor="#FFF"
+        android:textSize="30dp" />
 
 
 
