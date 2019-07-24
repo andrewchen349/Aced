@@ -8,42 +8,35 @@
         android:id="@+id/calendar_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="435dp"
-        android:layout_alignBottom="@+id/compactcalendar_view"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="@id/compactcalendar_view"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="24dp" />
+        android:layout_marginTop="24dp"/>
 
     <TextView
         android:id="@+id/empty_eventss_view"
-        android:layout_width="183dp"
-        android:layout_height="34dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="92dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="-2dp"
         android:fontFamily="sans-serif-light"
         android:text="No Events Yet.."
         android:textColor="@color/msg_no_notes"
-        android:textSize="@dimen/msg_no_notes" />
-
-    <TextView
-        android:id="@+id/select_date_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="149dp"
-        android:layout_marginTop="148dp"
-        android:layout_marginEnd="111dp"
-        android:fontFamily="sans-serif-light"
-        android:text="Select A Date"
-        android:textColor="@color/msg_no_notes"
         android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/select_date_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/empty_eventss_view"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="-2dp"
+            android:fontFamily="sans-serif-light"
+            android:text="Select A Date"
+            android:textColor="@color/msg_no_notes"
+            android:textSize="20dp" />
+
 
 
 </RelativeLayout>

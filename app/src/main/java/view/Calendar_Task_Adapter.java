@@ -34,6 +34,7 @@ public class Calendar_Task_Adapter extends RecyclerView.Adapter<Calendar_Task_Ad
         private TextView itemtitle;
         private TextView itemdesc;
         private CardView cardView;
+        private TextView time;
 
         public MyViewHolder2(View view) {
             super(view);
@@ -44,6 +45,7 @@ public class Calendar_Task_Adapter extends RecyclerView.Adapter<Calendar_Task_Ad
             itemtitle = view.findViewById(R.id.item_title);
             itemdesc = view.findViewById(R.id.item_detail);
             cardView = view.findViewById(R.id.card_view);
+            time = view.findViewById(R.id.item_time);
             }
     }
 
@@ -72,6 +74,7 @@ public class Calendar_Task_Adapter extends RecyclerView.Adapter<Calendar_Task_Ad
 
         //Set Dot
         holder.event_dot.setText(Html.fromHtml("&#8226;"));
+        holder.time.setText("All Day");
 
         //set Date
        // holder.time_date.setText(convertMonth(event.get_later_calendar_month()) + " " + event.get_later_calendar_day());
