@@ -54,14 +54,14 @@
         <TextView
             android:id="@+id/dot"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dot_margin_right"
-            android:layout_marginTop="@dimen/dimen_10"
             android:includeFontPadding="false"
             android:textColor="#5AC9DD"
             android:lineSpacingExtra="0dp"
-            android:textSize="70sp" />
+            android:textSize="60sp" />
 
         <TextView
             android:layout_width="wrap_content"

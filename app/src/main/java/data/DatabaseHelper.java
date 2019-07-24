@@ -761,7 +761,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    /*public List<Course>getAllCourses(){
+    public List<Course>getAllCourses(){
         List<Course> courses = new ArrayList<>();
 
         // Select All Query Arrange in DESC
@@ -778,13 +778,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 course.setId(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_ID3)));
                 course.setCourseName(cursor.getString(cursor.getColumnIndex(Course.COLUMN_COURSENAME)));
                 course.setProfessorName(cursor.getString(cursor.getColumnIndex(Course.COLUMN_TEACHERNAME)));
-                course.setEmail(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MONTH)));
-                course.setHour(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_HOUR)));
-                course.setMinute(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_MINUTE)));
-                course.set_calendar_day(cursor.getInt(cursor.getColumnIndex(Events.COLUMN_DAY)));
-                course.setLocation(cursor.getString(cursor.getColumnIndex(Events.COLUMN_LOCATION)));
+                course.setEmail(cursor.getString(cursor.getColumnIndex(Course.COLUMN_PROFESSOREMAIL)));
+                course.setLocation(cursor.getString(cursor.getColumnIndex(Course.COLUMN_LOCATIONCLASS)));
 
-                events.add(event);
+
+                courses.add(course);
             } while (cursor.moveToNext());
         }
 
@@ -792,9 +790,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         //returns List
-        return events;
+        return courses;
 
-    }*/
+    }
 
     public int getNotesCount() {
         String countQuery = "SELECT  * FROM " + Note.TABLE_NAME;
@@ -835,6 +833,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return count;
+
+    }
+
+    public int getCoursesCount(){
+        int count;
+
+        String countQuery = "SELECT  * FROM " + Course.TABLE_NAME3;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+
+        count = cursor.getCount();
+        cursor.close();
+
+        return count;
+
 
     }
 
