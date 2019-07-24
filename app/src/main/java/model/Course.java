@@ -16,6 +16,8 @@ public class Course {
     public static final String COLUMN_FRIDAY = "friday";
     public static final String COLUMN_LOCATIONCLASS = "location";
     public static final String COLUMN_PROFESSOREMAIL = "email";
+    public static final String COLUMN_HOUR = "hour";
+    public static final String COLUMN_MINUTE = "minute";
 
     //FIELDS
     private int id;
@@ -28,6 +30,8 @@ public class Course {
     private int Wed;
     private int Thurs;
     private int Fri;
+    private int hour;
+    private int minute;
 
     // Create table SQL query
     public static final String CREATE_TABLE3 =
@@ -37,6 +41,8 @@ public class Course {
                     + COLUMN_TEACHERNAME + " TEACHERNAME,"
                     + COLUMN_LOCATIONCLASS + " LOCATION,"
                     + COLUMN_PROFESSOREMAIL + " EMAIL,"
+                    + COLUMN_HOUR + "HOUR,"
+                    + COLUMN_MINUTE + "MINUTE,"
                     + COLUMN_MONDAY + " MONDAY,"
                     + COLUMN_TUESDAY + " TUESDAY,"
                     + COLUMN_WEDNESDAY + " WEDNESDAY,"
@@ -48,7 +54,7 @@ public class Course {
     public Course() {
     }
 
-    public Course(int id, String coursename, String profesorname, int mon, int tues, int wed, int thurs, int fri, String local, String email) {
+    public Course(int id, String coursename, String profesorname, int mon, int tues, int wed, int thurs, int fri, String local, String email, int hr, int min) {
         this.course_name = coursename;
         this.teacher_name = profesorname;
         this.Mon = mon;
@@ -59,6 +65,8 @@ public class Course {
         this.id = id;
         this.local = local;
         this.teacheremail = email;
+        this.hour = hr;
+        this.minute = min;
     }
 
 
@@ -81,6 +89,22 @@ public class Course {
 
     public void setProfessorName(String s){
         this.teacher_name = s;
+    }
+
+    public void setHour(int s){
+        this.hour = s;
+    }
+
+    public void setMinute(int s){
+        this.minute = s;
+    }
+
+    public int getHour(){
+        return this.hour;
+    }
+
+    public int getMinute(){
+        return this.minute;
     }
 
     public int getId(){

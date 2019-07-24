@@ -6,17 +6,19 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import Util.bottomNavBarHelper;
 
 public class Classes_Planner extends AppCompatActivity {
 
     private static final int ACTIVITY_NUM = 3;
+    private Button addCourse;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.class_planner_layout);
+        setContentView(R.layout.planner);
 
         setUpBottomNavbar();
     }
