@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <TextView
+        android:id="@+id/title_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:text="My Course"
+        android:layout_marginTop="20dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/segoeuisl"/>
+
+    <EditText
+        android:id="@+id/classname_update"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_update"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:drawablePadding="10dp"
+        android:drawableLeft="@drawable/planner"
+        android:hint="Class Name"/>
+
+    <EditText
+        android:id="@+id/location_update"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/classname_update"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:drawablePadding="10dp"
+        android:layout_marginLeft="20dp"
+        android:drawableLeft="@drawable/locationpin"
+        android:hint="Location"/>
+
+    <EditText
+        android:id="@+id/name_update"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/location_update"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentLeft="true"
+        android:drawablePadding="10dp"
+        android:layout_marginLeft="20dp"
+        android:drawableLeft="@drawable/profesor"
+        android:hint="Professor Name"/>
+
+    <EditText
+        android:id="@+id/email_update"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_update"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:drawablePadding="10dp"
+        android:layout_marginLeft="20dp"
+        android:drawableLeft="@drawable/courseemail"
+        android:hint="Professor Email"/>
+
+    <TextView
+        android:id="@+id/timenumbers_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/email_update"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:text="Time"
+        android:drawableLeft="@drawable/timerrrr"
+        android:drawablePadding="10dp"
+        android:textSize="20dp"/>
+
+    <com.dpro.widgets.WeekdaysPicker
+        android:id="@+id/weekdays_update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timenumbers_update"
+        android:layout_marginTop="40dp"
+        app:highlight_color="#5AC9DD"
+        app:sunday_first_day="false" />
+
+    <ImageView
+        android:id="@+id/confirm_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/weekdays_update"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:src="@drawable/confirm" />
+
+
+
+</RelativeLayout>

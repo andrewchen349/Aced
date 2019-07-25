@@ -964,6 +964,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(events.getId())});
     }
 
+    public int updateCourse(Course course){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_COURSENAME,course.getCourseName());
+
+        //update row with new task
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+    }
+
     public void deleteNote(Note note) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(Note.TABLE_NAME, Note.COLUMN_ID + " = ?",
@@ -990,5 +1002,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(event.getId())});
         db.close();
 
+    }
+
+    public void deleteCourseDataBase(Course course){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(Course.TABLE_NAME3, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+        db.close();
     }
     }

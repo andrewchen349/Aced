@@ -115,6 +115,16 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name=".Course_Update"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".Course_Moreinfo"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
 
         <activity android:name=".Tutorial"
             android:label="appTutorial" />
