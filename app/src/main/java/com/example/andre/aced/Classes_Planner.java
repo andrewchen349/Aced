@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Util.bottomNavBarHelper;
+import data.DatabaseHelper;
 import model.Course;
 import model.Events;
 import view.ChecklistAdapter;
@@ -31,6 +32,7 @@ public class Classes_Planner extends AppCompatActivity {
     public List<Course> all_courses = new ArrayList<>();
     private RecyclerView recyclerView;
     public static Courses_Adapter courses_adapter;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,9 +51,12 @@ public class Classes_Planner extends AppCompatActivity {
         });
 
         setUpBottomNavbar();
-        if(Course_Input.db != null) {
+        /*if(Course_Input.db != null) {
             all_courses.addAll(Course_Input.db.getAllCourses());
-        }
+        }*/
+
+        db =  new DatabaseHelper(this);
+        all_courses.addAll(db.getAllCourses());
 
 
         courses_adapter = new Courses_Adapter(this, all_courses);

@@ -88,7 +88,7 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
         course1.setLocation(course_location.getText().toString());
         db.insertCourseLocation(course1);
 
-        course1.setProfessorName(course_profesor.toString().toString());
+        course1.setProfessorName(course_profesor.getText().toString());
         db.insertTeacherName(course1);
 
         course1.setEmail(course_profesor_email.getText().toString());

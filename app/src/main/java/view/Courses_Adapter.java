@@ -26,12 +26,14 @@ public class Courses_Adapter extends RecyclerView.Adapter<Courses_Adapter.MyView
         public TextView courseName;
         public TextView teacherName;
         public TextView timeview;
+        public TextView location_display;
 
         public MyViewHolder(View view) {
             super(view);
             courseName= view.findViewById(R.id.coursetitle);
             teacherName = view.findViewById(R.id.profeesorname);
             timeview = view.findViewById(R.id.date);
+            location_display = view.findViewById(R.id.locationdisplay);
         }
     }
 
@@ -57,9 +59,11 @@ public class Courses_Adapter extends RecyclerView.Adapter<Courses_Adapter.MyView
 
         Course course = courseList.get(position);
 
+
         //TODO: Implement getters in Course model class
         holder.courseName.setText(course.getCourseName());
         holder.teacherName.setText((course.getProffesorName()));
+        holder.location_display.setText(course.getLocation());
 
         //Call to String Methods
         //holder.timeview.setText(formatDays());
