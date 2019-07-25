@@ -110,6 +110,11 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name=".Course_Input"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
 
         <activity android:name=".Tutorial"
             android:label="appTutorial" />

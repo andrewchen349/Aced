@@ -38,16 +38,16 @@ public class Course {
             "CREATE TABLE " + TABLE_NAME3 + "("
                     + COLUMN_ID3 + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + COLUMN_COURSENAME + " TEXT,"
+                    + COLUMN_PROFESSOREMAIL + " EMAIL,"
                     + COLUMN_TEACHERNAME + " TEACHERNAME,"
                     + COLUMN_LOCATIONCLASS + " LOCATION,"
-                    + COLUMN_PROFESSOREMAIL + " EMAIL,"
-                    + COLUMN_HOUR + "HOUR,"
-                    + COLUMN_MINUTE + "MINUTE,"
                     + COLUMN_MONDAY + " MONDAY,"
                     + COLUMN_TUESDAY + " TUESDAY,"
                     + COLUMN_WEDNESDAY + " WEDNESDAY,"
                     + COLUMN_THURSDAY + " THURSDAY,"
-                    + COLUMN_FRIDAY + " FRIDAY"
+                    + COLUMN_FRIDAY + " FRIDAY,"
+                    + COLUMN_HOUR + " HOUR,"
+                    + COLUMN_MINUTE + " MINUTE"
                     + ")";
 
     //Constructors

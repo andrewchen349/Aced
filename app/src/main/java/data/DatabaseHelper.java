@@ -282,6 +282,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(course.getId())});
     }
 
+    public int insertTeacherName(Course course){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_TEACHERNAME, course.getProffesorName());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+    }
+
     public int insertTeacherEmail(Course course){
         SQLiteDatabase db = this.getWritableDatabase();
 

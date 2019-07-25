@@ -62,7 +62,7 @@ public class Courses_Adapter extends RecyclerView.Adapter<Courses_Adapter.MyView
         holder.teacherName.setText((course.getProffesorName()));
 
         //Call to String Methods
-        holder.timeview.setText(formatDays());
+        //holder.timeview.setText(formatDays());
 
         // Displaying dot from HTML character code
         //holder.dot.setText(Html.fromHtml("&#8226;"));
