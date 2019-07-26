@@ -136,7 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(Course.COLUMN_TUESDAY, course.getMon());
+        values.put(Course.COLUMN_TUESDAY, course.getTues());
 
         return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
                 new String[]{String.valueOf(course.getId())});
@@ -147,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(Course.COLUMN_WEDNESDAY, course.getMon());
+        values.put(Course.COLUMN_WEDNESDAY, course.getWed());
 
         return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
                 new String[]{String.valueOf(course.getId())});
@@ -158,7 +158,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(Course.COLUMN_THURSDAY, course.getMon());
+        values.put(Course.COLUMN_THURSDAY, course.getThurs());
 
         return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
                 new String[]{String.valueOf(course.getId())});
@@ -169,7 +169,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(Course.COLUMN_FRIDAY, course.getMon());
+        values.put(Course.COLUMN_FRIDAY, course.getFri());
 
         return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
                 new String[]{String.valueOf(course.getId())});
@@ -227,6 +227,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(Course.COLUMN_MINUTE, course.getHour());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+    }
+
+    public int insertCourseEndHour(Course course){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_HOUREND, course.getHourEnd());
+
+        return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
+                new String[]{String.valueOf(course.getId())});
+    }
+
+    public int insertCourseEndMin(Course course){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Course.COLUMN_MINEND, course.getMinuteEnd());
 
         return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
                 new String[]{String.valueOf(course.getId())});
@@ -307,7 +329,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE, Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -327,7 +349,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE , Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -347,7 +369,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE , Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -367,7 +389,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE , Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -387,7 +409,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE , Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -407,7 +429,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE, Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -427,7 +449,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE, Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -447,7 +469,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE, Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -468,7 +490,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE, Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -488,7 +510,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE, Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -710,7 +732,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(Course.TABLE_NAME3,
                 new String[]{Course.COLUMN_ID3, Course.COLUMN_COURSENAME, Course.COLUMN_PROFESSOREMAIL, Course.COLUMN_TEACHERNAME, Course.COLUMN_LOCATIONCLASS,
-                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE},
+                        Course.COLUMN_MONDAY, Course.COLUMN_TUESDAY, Course.COLUMN_WEDNESDAY, Course.COLUMN_THURSDAY,Course.COLUMN_FRIDAY, Course.COLUMN_HOUR, Course.COLUMN_MINUTE, Course.COLUMN_HOUREND, Course.COLUMN_MINEND},
                 Course.COLUMN_ID3 + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -729,7 +751,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.getString(cursor.getColumnIndex(Course.COLUMN_LOCATIONCLASS)),
                 cursor.getString(cursor.getColumnIndex(Course.COLUMN_PROFESSOREMAIL)),
                 cursor.getInt(cursor.getColumnIndex(Course.COLUMN_HOUR)),
-                cursor.getInt(cursor.getColumnIndex(Course.COLUMN_MINUTE)));
+                cursor.getInt(cursor.getColumnIndex(Course.COLUMN_MINUTE)),
+                cursor.getInt(cursor.getColumnIndex(Course.COLUMN_HOUREND)),
+                cursor.getInt(cursor.getColumnIndex(Course.COLUMN_MINEND)));
 
         cursor.close();
         return course;
@@ -855,6 +879,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 course.setLocation(cursor.getString(cursor.getColumnIndex(Course.COLUMN_LOCATIONCLASS)));
                 course.setHour(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_HOUR)));
                 course.setMinute(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_MINUTE)));
+                course.setHourEnd(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_HOUREND)));
+                course.setMinuteEnd(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_MINEND)));
+                course.setMon(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_MONDAY)));
+                course.setTues(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_TUESDAY)));
+                course.setWed(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_WEDNESDAY)));
+                course.setThurs(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_THURSDAY)));
+                course.setFri(cursor.getInt(cursor.getColumnIndex(Course.COLUMN_FRIDAY)));
 
 
                 courses.add(course);

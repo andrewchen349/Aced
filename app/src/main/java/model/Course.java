@@ -18,6 +18,8 @@ public class Course {
     public static final String COLUMN_PROFESSOREMAIL = "email";
     public static final String COLUMN_HOUR = "hour";
     public static final String COLUMN_MINUTE = "minute";
+    public static final String COLUMN_HOUREND = "hour_end";
+    public static final String COLUMN_MINEND = "minute_end";
 
     //FIELDS
     private int id;
@@ -32,6 +34,8 @@ public class Course {
     private int Fri;
     private int hour;
     private int minute;
+    private int hour_end;
+    private int minute_end;
 
     // Create table SQL query
     public static final String CREATE_TABLE3 =
@@ -47,14 +51,17 @@ public class Course {
                     + COLUMN_THURSDAY + " THURSDAY,"
                     + COLUMN_FRIDAY + " FRIDAY,"
                     + COLUMN_HOUR + " HOUR,"
-                    + COLUMN_MINUTE + " MINUTE"
+                    + COLUMN_MINUTE + " MINUTE,"
+                    + COLUMN_HOUREND + " HOUREND,"
+                    + COLUMN_MINEND + " MINUTEEND"
                     + ")";
 
     //Constructors
     public Course() {
     }
 
-    public Course(int id, String coursename, String profesorname, int mon, int tues, int wed, int thurs, int fri, String local, String email, int hr, int min) {
+    public Course(int id, String coursename, String profesorname, int mon, int tues, int wed, int thurs, int fri, String local, String email, int hr, int min
+    ,int hourend, int minend) {
         this.course_name = coursename;
         this.teacher_name = profesorname;
         this.Mon = mon;
@@ -67,6 +74,8 @@ public class Course {
         this.teacheremail = email;
         this.hour = hr;
         this.minute = min;
+        this.hour_end = hourend;
+        this.minute_end = minend;
     }
 
 
@@ -99,12 +108,28 @@ public class Course {
         this.minute = s;
     }
 
+    public void setHourEnd(int s){
+        this.hour_end = s;
+    }
+
+    public void setMinuteEnd(int s){
+        this.minute_end = s;
+    }
+
     public int getHour(){
         return this.hour;
     }
 
     public int getMinute(){
         return this.minute;
+    }
+
+    public int getHourEnd(){
+        return this.hour_end;
+    }
+
+    public int getMinuteEnd(){
+        return this.minute_end;
     }
 
     public int getId(){
@@ -124,6 +149,27 @@ public class Course {
 
     public String getProffesorName(){
         return this.teacher_name;
+    }
+
+
+    public void setMon(int s){
+        this.Mon = s;
+    }
+
+    public void setTues(int s){
+        this.Tues = s;
+    }
+
+    public void setWed(int s){
+        this.Wed = s;
+    }
+
+    public void setThurs(int s){
+        this.Thurs = s;
+    }
+
+    public void setFri(int s){
+        this.Fri = s;
     }
 
     public int getMon(){

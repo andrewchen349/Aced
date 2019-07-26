@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import com.dpro.widgets.WeekdaysPicker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import data.DatabaseHelper;
@@ -25,7 +28,7 @@ public class Course_Moreinfo extends AppCompatActivity {
 
     private TextView course_time;
     private WeekdaysPicker weekdaysPicker;
-    private ImageView save;
+    private Button save;
 
     public List<Course> all_courses_update = new ArrayList<>();
     private int pos;
@@ -55,8 +58,11 @@ public class Course_Moreinfo extends AppCompatActivity {
         user_selected_minute = all_courses_update.get(pos).getMinute();
 
 
-        String s = all_courses_update.get(pos).getHour() + ":" + all_courses_update.get(pos).getMinute();
+        String s = all_courses_update.get(pos).getHour() + ":" + all_courses_update.get(pos).getMinute() + " to " +
+                all_courses_update.get(pos).getHourEnd() + ":" + all_courses_update.get(pos).getMinuteEnd();
         course_time.setText(s);
+
+        setDaySelector();
     }
 
 
@@ -68,6 +74,41 @@ public class Course_Moreinfo extends AppCompatActivity {
 
         course_time = (TextView)findViewById(R.id.timenumbers_update);
         weekdaysPicker = (WeekdaysPicker)findViewById(R.id.weekdays_update);
-        save = (ImageView)findViewById(R.id.confirm_update);
+        save = (Button)findViewById(R.id.confirm);
+    }
+
+    private void setDaySelector(){
+
+        LinkedHashMap<Integer, Boolean> map = new LinkedHashMap<>();
+        System.out.println(all_courses_update.get(pos).getTues());
+
+        if (all_courses_update.get(pos).getMon() == 2){
+            System.out.println("m here");
+            map.put(Calendar.MONDAY, Boolean.TRUE);
+        }
+
+        if (all_courses_update.get(pos).getTues() == 3){
+            System.out.println("t here");
+            //weekdaysPicker.selectDay(Calendar.TUESDAY);
+            map.put(Calendar.TUESDAY, Boolean.TRUE );
+        }
+
+        if (all_courses_update.get(pos).getWed() == 4){
+            System.out.println("w here");
+            map.put(Calendar.WEDNESDAY, Boolean.TRUE );
+        }
+
+        if (all_courses_update.get(pos).getThurs() == 5){
+            System.out.println("th here");
+            map.put(Calendar.THURSDAY, Boolean.TRUE );
+        }
+
+        if (all_courses_update.get(pos).getFri() == 6){
+            System.out.println("Fri here");
+            map.put(Calendar.FRIDAY, Boolean.TRUE );
+        }
+
+        weekdaysPicker.setCustomDays(map);
+
     }
 }

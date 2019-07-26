@@ -78,25 +78,38 @@
         android:drawablePadding="10dp"
         android:textSize="20dp"/>
 
+    <TextView
+        android:id="@+id/dayselect"
+        android:layout_marginLeft="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/timenumbers_update"
+        android:text="Days Selector"
+        android:textSize="20dp"
+        android:textStyle="italic"
+        android:fontFamily="@font/segoeuisl"
+        android:layout_marginTop="40dp"/>
+
     <com.dpro.widgets.WeekdaysPicker
         android:id="@+id/weekdays_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/timenumbers_update"
-        android:layout_marginTop="40dp"
+        android:layout_below="@id/dayselect"
+        android:layout_marginTop="20dp"
         app:highlight_color="#5AC9DD"
+        app:background_color="@android:color/white"
         app:sunday_first_day="false" />
 
-    <ImageView
-        android:id="@+id/confirm_update"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/weekdays_update"
-        android:layout_marginTop="30dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:src="@drawable/confirm" />
+        android:text="Save"
+        android:textColor="#5AC9DD"
+        android:fontFamily="@font/segoeui"
+        android:background="@android:color/white"
+        />
 
 
 

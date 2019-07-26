@@ -64,6 +64,8 @@ public class Courses_Adapter extends RecyclerView.Adapter<Courses_Adapter.MyView
         holder.courseName.setText(course.getCourseName());
         holder.teacherName.setText((course.getProffesorName()));
         holder.location_display.setText(course.getLocation());
+        holder.timeview.setText(formatTime(course));
+
 
         //Call to String Methods
         //holder.timeview.setText(formatDays());
@@ -82,7 +84,8 @@ public class Courses_Adapter extends RecyclerView.Adapter<Courses_Adapter.MyView
     }
 
     //TODO
-    public String formatDays(){
-        return "";
+    public String formatTime(Course course){
+        String s = course.getHour() + ":" + course.getMinute() + " - " + course.getHourEnd() + ":" + course.getMinuteEnd();
+        return  s;
     }
 }

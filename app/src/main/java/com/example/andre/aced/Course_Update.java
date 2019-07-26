@@ -1,5 +1,6 @@
 package com.example.andre.aced;
 
+import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,20 +8,24 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.dpro.widgets.WeekdaysPicker;
+import com.mcsoft.timerangepickerdialog.RangeTimePickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import data.DatabaseHelper;
 import model.Course;
 
-public class Course_Update extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener{
+public class Course_Update extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, RangeTimePickerDialog.ISelectedTime{
 
     private EditText course_name;
     private EditText course_profesor;
@@ -29,7 +34,7 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
 
     private TextView course_time;
     private WeekdaysPicker weekdaysPicker;
-    private ImageView save;
+    private Button save;
 
     public List<Course> all_courses_update = new ArrayList<>();
     private int pos;
@@ -37,6 +42,11 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
 
     private int user_selected_hour;
     private  int user_selected_minute;
+
+    public static int user_selected_hour_later;
+    public static int getUser_selected_minute_later;
+
+    private List<Integer>selectedDays = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,15 +69,30 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
         user_selected_hour = all_courses_update.get(pos).getHour();
         user_selected_minute = all_courses_update.get(pos).getMinute();
 
+        user_selected_hour_later = all_courses_update.get(pos).getHourEnd();
+        getUser_selected_minute_later = all_courses_update.get(pos).getMinuteEnd();
 
-        String s = all_courses_update.get(pos).getHour() + ":" + all_courses_update.get(pos).getMinute();
+
+
+        String s = all_courses_update.get(pos).getHour() + ":" + all_courses_update.get(pos).getMinute() + " to " +
+                all_courses_update.get(pos).getHourEnd() + ":" + all_courses_update.get(pos).getMinuteEnd();
         course_time.setText(s);
 
         course_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment timePicker = new TimePickerFragment();
-                timePicker.show(getSupportFragmentManager(), "time picker");
+                //DialogFragment timePicker = new TimePickerFragment();
+                //timePicker.show(getSupportFragmentManager(), "time picker");
+
+                RangeTimePickerDialog dialog = new RangeTimePickerDialog();
+                dialog.newInstance();
+                dialog.setRadiusDialog(20); // Set radius of dialog (default is 50)
+                dialog.setIs24HourView(true); // Indicates if the format should be 24 hours
+                dialog.setColorTabSelected(R.color.white);
+                dialog.setColorBackgroundHeader(R.color.colorPrimary); // Set Color of Background header dialog
+                dialog.setColorTextButton(R.color.colorPrimaryDark); // Set Text color of button
+                FragmentManager fragmentManager = getFragmentManager();
+                dialog.show(fragmentManager, "");
             }
         });
 
@@ -80,6 +105,8 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
             }
         });
 
+        //selectedDays = weekdaysPicker.getSelectedDays();
+
 
     }
 
@@ -91,7 +118,7 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
 
         course_time = (TextView)findViewById(R.id.timenumbers_update);
         weekdaysPicker = (WeekdaysPicker)findViewById(R.id.weekdays_update);
-        save = (ImageView)findViewById(R.id.confirm_update);
+        save = (Button)findViewById(R.id.confirm);
     }
 
     private void updateCourse(String course){
@@ -113,8 +140,45 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
         course1.setHour(user_selected_hour);
         course1.setMinute(user_selected_minute);
 
+        course1.setHourEnd(user_selected_hour_later);
+        course1.setMinuteEnd(getUser_selected_minute_later);
+
         db_update.insertCourseHour(course1);
         db_update.insertCourseMin(course1);
+
+        db_update.insertCourseEndHour(course1);
+        db_update.insertCourseEndMin(course1);
+
+        selectedDays = weekdaysPicker.getSelectedDays();
+
+        for(int i : selectedDays){
+
+            if(i == 2){
+                course1.setMon(i);
+                db_update.insertMon(course1);
+            }
+
+            if(i == 3){
+                course1.setTues(i);
+                db_update.insertTues(course1);
+            }
+
+            if(i == 4){
+                course1.setWed(i);
+                db_update.insertWed(course1);
+            }
+
+            if(i == 5){
+                course1.setThurs(i);
+                db_update.insertThurs(course1);
+            }
+
+            if(i == 6){
+                course1.setFri(i);
+                db_update.insertFri(course1);
+            }
+
+        }
     }
 
     @Override
@@ -147,4 +211,19 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
         }
 
     }
+
+
+
+    @Override
+    public void onSelectedTime(int hourStart, int minuteStart, int hourEnd, int minuteEnd) {
+
+        user_selected_hour = hourStart;
+        user_selected_minute = minuteStart;
+
+        user_selected_hour_later = hourEnd;
+        getUser_selected_minute_later = minuteEnd;
+
+    }
+
+
 }
