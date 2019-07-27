@@ -11,6 +11,7 @@ import com.github.tlaabs.timetableview.Time;
 import com.github.tlaabs.timetableview.TimetableView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import data.DatabaseHelper;
@@ -22,7 +23,7 @@ public class WeeklyView extends AppCompatActivity {
     private DatabaseHelper db;
 
     private List<Course>all_courses = new ArrayList<>();
-    private List<Schedule>scheduleList = new ArrayList<>();
+    private ArrayList<Schedule>scheduleList = new ArrayList<>();
     private String json;
 
     @Override
@@ -36,6 +37,8 @@ public class WeeklyView extends AppCompatActivity {
 
         all_courses.addAll(db.getAllCourses());
 
+
+
         timetableView.setOnStickerSelectEventListener(new TimetableView.OnStickerSelectedListener() {
             @Override
             public void OnStickerSelected(int idx, ArrayList<Schedule> schedules) {
@@ -43,18 +46,11 @@ public class WeeklyView extends AppCompatActivity {
             }
         });
 
-        /*if(!json.isEmpty()){
-            timetableView.load(json);
-        }*/
-        importclassschedule();
+        timetableView.add(importclassschedule());
     }
 
-    private void importclassschedule(){
-
+   private ArrayList importclassschedule(){
         if(all_courses.size() != 0){
-
-            //Loop through each object
-
             for (Course c : all_courses){
                 Schedule schedule = new Schedule();
                 schedule.setClassTitle(c.getCourseName());
@@ -62,15 +58,69 @@ public class WeeklyView extends AppCompatActivity {
                 schedule.setProfessorName(c.getProffesorName());
                 schedule.setStartTime(new Time(c.getHour(),c.getMinute()));
                 schedule.setEndTime(new Time(c.getHourEnd(), c.getMinuteEnd()));
-                schedule.setDay(c.getMon());
-                schedule.setDay(c.getTues());
-                schedule.setDay(c.getWed());
-                schedule.setDay(c.getThurs());
-                schedule.setDay(c.getFri());
-                scheduleList.add(schedule);
+
+                if(c.getMon() != 0) {
+                    schedule.setDay(c.getMon() - 2);
+                    scheduleList.add(schedule);
+                    schedule = new Schedule();
+                    schedule.setClassTitle(c.getCourseName());
+                    schedule.setClassPlace(c.getLocation());
+                    schedule.setProfessorName(c.getProffesorName());
+                    schedule.setStartTime(new Time(c.getHour(),c.getMinute()));
+                    schedule.setEndTime(new Time(c.getHourEnd(), c.getMinuteEnd()));
+                }
+
+                if(c.getTues() != 0)
+                {
+                    schedule.setDay(c.getTues() - 2);
+                    scheduleList.add(schedule);
+                    schedule = new Schedule();
+                    schedule.setClassTitle(c.getCourseName());
+                    schedule.setClassPlace(c.getLocation());
+                    schedule.setProfessorName(c.getProffesorName());
+                    schedule.setStartTime(new Time(c.getHour(),c.getMinute()));
+                    schedule.setEndTime(new Time(c.getHourEnd(), c.getMinuteEnd()));
+                }
+
+                if(c.getWed() != 0) {
+                    schedule.setDay(c.getWed() - 2);
+                    scheduleList.add(schedule);
+                    schedule = new Schedule();
+                    schedule.setClassTitle(c.getCourseName());
+                    schedule.setClassPlace(c.getLocation());
+                    schedule.setProfessorName(c.getProffesorName());
+                    schedule.setStartTime(new Time(c.getHour(),c.getMinute()));
+                    schedule.setEndTime(new Time(c.getHourEnd(), c.getMinuteEnd()));
+                }
+
+                if(c.getThurs() != 0) {
+                    schedule.setDay(c.getThurs() - 2);
+                    scheduleList.add(schedule);
+                    schedule = new Schedule();
+                    schedule.setClassTitle(c.getCourseName());
+                    schedule.setClassPlace(c.getLocation());
+                    schedule.setProfessorName(c.getProffesorName());
+                    schedule.setStartTime(new Time(c.getHour(),c.getMinute()));
+                    schedule.setEndTime(new Time(c.getHourEnd(), c.getMinuteEnd()));
+                }
+
+                if(c.getFri() != 0) {
+                    System.out.println("fri ");
+                    //scheduleList.add(schedule);
+                    schedule.setDay(c.getFri() - 2);
+                    scheduleList.add(schedule);
+                    schedule = new Schedule();
+                    schedule.setClassTitle(c.getCourseName());
+                    schedule.setClassPlace(c.getLocation());
+                    schedule.setProfessorName(c.getProffesorName());
+                    schedule.setStartTime(new Time(c.getHour(),c.getMinute()));
+                    schedule.setEndTime(new Time(c.getHourEnd(), c.getMinuteEnd()));
+                }
+                //scheduleList.add(schedule);
             }
         }
 
-        //json =  timetableView.createSaveData();
+
+        return scheduleList;
     }
 }

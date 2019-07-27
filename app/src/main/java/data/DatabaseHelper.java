@@ -226,7 +226,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(Course.COLUMN_MINUTE, course.getHour());
+        values.put(Course.COLUMN_MINUTE, course.getMinute());
 
         return db.update(Course.TABLE_NAME3, values, Course.COLUMN_ID3 + " = ?",
                 new String[]{String.valueOf(course.getId())});

@@ -22,4 +22,10 @@
         android:icon="@drawable/class_planner"
         android:title="Courses" />
 
+    <item
+        android:id="@+id/navigation_weekly"
+        android:icon="@drawable/planner"
+        android:title="Weekly Planner" />
+
+
 </menu>

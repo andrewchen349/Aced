@@ -12,6 +12,7 @@ import com.example.andre.aced.Classes_Planner;
 import com.example.andre.aced.Notes;
 import com.example.andre.aced.Option;
 import com.example.andre.aced.R;
+import com.example.andre.aced.WeeklyView;
 
 
 public class bottomNavBarHelper {
@@ -37,6 +38,11 @@ public class bottomNavBarHelper {
                     case R.id.navigation_course:
                         Intent intent_class = new Intent(context, Classes_Planner.class);
                         context.startActivity(intent_class);
+                        break;
+
+                    case  R.id.navigation_weekly:
+                        Intent intent_weekly = new Intent(context, WeeklyView.class);
+                        context.startActivity(intent_weekly);
                         break;
                 }
 

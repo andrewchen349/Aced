@@ -87,7 +87,7 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
                 RangeTimePickerDialog dialog = new RangeTimePickerDialog();
                 dialog.newInstance();
                 dialog.setRadiusDialog(20); // Set radius of dialog (default is 50)
-                dialog.setIs24HourView(true); // Indicates if the format should be 24 hours
+                dialog.setIs24HourView(false); // Indicates if the format should be 24 hours
                 dialog.setColorTabSelected(R.color.white);
                 dialog.setColorBackgroundHeader(R.color.colorPrimary); // Set Color of Background header dialog
                 dialog.setColorTextButton(R.color.colorPrimaryDark); // Set Text color of button
@@ -157,9 +157,18 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
                 course1.setMon(i);
                 db_update.insertMon(course1);
             }
+            if(i != 2){
+                course1.setMon(0);
+                db_update.insertMon(course1);
+            }
 
             if(i == 3){
                 course1.setTues(i);
+                db_update.insertTues(course1);
+            }
+
+            if(i != 3){
+                course1.setTues(0);
                 db_update.insertTues(course1);
             }
 
@@ -168,13 +177,28 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
                 db_update.insertWed(course1);
             }
 
+            if(i != 4){
+                course1.setWed(0);
+                db_update.insertWed(course1);
+            }
+
             if(i == 5){
                 course1.setThurs(i);
                 db_update.insertThurs(course1);
             }
 
+            if(i != 5){
+                course1.setThurs(0);
+                db_update.insertThurs(course1);
+            }
+
             if(i == 6){
                 course1.setFri(i);
+                db_update.insertFri(course1);
+            }
+
+            if(i != 6){
+                course1.setFri(0);
                 db_update.insertFri(course1);
             }
 
