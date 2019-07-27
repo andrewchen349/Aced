@@ -80,7 +80,7 @@ public class Course_Moreinfo extends AppCompatActivity {
     private void setDaySelector(){
 
         LinkedHashMap<Integer, Boolean> map = new LinkedHashMap<>();
-        System.out.println(all_courses_update.get(pos).getTues());
+        //System.out.println(all_courses_update.get(pos).getTues());
 
         if (all_courses_update.get(pos).getMon() == 2){
             System.out.println("m here");

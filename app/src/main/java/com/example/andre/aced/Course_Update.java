@@ -108,6 +108,8 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
         //selectedDays = weekdaysPicker.getSelectedDays();
 
 
+
+
     }
 
     private void findXML(){
@@ -127,6 +129,17 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
         Course course1 = all_courses_update.get(pos);
         course1.setCourseName(course);
         db_update.updateCourse(course1);
+
+        course1.setMon(0);
+        db_update.insertMon(course1);
+        course1.setTues(0);
+        db_update.insertTues(course1);
+        course1.setWed(0);
+        db_update.insertWed(course1);
+        course1.setThurs(0);
+        db_update.insertThurs(course1);
+        course1.setFri(0);
+        db_update.insertFri(course1);
 
         course1.setLocation(course_location.getText().toString());
         db_update.insertCourseLocation(course1);
@@ -153,54 +166,67 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
 
         for(int i : selectedDays){
 
+            System.out.println(i);
+
             if(i == 2){
+                System.out.println("2h");
                 course1.setMon(i);
                 db_update.insertMon(course1);
             }
-            if(i != 2){
+
+            /*if(i != 2){
+                System.out.println("2n");
                 course1.setMon(0);
                 db_update.insertMon(course1);
-            }
+            }*/
 
             if(i == 3){
+                System.out.println("4h");
                 course1.setTues(i);
                 db_update.insertTues(course1);
             }
 
-            if(i != 3){
+            /*if(i != 3){
+                System.out.println("3n");
                 course1.setTues(0);
                 db_update.insertTues(course1);
-            }
+            }*/
 
             if(i == 4){
+                System.out.println("4h");
                 course1.setWed(i);
                 db_update.insertWed(course1);
             }
 
-            if(i != 4){
+            /*if(i != 4){
+                System.out.println("4n");
                 course1.setWed(0);
                 db_update.insertWed(course1);
-            }
+            }*/
 
             if(i == 5){
+                System.out.println("5h");
                 course1.setThurs(i);
                 db_update.insertThurs(course1);
             }
 
-            if(i != 5){
+            /*if(i != 5){
+                System.out.println("5n");
                 course1.setThurs(0);
                 db_update.insertThurs(course1);
-            }
+            }*/
 
             if(i == 6){
+                System.out.println("6h");
                 course1.setFri(i);
                 db_update.insertFri(course1);
             }
 
-            if(i != 6){
+            /*if(i != 6){
+                System.out.println("6n");
                 course1.setFri(0);
                 db_update.insertFri(course1);
-            }
+            }*/
 
         }
     }
