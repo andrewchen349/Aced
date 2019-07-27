@@ -1,14 +1,19 @@
 package com.example.andre.aced;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.tlaabs.timetableview.Schedule;
 import com.github.tlaabs.timetableview.Time;
 import com.github.tlaabs.timetableview.TimetableView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +30,8 @@ public class WeeklyView extends AppCompatActivity {
     private List<Course>all_courses = new ArrayList<>();
     private ArrayList<Schedule>scheduleList = new ArrayList<>();
     private String json;
+    private ImageView back;
+    private TextView add;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,11 +40,18 @@ public class WeeklyView extends AppCompatActivity {
 
         //Weektable
         timetableView = (TimetableView)findViewById(R.id.timetable);
+        back = (ImageView)findViewById(R.id.weekly_view_back);
+        add = (TextView)findViewById(R.id.add_weekly_view_event);
         db = new DatabaseHelper(this);
 
         all_courses.addAll(db.getAllCourses());
 
-
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Show Action Dialog
+            }
+        });
 
         timetableView.setOnStickerSelectEventListener(new TimetableView.OnStickerSelectedListener() {
             @Override
@@ -47,6 +61,14 @@ public class WeeklyView extends AppCompatActivity {
         });
 
         timetableView.add(importclassschedule());
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WeeklyView.this, com.example.andre.aced.Calendar.class);
+                WeeklyView.this.startActivity(intent);
+            }
+        });
     }
 
    private ArrayList importclassschedule(){

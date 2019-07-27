@@ -14,11 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.dpro.widgets.WeekdaysPicker;
 import com.mcsoft.timerangepickerdialog.RangeTimePickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import data.DatabaseHelper;
@@ -81,9 +83,8 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
                     createCourse(course_name.getText().toString());
                     Intent intent = new Intent(Course_Input.this, Classes_Planner.class);
                     Course_Input.this.startActivity(intent);
-                    for(int n : selectedDays){
-                        System.out.println(n);
-                    }
+                    Toast.makeText(Course_Input.this, "Course Created!", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -211,6 +212,13 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
 
     @Override
     public void onSelectedTime(int hourStart, int minuteStart, int hourEnd, int minuteEnd) {
+
+        Calendar c = java.util.Calendar.getInstance();
+        c.set(Calendar.HOUR, hourStart);
+        c.set(Calendar.MINUTE, minuteStart);
+        int ampm = c.get(java.util.Calendar.AM_PM);
+        System.out.println("am" + ampm);
+
 
         user_selected_hour = hourStart;
         user_selected_minute = minuteStart;

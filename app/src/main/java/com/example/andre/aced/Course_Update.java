@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.dpro.widgets.WeekdaysPicker;
 import com.mcsoft.timerangepickerdialog.RangeTimePickerDialog;
@@ -102,6 +103,7 @@ public class Course_Update extends AppCompatActivity implements TimePickerDialog
                 updateCourse(course_name.getText().toString());
                 Intent intent = new Intent(Course_Update.this, Classes_Planner.class);
                 Course_Update.this.startActivity(intent);
+                Toast.makeText(Course_Update.this, "Course Updated!", Toast.LENGTH_SHORT).show();
             }
         });
 

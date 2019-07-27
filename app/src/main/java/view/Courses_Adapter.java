@@ -11,6 +11,10 @@ import android.widget.TextView;
 
 import com.example.andre.aced.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import model.Course;
@@ -85,7 +89,41 @@ public class Courses_Adapter extends RecyclerView.Adapter<Courses_Adapter.MyView
 
     //TODO
     public String formatTime(Course course){
-        String s = course.getHour() + ":" + course.getMinute() + " - " + course.getHourEnd() + ":" + course.getMinuteEnd();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR, course.getHour());
+        calendar.set(Calendar.MINUTE, course.getMinute());
+        if(calendar.get(Calendar.AM_PM) == 0){
+            calendar.set(Calendar.AM_PM, 1);
+        }
+
+        else{
+            calendar.set(Calendar.AM_PM, 0);
+        }
+
+        Date d1 =calendar.getTime();
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR, course.getHourEnd());
+        cal.set(Calendar.MINUTE, course.getMinuteEnd());
+
+        if(cal.get(Calendar.AM_PM) == 0){
+            cal.set(Calendar.AM_PM, 1);
+        }
+
+        else{
+            cal.set(Calendar.AM_PM, 0);
+        }
+
+        Date d2 = cal.getTime();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
+
+        //String s = course.getHour() + ":" + course.getMinute() + " - " + course.getHourEnd() + ":" + course.getMinuteEnd();
+
+        String s = simpleDateFormat.format(d1) + " - " + simpleDateFormat.format(d2);
         return  s;
+
+
     }
 }
