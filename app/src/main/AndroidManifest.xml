@@ -125,6 +125,16 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name=".Weekly_View_Update_Event"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".Week_View_Add_Event"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+        </activity>
+
 
         <activity android:name=".Tutorial"
             android:label="appTutorial" />

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="20dp"
-        android:text="Add Event"
+        android:text="Update Event"
         android:layout_marginTop="20dp"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -48,7 +48,7 @@
         android:id="@+id/timenumbers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/location"
+        android:layout_below="@id/event_location"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
         android:text="Time"
@@ -67,6 +67,24 @@
         android:fontFamily="@font/segoeui"
         android:background="@android:color/white"
         />
+    <ImageView
+        android:id="@+id/course_delete"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:src="@drawable/trash"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="8dp"/>
+
+    <com.dpro.widgets.WeekdaysPicker
+        android:id="@+id/weekdays"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timenumbers"
+        android:layout_marginTop="50dp"
+        app:background_color="@android:color/white"
+        app:highlight_color="#5AC9DD"
+        app:sunday_first_day="false" />
 
 
 

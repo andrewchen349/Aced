@@ -44,6 +44,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/add_weekly_view_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="+"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="4dp"
+        android:textSize="40dp"/>
+
+
     <ImageView
         android:id="@+id/weekly_view_back"
         android:layout_width="31dp"
@@ -52,15 +64,26 @@
         android:src="@drawable/backey"
         android:layout_marginTop="17dp"/>
 
-    <TextView
-        android:id="@+id/add_weekly_view_event"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/table_confirm"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="+"
-        android:layout_marginTop="4dp"
-        android:textSize="40dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_marginRight="17dp"/>
+        android:layout_alignParentBottom="true"
+        android:text="Save"
+        android:textColor="#5AC9DD"
+        android:fontFamily="@font/segoeui"
+        android:background="@android:color/white"/>
+
+    <Button
+        android:id="@+id/table_load"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/table_confirm"
+        android:text="Load"
+        android:textColor="#5AC9DD"
+        android:fontFamily="@font/segoeui"
+        android:background="@android:color/white"/>
+
 
 </RelativeLayout>
