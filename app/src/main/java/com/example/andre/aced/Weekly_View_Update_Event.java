@@ -110,6 +110,8 @@ public class Weekly_View_Update_Event extends AppCompatActivity implements Range
             }
         });
 
+        weekdaysPicker.setSelectOnlyOne(true);
+
 
 
     }
@@ -154,6 +156,10 @@ public class Weekly_View_Update_Event extends AppCompatActivity implements Range
     private void inputDataProcessing(){
         schedule.setClassTitle(eventName.getText().toString());
         schedule.setClassPlace(location.getText().toString());
+
+        if(weekdaysPicker.getSelectedDays().size() != 0){
+            schedule.setDay(weekdaysPicker.getSelectedDays().get(0) - 2);
+        }
 
         if(clicked || mode == WeeklyView.REQUEST_ADD){
             schedule.setStartTime(new Time(user_selected_hr_start,user_selected_min_start));

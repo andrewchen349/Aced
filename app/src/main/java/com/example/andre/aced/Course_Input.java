@@ -137,9 +137,7 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
 
         selectedDays = weekdaysPicker.getSelectedDays();
 
-        for(int n : selectedDays){
-            System.out.println("Heree" + n);
-        }
+
 
         for(int i : selectedDays){
 
