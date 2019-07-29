@@ -30,7 +30,7 @@ public class ChecklistAdapter extends RecyclerView.Adapter<ChecklistAdapter.MyVi
     private List<Checklist> taskList;
     private Context context;
 
-    private int [] colors = {Color.parseColor("#5AC9DD"),Color.parseColor("#FF971A"), Color.parseColor("#FF6961")
+    private int [] colors = {Color.parseColor("#00CC99"),Color.parseColor("#FF971A"), Color.parseColor("#FF6961")
     , Color.parseColor("#E2A7D9")};
     private int colorCode;
 
