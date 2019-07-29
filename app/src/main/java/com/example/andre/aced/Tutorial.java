@@ -19,14 +19,14 @@ public class Tutorial extends AppIntro2 {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addSlide(AppIntroFragment.newInstance("Welcome", "Ready to Get Academically Organized?",
-                R.drawable.pt3, Color.parseColor("#FF6961")));
-        addSlide(AppIntroFragment.newInstance("Organize With Calendar", "Plan out your study sessions, schedule projects  meetings etc",
-                R.drawable.tutorial_cal, Color.parseColor("#00BCD4")));
-        addSlide(AppIntroFragment.newInstance("Stay on Task", "Stay on top of your tasks, set a deadline and get notify!",
-                R.drawable.tutorial_task, Color.parseColor("#5C6BC0")));
-        addSlide(AppIntroFragment.newInstance("Take Notes", "Have a great idea? Jot it down!",
-                R.drawable.tutorial_notes, Color.parseColor("#4CAF50")));
+        addSlide(AppIntroFragment.newInstance("Welcome", "Maximize Your Daily Productivity With Calendar, Task Objectives And Course Reminders",
+                R.drawable.openingpageview, Color.parseColor("#5AC9DD")));
+        addSlide(AppIntroFragment.newInstance("Organize and Plan ", "Plan Out Your Study Sessions, Projects, Meetings and Never Forget Your Classes",
+                R.drawable.tutorialview2display, Color.parseColor("#FCBD56")));
+        addSlide(AppIntroFragment.newInstance("Stay Reminded", "Set Daily Tasks and Never Forget",
+                R.drawable.tutorial3viewdisplay, Color.parseColor("#E2615C")));
+        addSlide(AppIntroFragment.newInstance("Be Inspired", "Have A Great Idea? Never Lose A Thought...Jot It Down!",
+                R.drawable.tutorial4viewdisplay, Color.parseColor("#00CC99")));
 
         // OPTIONAL METHODS
 

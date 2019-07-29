@@ -144,31 +144,26 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
             if(i == 2){
                 course1.setMon(i);
                 db.insertMon(course1);
-                System.out.println("mhere");
             }
 
             if(i == 3){
                 course1.setTues(i);
                 db.insertTues(course1);
-                System.out.println("there");
             }
 
             if(i == 4){
                 course1.setWed(i);
                 db.insertWed(course1);
-                System.out.println("where");
             }
 
             if(i == 5){
                 course1.setThurs(i);
                 db.insertThurs(course1);
-                System.out.println("there");
             }
 
             if(i == 6){
                 course1.setFri(i);
                 db.insertFri(course1);
-                System.out.println("fhere");
             }
 
         }

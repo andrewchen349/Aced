@@ -130,7 +130,7 @@ public class Weekly_View_Update_Event extends AppCompatActivity implements Range
         mode = i.getIntExtra("mode", WeeklyView.REQUEST_ADD);
 
         if(mode == WeeklyView.REQUEST_EDIT){
-            weekdaysPicker.setVisibility(View.INVISIBLE);
+            //weekdaysPicker.setVisibility(View.INVISIBLE);
             loadScheduleData();
         }
     }

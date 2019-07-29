@@ -68,7 +68,7 @@
             android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".Splash_Screen"
+        <activity android:name=".Tutorial"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
 
@@ -136,8 +136,7 @@
         </activity>
 
 
-        <activity android:name=".Tutorial"
-            android:label="appTutorial" />
+
 
 
         <receiver android:name=".AlertReceiver"/>

@@ -1,5 +1,7 @@
 package com.example.andre.aced;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -45,6 +48,8 @@ public class WeeklyView extends AppCompatActivity {
     private Button save;
     private Button load;
 
+    private NotificationManagerCompat notificationManagerCompat;
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,8 @@ public class WeeklyView extends AppCompatActivity {
         save = (Button)findViewById(R.id.table_confirm);
         load = (Button)findViewById(R.id.table_load);
         all_courses.addAll(db.getAllCourses());
+
+        loadSavedData();
 
         add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +94,7 @@ public class WeeklyView extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(WeeklyView.this, com.example.andre.aced.Calendar.class);
                 WeeklyView.this.startActivity(intent);
+                saveByPreference(timetableView.createSaveData());
             }
         });
 
@@ -103,6 +111,9 @@ public class WeeklyView extends AppCompatActivity {
                 loadSavedData();
             }
         });
+
+        notificationManagerCompat = NotificationManagerCompat.from(this);
+        startAlarm();
     }
 
     @Override
@@ -131,12 +142,75 @@ public class WeeklyView extends AppCompatActivity {
         }
     }
 
+    private void startAlarm(){
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(this.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver2.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 2, intent, 0);
+
+        for(Course c : all_courses){
+
+            //Calendar cal = Calendar.getInstance();
+            if(c.getMon() == 2){
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, c.getHour());
+                cal.set(Calendar.MINUTE, c.getMinute() - 10);
+                cal.set(Calendar.DAY_OF_WEEK, c.getMon());
+                intent.putExtra("coursename", c.getCourseName());
+                alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+
+            }
+
+            if(c.getTues() == 3){
+                Calendar cal1 = Calendar.getInstance();
+                cal1.set(Calendar.HOUR_OF_DAY, c.getHour());
+                cal1.set(Calendar.MINUTE, c.getMinute() - 10);
+                cal1.set(Calendar.DAY_OF_WEEK, c.getTues());
+                intent.putExtra("coursename", c.getCourseName());
+                alarmManager.set(AlarmManager.RTC_WAKEUP, cal1.getTimeInMillis(), pendingIntent);
+
+            }
+
+            if(c.getWed() == 4){
+                Calendar cal2 = Calendar.getInstance();
+                cal2.set(Calendar.HOUR_OF_DAY, c.getHour());
+                cal2.set(Calendar.MINUTE, c.getMinute() - 10);
+                cal2.set(Calendar.DAY_OF_WEEK, c.getWed());
+                intent.putExtra("coursename", c.getCourseName());
+                alarmManager.set(AlarmManager.RTC_WAKEUP, cal2.getTimeInMillis(), pendingIntent);
+
+            }
+
+            if(c.getThurs() == 5){
+                Calendar cal3 = Calendar.getInstance();
+                cal3.set(Calendar.HOUR_OF_DAY, c.getHour());
+                cal3.set(Calendar.MINUTE, c.getMinute() - 10);
+                cal3.set(Calendar.DAY_OF_WEEK, c.getTues());
+                intent.putExtra("coursename", c.getCourseName());
+                alarmManager.set(AlarmManager.RTC_WAKEUP, cal3.getTimeInMillis(), pendingIntent);
+
+            }
+
+            if(c.getFri() == 6){
+                Calendar cal4 = Calendar.getInstance();
+                cal4.set(Calendar.HOUR_OF_DAY, c.getHour());
+                cal4.set(Calendar.MINUTE, c.getMinute() - 10);
+                cal4.set(Calendar.DAY_OF_WEEK, c.getTues());
+                intent.putExtra("coursename", c.getCourseName());
+                alarmManager.set(AlarmManager.RTC_WAKEUP, cal4.getTimeInMillis(), pendingIntent);
+
+            }
+
+        }
+    }
+
     private void saveByPreference(String data){
         SharedPreferences mPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = mPref.edit();
         editor.putString("timetable_demo",data);
         editor.commit();
-        Toast.makeText(this,"saved!",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"saved!",Toast.LENGTH_SHORT).show();
     }
 
     /** get json data from SharedPreferences and then restore the timetable */
@@ -146,7 +220,7 @@ public class WeeklyView extends AppCompatActivity {
         String savedData = mPref.getString("timetable_demo","");
         if(savedData == null && savedData.equals("")) return;
         timetableView.load(savedData);
-        Toast.makeText(this,"loaded!",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,"loaded!",Toast.LENGTH_SHORT).show();
     }
 
 

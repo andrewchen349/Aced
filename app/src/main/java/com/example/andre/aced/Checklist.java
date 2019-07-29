@@ -174,6 +174,7 @@ public class Checklist extends AppCompatActivity implements TimePickerDialog.OnT
         c.set(Calendar.MINUTE, minute);
         c.set(Calendar.SECOND, 0);
 
+
         //Adds a Day for Midnight
         if(c.before(Calendar.getInstance())) {
             c.add(Calendar.DATE, 1);
