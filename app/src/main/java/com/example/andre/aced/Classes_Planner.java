@@ -2,7 +2,9 @@ package com.example.andre.aced;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -153,5 +155,13 @@ public class Classes_Planner extends AppCompatActivity {
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
+    }
+
+    private void saveByPreference(String data){
+        SharedPreferences mPref = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = mPref.edit();
+        editor.putString("timetable_demo",data);
+        editor.commit();
+        //Toast.makeText(this,"saved!",Toast.LENGTH_SHORT).show();
     }
 }

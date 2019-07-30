@@ -2,6 +2,7 @@ package com.example.andre.aced;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,7 +34,7 @@ import model.Course;
 
 public class WeeklyView extends AppCompatActivity {
 
-    private TimetableView timetableView;
+    public TimetableView timetableView;
     private DatabaseHelper db;
 
     public List<Course>all_courses = new ArrayList<>();
@@ -44,9 +45,12 @@ public class WeeklyView extends AppCompatActivity {
 
     public static final int REQUEST_ADD = 1;
     public static final int REQUEST_EDIT = 2;
+    public static int requestCode = 2;
 
     private Button save;
     private Button load;
+
+    private Context context = this;
 
     private NotificationManagerCompat notificationManagerCompat;
 
@@ -87,7 +91,11 @@ public class WeeklyView extends AppCompatActivity {
             }
         });
 
+        //loadSavedData();
         timetableView.add(importclassschedule());
+        //saveByPreference(timetableView.createSaveData());
+        //loadSavedData();
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +121,7 @@ public class WeeklyView extends AppCompatActivity {
         });
 
         notificationManagerCompat = NotificationManagerCompat.from(this);
-        startAlarm();
+        //startAlarm();
     }
 
     @Override
@@ -144,61 +152,109 @@ public class WeeklyView extends AppCompatActivity {
 
     private void startAlarm(){
 
-        AlarmManager alarmManager = (AlarmManager)getSystemService(this.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager)getSystemService(context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver2.class);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 2, intent, 0);
 
         for(Course c : all_courses){
 
             //Calendar cal = Calendar.getInstance();
             if(c.getMon() == 2){
                 Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, c.getHour());
-                cal.set(Calendar.MINUTE, c.getMinute() - 10);
-                cal.set(Calendar.DAY_OF_WEEK, c.getMon());
-                intent.putExtra("coursename", c.getCourseName());
-                alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                if(cal.get(Calendar.AM_PM) == 0){
+                    cal.set(Calendar.AM_PM, 1);
+                }
 
+                else{
+                    cal.set(Calendar.AM_PM, 0);
+                }
+
+                cal.set(Calendar.HOUR_OF_DAY, c.getHour());
+                cal.set(Calendar.MINUTE, c.getMinute() );
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.DAY_OF_WEEK, c.getMon() - 1);
+                intent.putExtra("coursename", c.getCourseName());
+                requestCode ++;
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, 0);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+                //cal.clear();
             }
 
             if(c.getTues() == 3){
                 Calendar cal1 = Calendar.getInstance();
+                if(cal1.get(Calendar.AM_PM) == 0){
+                    cal1.set(Calendar.AM_PM, 1);
+                }
+
+                else{
+                    cal1.set(Calendar.AM_PM, 0);
+                }
                 cal1.set(Calendar.HOUR_OF_DAY, c.getHour());
-                cal1.set(Calendar.MINUTE, c.getMinute() - 10);
-                cal1.set(Calendar.DAY_OF_WEEK, c.getTues());
+                cal1.set(Calendar.MINUTE, c.getMinute() );
+                cal1.set(Calendar.DAY_OF_WEEK, c.getTues() - 1);
                 intent.putExtra("coursename", c.getCourseName());
-                alarmManager.set(AlarmManager.RTC_WAKEUP, cal1.getTimeInMillis(), pendingIntent);
+                requestCode ++;
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, 0);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal1.getTimeInMillis(), pendingIntent);
+                //cal1.clear();
 
             }
 
             if(c.getWed() == 4){
                 Calendar cal2 = Calendar.getInstance();
+                if(cal2.get(Calendar.AM_PM) == 0){
+                    cal2.set(Calendar.AM_PM, 1);
+                }
+
+                else{
+                    cal2.set(Calendar.AM_PM, 0);
+                }
                 cal2.set(Calendar.HOUR_OF_DAY, c.getHour());
                 cal2.set(Calendar.MINUTE, c.getMinute() - 10);
-                cal2.set(Calendar.DAY_OF_WEEK, c.getWed());
+                cal2.set(Calendar.DAY_OF_WEEK, c.getWed() - 1);
                 intent.putExtra("coursename", c.getCourseName());
-                alarmManager.set(AlarmManager.RTC_WAKEUP, cal2.getTimeInMillis(), pendingIntent);
-
+                requestCode++;
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, 0);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal2.getTimeInMillis(), pendingIntent);
+                //cal2.clear();
             }
 
             if(c.getThurs() == 5){
                 Calendar cal3 = Calendar.getInstance();
+                if(cal3.get(Calendar.AM_PM) == 0){
+                    cal3.set(Calendar.AM_PM, 1);
+                }
+
+                else{
+                    cal3.set(Calendar.AM_PM, 0);
+                }
                 cal3.set(Calendar.HOUR_OF_DAY, c.getHour());
                 cal3.set(Calendar.MINUTE, c.getMinute() - 10);
-                cal3.set(Calendar.DAY_OF_WEEK, c.getTues());
+                cal3.set(Calendar.DAY_OF_WEEK, c.getThurs() - 1);
                 intent.putExtra("coursename", c.getCourseName());
-                alarmManager.set(AlarmManager.RTC_WAKEUP, cal3.getTimeInMillis(), pendingIntent);
+                requestCode ++;
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, 0);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal3.getTimeInMillis(), pendingIntent);
+                //cal3.clear();
 
             }
 
             if(c.getFri() == 6){
                 Calendar cal4 = Calendar.getInstance();
+                if(cal4.get(Calendar.AM_PM) == 0){
+                    cal4.set(Calendar.AM_PM, 1);
+                }
+
+                else{
+                    cal4.set(Calendar.AM_PM, 0);
+                }
                 cal4.set(Calendar.HOUR_OF_DAY, c.getHour());
                 cal4.set(Calendar.MINUTE, c.getMinute() - 10);
-                cal4.set(Calendar.DAY_OF_WEEK, c.getTues());
+                cal4.set(Calendar.DAY_OF_WEEK, c.getFri() - 1);
                 intent.putExtra("coursename", c.getCourseName());
-                alarmManager.set(AlarmManager.RTC_WAKEUP, cal4.getTimeInMillis(), pendingIntent);
+                requestCode ++;
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, 0);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal4.getTimeInMillis(), pendingIntent);
+                //cal4.clear();
 
             }
 
@@ -280,7 +336,6 @@ public class WeeklyView extends AppCompatActivity {
                 }
 
                 if(c.getFri() != 0) {
-                    System.out.println("fri ");
                     //scheduleList.add(schedule);
                     schedule.setDay(c.getFri() - 2);
                     scheduleList.add(schedule);

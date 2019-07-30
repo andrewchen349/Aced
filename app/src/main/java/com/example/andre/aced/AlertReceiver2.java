@@ -18,11 +18,11 @@ public class AlertReceiver2 extends BroadcastReceiver {
 
 
         Intent broadCastIntent = new Intent(context, WeeklyView.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 21, broadCastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, WeeklyView.requestCode, broadCastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent broadCastIntent1 = new Intent(context, WeeklyView.class);
         broadCastIntent1.setAction("menuFragment");
-        PendingIntent pendingIntent1 = PendingIntent.getActivity(context, 2 , broadCastIntent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent1 = PendingIntent.getActivity(context, WeeklyView.requestCode , broadCastIntent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
 
         //Builds Notification
@@ -34,6 +34,6 @@ public class AlertReceiver2 extends BroadcastReceiver {
         builder.setContentIntent(pendingIntent );
         builder.setColor(R.color.colorPrimaryDark);
 
-        notificationManager.notify(2, builder.build());
+        notificationManager.notify(WeeklyView.requestCode, builder.build());
     }
 }

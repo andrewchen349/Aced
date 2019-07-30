@@ -27,7 +27,7 @@ public class Notification_Channels extends Application {
             NotificationChannel class_checkList_priority = new NotificationChannel(checkListUserInput, "priorityNotifications", NotificationManager.IMPORTANCE_HIGH);
             class_checkList_priority.setDescription("Notification for User Inputed Time");
 
-            NotificationChannel remind_classes = new NotificationChannel(checkListUserInput, "priorityNotifications", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel remind_classes = new NotificationChannel(remindClassSchedule, "priorityNotifications1", NotificationManager.IMPORTANCE_HIGH);
             remind_classes.setDescription("Notification for Class Schedule");
 
             //Call to Create Notification Channel

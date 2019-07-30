@@ -144,6 +144,8 @@
 
         <receiver android:name=".AlertReceiver"/>
 
+        <receiver android:name=".AlertReceiver2"/>
+
 
 
         <uses-library

@@ -1,11 +1,16 @@
 package com.example.andre.aced;
 
+import android.app.AlarmManager;
 import android.app.FragmentManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -32,10 +37,14 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
     private EditText course_profesor;
     private EditText course_location;
     private EditText course_profesor_email;
+    private Context context;
+    private Calendar c = Calendar.getInstance();
 
     private TextView course_time;
     private WeekdaysPicker weekdaysPicker;
     private Button save;
+
+    public static int requestCode = 0;
 
     public static DatabaseHelper db;
 
@@ -46,6 +55,7 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
     public static int getUser_selected_minute_later;
 
     private List<Integer>selectedDays = new ArrayList<>();
+    private List<Course>all_courses = new ArrayList<>();
 
 
     @Override
@@ -55,6 +65,7 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
 
         findXML();
         db = new DatabaseHelper(this);
+        all_courses.addAll(db.getAllCourses());
 
 
         course_time.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +95,7 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
                     Intent intent = new Intent(Course_Input.this, Classes_Planner.class);
                     Course_Input.this.startActivity(intent);
                     Toast.makeText(Course_Input.this, "Course Created!", Toast.LENGTH_SHORT).show();
+                    //startAlarm();
 
                 }
             }
@@ -91,6 +103,32 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
 
         //selectedDays = weekdaysPicker.getSelectedDays();
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void startAlarm(Course course, Calendar cal, int dayOfWeek){
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver2.class);
+        intent.putExtra("coursename", course.getCourseName());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, 0);
+
+        cal.set(Calendar.HOUR_OF_DAY, user_selected_hour);
+        cal.set(Calendar.MINUTE, user_selected_minute);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+
+        Calendar currentCal = Calendar.getInstance();
+
+        /*if(cal.compareTo(currentCal) < 0) {
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+        }*/
+
+        if(cal.getTimeInMillis() < System.currentTimeMillis()) {
+            cal.add(Calendar.DAY_OF_YEAR, 7);
+        }
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
     }
 
 
@@ -113,6 +151,7 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
 
         long id = db.insertCourseName(course);
         Course course1 = db.getCourse(id);
+        all_courses.add(course1);
 
         course1.setLocation(course_location.getText().toString());
         db.insertCourseLocation(course1);
@@ -144,29 +183,37 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
             if(i == 2){
                 course1.setMon(i);
                 db.insertMon(course1);
+                //c.set(Calendar.DAY_OF_WEEK, course1.getMon() - 1 );
             }
 
             if(i == 3){
                 course1.setTues(i);
                 db.insertTues(course1);
+                //c.set(Calendar.DAY_OF_WEEK, course1.getTues() - 1 );
             }
 
             if(i == 4){
                 course1.setWed(i);
                 db.insertWed(course1);
+                //c.set(Calendar.DAY_OF_WEEK, course1.getWed() - 1 );
             }
 
             if(i == 5){
                 course1.setThurs(i);
                 db.insertThurs(course1);
+               // c.set(Calendar.DAY_OF_WEEK, course1.getThurs() - 1 );
             }
 
             if(i == 6){
                 course1.setFri(i);
                 db.insertFri(course1);
+                //c.set(Calendar.DAY_OF_WEEK, course1.getFri() - 1 );
             }
 
         }
+
+        //startAlarm(c);
+        determineAlarm(course1);
 
 
     }
@@ -201,16 +248,18 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
             course_time.setText(time);
         }
 
+        //startAlarm(c);
+
     }
 
     @Override
     public void onSelectedTime(int hourStart, int minuteStart, int hourEnd, int minuteEnd) {
 
-        Calendar c = java.util.Calendar.getInstance();
+        /*c = java.util.Calendar.getInstance();
         c.set(Calendar.HOUR, hourStart);
         c.set(Calendar.MINUTE, minuteStart);
         int ampm = c.get(java.util.Calendar.AM_PM);
-        System.out.println("am" + ampm);
+        System.out.println("am" + ampm);*/
 
 
         user_selected_hour = hourStart;
@@ -219,6 +268,44 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
         user_selected_hour_later = hourEnd;
         getUser_selected_minute_later = minuteEnd;
 
+        requestCode++;
+        //startAlarm(c);
+
 
     }
-}
+
+    public void determineAlarm(Course course){
+
+        if(course.getMon() == 2){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getMon() - 1 );
+            startAlarm(course, c, Calendar.MONDAY);
+        }
+
+        if(course.getTues() == 3){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getTues() - 1 );
+            startAlarm(course, c, Calendar.TUESDAY);
+        }
+
+        if(course.getWed() == 4){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getWed() - 1 );
+            startAlarm(course, c, Calendar.WEDNESDAY);
+        }
+
+        if(course.getThurs() == 5){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getThurs() - 1 );
+            startAlarm(course, c, Calendar.THURSDAY);
+        }
+
+        if(course.getFri() == 6){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getFri() - 1 );
+            startAlarm(course,c, Calendar.FRIDAY);
+        }
+
+        }
+    }
+
