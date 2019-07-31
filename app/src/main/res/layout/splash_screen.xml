@@ -9,16 +9,22 @@
         android:id="@+id/imageView5"
         android:layout_width="112dp"
         android:layout_height="409dp"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="80dp"
         app:srcCompat="@drawable/newlogo" />
+
+    <TextView
+        android:id="@+id/aced"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+       android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/imageView5"
+        android:fontFamily="@font/segoeuisl"
+        android:text="Aced"
+        android:textSize="50dp"
+        android:textStyle="bold" />
+
 
     <TextView
         android:id="@+id/textView1"
@@ -29,8 +35,8 @@
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:fontFamily="@font/segoeuisl"
-        android:text="  A Student Organizer Made by Students"
+        android:text="  A Smart Planner For Students"
         android:textAlignment="center"
-        android:textSize="12dp" />
+        android:textSize="15dp" />
 
 </RelativeLayout>
