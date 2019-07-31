@@ -11,6 +11,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,11 +41,12 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
     private EditText local;
     private ImageView setLocal;
     private TextView locationview;
+    private Button confirm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.more_task_info);
+        setContentView(R.layout.more_task_info_two);
 
         //Find Corresponding XML components
         deleteTask = (ImageView)findViewById(R.id.more_info_trash);
@@ -54,8 +56,9 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
         task_desciption = (TextView)findViewById(R.id.more_info_task);
         displayTime = (TextView)findViewById(R.id.more_info_displaytime);
         local = (EditText)findViewById(R.id.location_input);
-        setLocal = (ImageView)findViewById(R.id.locationset);
+        //setLocal = (ImageView)findViewById(R.id.locationset);
         locationview = (TextView)findViewById(R.id.location);
+        confirm = (Button)findViewById(R.id.confirm);
 
 
         checklist = new Checklist();
@@ -68,7 +71,7 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
         hr = i.getIntExtra("hour", 0);
         position = i.getIntExtra("position", 0);
 
-        setLocal.setOnClickListener(new View.OnClickListener() {
+       confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String local1 = local.getText().toString();
@@ -76,6 +79,10 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
                 checklist.checklistList.get(position).setLocation(local1);
                 checklist.db.insertTaskLocation(checklist.checklistList.get(position));
                 locationview.setText(local1);
+
+                Intent intent = new Intent(more_info_task.this, Checklist.class);
+                more_info_task.this.startActivity(intent);
+                checklist.checklistAdapter.notifyDataSetChanged(); //TODO new CHange
             }
         });
 
@@ -127,13 +134,13 @@ public class more_info_task extends AppCompatActivity implements TimePickerDialo
             }
         });*/
 
-        reschedule.setOnClickListener(new View.OnClickListener() {
+        /*reschedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
             }
-        });
+        });*/
 
         task_desciption.setText(more_info_taskUpdate);
         displayTime.setText(formatTime());
