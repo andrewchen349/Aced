@@ -106,12 +106,11 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void startAlarm(Course course, Calendar cal, int dayOfWeek){
+    private void startAlarm(Course course, int dayOfWeek){
+
+        Calendar cal = Calendar.getInstance();
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver2.class);
-        intent.putExtra("coursename", course.getCourseName());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, 0);
 
         cal.set(Calendar.HOUR_OF_DAY, user_selected_hour);
         cal.set(Calendar.MINUTE, user_selected_minute);
@@ -127,6 +126,12 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
         if(cal.getTimeInMillis() < System.currentTimeMillis()) {
             cal.add(Calendar.DAY_OF_YEAR, 7);
         }
+
+        Intent intent = new Intent(this, AlertReceiver2.class);
+        intent.putExtra("coursename", course.getCourseName());
+        requestCode ++;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, intent, 0);
+
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, pendingIntent);
     }
@@ -151,7 +156,7 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
 
         long id = db.insertCourseName(course);
         Course course1 = db.getCourse(id);
-        all_courses.add(course1);
+        //all_courses.add(course1);
 
         course1.setLocation(course_location.getText().toString());
         db.insertCourseLocation(course1);
@@ -213,10 +218,48 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
         }
 
         //startAlarm(c);
-        determineAlarm(course1);
+        //determineAlarm(course1);
 
+        if(course1.getMon() == 2){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getMon() - 1 );
+            //requestCode++;
+            startAlarm(course1, Calendar.MONDAY);
+        }
+
+        if(course1.getTues() == 3){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getTues() - 1 );
+            //requestCode++;
+            startAlarm(course1, Calendar.TUESDAY);
+        }
+
+        if(course1.getWed() == 4){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getWed() - 1 );
+            //requestCode++;
+            startAlarm(course1, Calendar.WEDNESDAY);
+        }
+
+        if(course1.getThurs() == 5){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getThurs() - 1 );
+            //requestCode++;
+
+            startAlarm(course1, Calendar.THURSDAY);
+        }
+
+        if(course1.getFri() == 6){
+
+            //c.set(Calendar.DAY_OF_WEEK, course.getFri() - 1 );
+            //requestCode++;
+            startAlarm(course1, Calendar.FRIDAY);
+        }
 
     }
+
+
+
 
 
     @Override
@@ -268,44 +311,50 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
         user_selected_hour_later = hourEnd;
         getUser_selected_minute_later = minuteEnd;
 
-        requestCode++;
+        //requestCode++;
         //startAlarm(c);
 
 
     }
 
-    public void determineAlarm(Course course){
+   /* public void determineAlarm(Course course){
 
         if(course.getMon() == 2){
 
             //c.set(Calendar.DAY_OF_WEEK, course.getMon() - 1 );
+            //requestCode++;
             startAlarm(course, c, Calendar.MONDAY);
         }
 
         if(course.getTues() == 3){
 
             //c.set(Calendar.DAY_OF_WEEK, course.getTues() - 1 );
+            //requestCode++;
             startAlarm(course, c, Calendar.TUESDAY);
         }
 
         if(course.getWed() == 4){
 
             //c.set(Calendar.DAY_OF_WEEK, course.getWed() - 1 );
+            //requestCode++;
             startAlarm(course, c, Calendar.WEDNESDAY);
         }
 
         if(course.getThurs() == 5){
 
             //c.set(Calendar.DAY_OF_WEEK, course.getThurs() - 1 );
+            //requestCode++;
+
             startAlarm(course, c, Calendar.THURSDAY);
         }
 
         if(course.getFri() == 6){
 
             //c.set(Calendar.DAY_OF_WEEK, course.getFri() - 1 );
+            //requestCode++;
             startAlarm(course,c, Calendar.FRIDAY);
         }
 
-        }
+        }*/
     }
 
