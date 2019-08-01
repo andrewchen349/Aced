@@ -41,6 +41,7 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
     public int position;
     public Calendar calendar;
     private ImageView locationConfirm;
+    private Button confirm;
 
     public int yr;
     public int m;
@@ -53,7 +54,7 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.more_event_info);
+        setContentView(R.layout.more_event_info_two);
 
         //find corresponding XML components
         back = (ImageView) findViewById(R.id.more_info_back);
@@ -64,9 +65,10 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
         time_input = (TextView) findViewById(R.id.user_selected_time);
         location = (TextView) findViewById(R.id.location);
         location_input = (EditText) findViewById(R.id.location_input);
-        invite = (TextView) findViewById(R.id.more_info_invite);
-        invite_input = (TextView) findViewById(R.id.invite_input);
-        locationConfirm = (ImageView)findViewById(R.id.locationset);
+        //invite = (TextView) findViewById(R.id.more_info_invite);
+        //invite_input = (TextView) findViewById(R.id.invite_input);
+        //locationConfirm = (ImageView)findViewById(R.id.locationset);
+        confirm = (Button)findViewById(R.id.confirm);
 
         //Create a Calendar object
         calendar = new Calendar();
@@ -91,7 +93,7 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
             }
         }
 
-        locationConfirm.setOnClickListener(new View.OnClickListener() {
+        confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String local = location_input.getText().toString();
@@ -99,6 +101,8 @@ public class more_event_info extends AppCompatActivity implements TimePickerDial
                 calendar.current_calendar_events.get(position).setLocation(local);
                 calendar.db_calendar.insertEventLocation(calendar.current_calendar_events.get(position));
                 location.setText(local);
+                Intent intent = new Intent(more_event_info.this, Calendar.class);
+                more_event_info.this.startActivity(intent);
             }
         });
 

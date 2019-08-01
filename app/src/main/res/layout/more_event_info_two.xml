@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/more_info_back"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="15dp"
+        app:srcCompat="@drawable/back" />
+
+    <ImageView
+        android:id="@+id/more_info_trash"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="18dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        app:srcCompat="@drawable/trash" />
+
+    <TextView
+        android:id="@+id/more_info_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/more_info_back"
+        android:layout_marginLeft="15dp"
+        android:hint="Event"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        />
+
+    <TextView
+        android:id="@+id/more_info_event_date"
+        android:layout_width="188dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/more_info_event"
+        android:layout_marginLeft="15dp"
+        android:hint="Event Date"
+       />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/more_info_event_date"
+        android:layout_marginLeft="15dp"
+        app:srcCompat="@drawable/iconinfo" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="191dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/more_info_event_date"
+        android:layout_toRightOf="@+id/imageView"
+        android:text="Time"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        android:textSize="20dp"
+        />
+
+    <TextView
+        android:id="@+id/user_selected_time"
+        android:layout_width="191dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@+id/time"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_marginLeft="10dp"
+        android:hint="Time"
+        android:textSize="15dp"
+        />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_below="@+id/user_selected_time"
+        app:srcCompat="@drawable/location" />
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="191dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/user_selected_time"
+        android:layout_toRightOf="@+id/imageView8"
+        android:hint="Location"
+        android:textAlignment="viewStart"
+        android:layout_marginLeft="10dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        />
+
+    <EditText
+        android:id="@+id/location_input"
+        android:layout_width="205dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="8dp"
+        android:hint="User Location"
+        android:layout_below="@+id/location"
+        android:layout_toRightOf="@+id/imageView8"
+        android:layout_marginLeft="10dp"
+        />
+
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="Save"
+        android:textColor="#5AC9DD"
+        android:fontFamily="@font/segoeui"
+        android:background="@android:color/white"
+        />
+
+
+</RelativeLayout>

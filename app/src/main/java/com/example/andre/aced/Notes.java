@@ -135,7 +135,7 @@ public class Notes extends AppCompatActivity {
     }
 
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete", "More Info"};
+        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
@@ -145,13 +145,13 @@ public class Notes extends AppCompatActivity {
                 if (which == 0) {
                     showNoteDialog(true, notesList.get(position), position);
                 }
-                if (which == 2){
+                /*if (which == 2){
                     String note_title = notesList.get(position).getNote();
                     Intent intent = new Intent (Notes.this, more_note_info.class);
                     intent.putExtra("Note", note_title);
                     intent.putExtra("position", position);
                     Notes.this.startActivity(intent);
-                }
+                }*/
                 else {
                     deleteNote(position);
                 }

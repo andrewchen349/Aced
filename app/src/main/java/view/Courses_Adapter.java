@@ -93,13 +93,14 @@ public class Courses_Adapter extends RecyclerView.Adapter<Courses_Adapter.MyView
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR, course.getHour());
         calendar.set(Calendar.MINUTE, course.getMinute());
-        if(calendar.get(Calendar.AM_PM) == 0){
+
+        /* if(calendar.get(Calendar.AM_PM) == 0){
             calendar.set(Calendar.AM_PM, 1);
         }
 
         else{
             calendar.set(Calendar.AM_PM, 0);
-        }
+        }*/
 
         Date d1 =calendar.getTime();
 

@@ -112,6 +112,14 @@ public class Course_Input extends AppCompatActivity implements TimePickerDialog.
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(context.ALARM_SERVICE);
 
+        /*if(cal.get(Calendar.AM_PM) == 0){
+            cal.set(Calendar.AM_PM, 1);
+        }
+
+        else{
+            cal.set(Calendar.AM_PM, 0);
+        }*/
+
         cal.set(Calendar.HOUR_OF_DAY, user_selected_hour);
         cal.set(Calendar.MINUTE, user_selected_minute);
         cal.set(Calendar.SECOND, 0);
